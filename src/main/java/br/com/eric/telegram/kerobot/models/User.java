@@ -1,5 +1,8 @@
 package br.com.eric.telegram.kerobot.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
 	private Integer id;
 	private boolean is_bot;

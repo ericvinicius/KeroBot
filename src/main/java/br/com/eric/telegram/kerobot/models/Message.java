@@ -1,5 +1,8 @@
 package br.com.eric.telegram.kerobot.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Message {
 	private Integer message_id;
 	private User from;
