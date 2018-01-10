@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ljtfreitas.restify.http.RestifyProxyBuilder;
 
 import br.com.eric.telegram.kerobot.action.TelegramBot;
@@ -28,9 +30,10 @@ public class GetMessageController {
 
 	@RequestMapping
 	@ResponseStatus(value = HttpStatus.OK)
-	public void newMessage(@RequestBody Update update) {
+	public void newMessage(@RequestBody Update update) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
 		logger.info("..................................MESSAGE..................................");
-		logger.info(update);
+		logger.info(mapper.writeValueAsString(update));
 		logger.info("...........................................................................");
 
 		Optional.ofNullable(update.getMessage()).ifPresent(msg -> {
