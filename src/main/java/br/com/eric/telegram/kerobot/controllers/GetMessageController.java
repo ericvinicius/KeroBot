@@ -9,7 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import br.com.eric.telegram.kerobot.Boot;
+import br.com.eric.telegram.kerobot.action.Sender;
+import br.com.eric.telegram.kerobot.models.Update;
 
 @Controller
 @RequestMapping("/webhook")
@@ -17,12 +18,13 @@ import br.com.eric.telegram.kerobot.Boot;
 public class GetMessageController {
 	
 	private final String TOKEN = "530257705:AAEA0JYLsFlrI0gUKEeq83sOuO1OQQLvkSo";
-	private static final Logger logger = LogManager.getLogger(Boot.class);
+	private static final Logger logger = LogManager.getLogger(GetMessageController.class);
 
 	@RequestMapping
 	@ResponseStatus(value = HttpStatus.OK)
-	public void newMessage() {
+	public void newMessage(Update update) {
 		logger.info("..................................MESSAGE..................................");
+		Sender.botApi.send(TOKEN, update.getMessage().getChat().getId(), "ola " + update.getMessage().getFrom().getFirst_name() + ", sua mensagem foi: " + update.getMessage().getText());
 	}
 
 }
