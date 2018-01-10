@@ -22,7 +22,7 @@ import br.com.eric.telegram.kerobot.models.Update;
 @Transactional
 public class GetMessageController {
 
-	private final String TOKEN = "530257705:AAEA0JYLsFlrI0gUKEeq83sOuO1OQQLvkSo";
+	private final String TOKEN = "480394771:AAEXAhXgyzaZPpCBNsdOreSxsclgNNmofCs";
 	private static final Logger logger = LogManager.getLogger(GetMessageController.class);
 
 	@RequestMapping
