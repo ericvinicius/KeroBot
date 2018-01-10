@@ -22,6 +22,7 @@ import br.com.eric.telegram.kerobot.models.Update;
 @Transactional
 public class GetMessageController {
 
+	//https://api.telegram.org/bot480394771:AAEXAhXgyzaZPpCBNsdOreSxsclgNNmofCs/setWebhook?url=https://telegram-kero-bot.herokuapp.com/webhook
 	private final String TOKEN = "480394771:AAEXAhXgyzaZPpCBNsdOreSxsclgNNmofCs";
 	private static final Logger logger = LogManager.getLogger(GetMessageController.class);
 
