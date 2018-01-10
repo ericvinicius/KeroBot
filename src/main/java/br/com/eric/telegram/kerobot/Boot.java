@@ -18,7 +18,7 @@ public class Boot {
 	private static final Logger logger = LogManager.getLogger(Boot.class);
 
 	public static void main(String[] args) {
-		System.setProperty(ACTIVE_PROFILES_PROPERTY_NAME, "dev");
+		System.setProperty(ACTIVE_PROFILES_PROPERTY_NAME, "prod");
 		SpringApplication.run(Boot.class, args);
 	}
 
