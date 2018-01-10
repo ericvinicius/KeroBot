@@ -8,6 +8,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -26,7 +27,7 @@ public class GetMessageController {
 
 	@RequestMapping
 	@ResponseStatus(value = HttpStatus.OK)
-	public void newMessage(Update update) {
+	public void newMessage(@RequestBody Update update) {
 		logger.info("..................................MESSAGE..................................");
 		logger.info(update);
 		logger.info("...........................................................................");
