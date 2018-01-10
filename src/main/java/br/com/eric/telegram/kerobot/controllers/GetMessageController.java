@@ -1,5 +1,7 @@
 package br.com.eric.telegram.kerobot.controllers;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.apache.log4j.LogManager;
@@ -18,7 +20,7 @@ import br.com.eric.telegram.kerobot.models.Update;
 @RequestMapping("/webhook")
 @Transactional
 public class GetMessageController {
-	
+
 	private final String TOKEN = "530257705:AAEA0JYLsFlrI0gUKEeq83sOuO1OQQLvkSo";
 	private static final Logger logger = LogManager.getLogger(GetMessageController.class);
 
@@ -28,9 +30,12 @@ public class GetMessageController {
 		logger.info("..................................MESSAGE..................................");
 		logger.info(update);
 		logger.info("...........................................................................");
-		
-		TelegramBot botApi = new RestifyProxyBuilder().target(TelegramBot.class).build();
-		botApi.send(TOKEN, update.getMessage().getChat().getId(), "ola " + update.getMessage().getFrom().getFirst_name() + ", sua mensagem foi: " + update.getMessage().getText());
+
+		Optional.of(update.getMessage()).ifPresent(msg -> {
+			TelegramBot botApi = new RestifyProxyBuilder().target(TelegramBot.class).build();
+			String txt = "ola " + update.getMessage().getFrom().getFirst_name() + ", sua mensagem foi: " + update.getMessage().getText();
+			botApi.send(TOKEN, update.getMessage().getChat().getId(), txt);
+		});
 	}
 
 }
