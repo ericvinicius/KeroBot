@@ -47,4 +47,10 @@ public class Message {
 		this.chat = chat;
 	}
 
+	@Override
+	public String toString() {
+		return "Message [message_id=" + message_id + ", from=" + from + ", date=" + date + ", text=" + text + ", chat="
+				+ chat + "]";
+	}
+
 }

@@ -29,4 +29,9 @@ public class Chat {
 		this.title = title;
 	}
 
+	@Override
+	public String toString() {
+		return "Chat [id=" + id + ", type=" + type + ", title=" + title + "]";
+	}
+
 }

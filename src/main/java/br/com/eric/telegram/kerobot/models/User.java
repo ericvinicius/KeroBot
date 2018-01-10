@@ -38,4 +38,9 @@ public class User {
 		this.username = username;
 	}
 
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", is_bot=" + is_bot + ", first_name=" + first_name + ", username=" + username + "]";
+	}
+
 }

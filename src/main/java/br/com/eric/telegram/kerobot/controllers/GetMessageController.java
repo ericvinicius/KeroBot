@@ -9,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import br.com.eric.telegram.kerobot.action.Sender;
+import com.github.ljtfreitas.restify.http.RestifyProxyBuilder;
+
+import br.com.eric.telegram.kerobot.action.TelegramBot;
 import br.com.eric.telegram.kerobot.models.Update;
 
 @Controller
@@ -24,7 +26,11 @@ public class GetMessageController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public void newMessage(Update update) {
 		logger.info("..................................MESSAGE..................................");
-		Sender.botApi.send(TOKEN, update.getMessage().getChat().getId(), "ola " + update.getMessage().getFrom().getFirst_name() + ", sua mensagem foi: " + update.getMessage().getText());
+		logger.info(update);
+		logger.info("...........................................................................");
+		
+		TelegramBot botApi = new RestifyProxyBuilder().target(TelegramBot.class).build();
+		botApi.send(TOKEN, update.getMessage().getChat().getId(), "ola " + update.getMessage().getFrom().getFirst_name() + ", sua mensagem foi: " + update.getMessage().getText());
 	}
 
 }

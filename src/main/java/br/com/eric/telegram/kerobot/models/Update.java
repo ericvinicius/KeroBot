@@ -20,4 +20,9 @@ public class Update {
 		this.message = message;
 	}
 
+	@Override
+	public String toString() {
+		return "Update [update_id=" + update_id + ", message=" + message + "]";
+	}
+
 }
