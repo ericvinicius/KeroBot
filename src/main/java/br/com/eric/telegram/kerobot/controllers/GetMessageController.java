@@ -31,7 +31,7 @@ public class GetMessageController {
 		logger.info(update);
 		logger.info("...........................................................................");
 
-		Optional.of(update.getMessage()).ifPresent(msg -> {
+		Optional.ofNullable(update.getMessage()).ifPresent(msg -> {
 			TelegramBot botApi = new RestifyProxyBuilder().target(TelegramBot.class).build();
 			String txt = "ola " + update.getMessage().getFrom().getFirst_name() + ", sua mensagem foi: " + update.getMessage().getText();
 			botApi.send(TOKEN, update.getMessage().getChat().getId(), txt);
