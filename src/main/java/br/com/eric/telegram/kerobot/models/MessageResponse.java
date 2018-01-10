@@ -7,8 +7,9 @@ public class MessageResponse {
 	private boolean ok;
 	private Result result;
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public class Result {
-		private Integer id;
+		private Integer message_id;
 		private User from;
 		private Chat chat;
 		private Integer date;
@@ -45,13 +46,13 @@ public class MessageResponse {
 		public void setText(String text) {
 			this.text = text;
 		}
-
-		public Integer getId() {
-			return id;
+		
+		public Integer getMessage_id() {
+			return message_id;
 		}
 
-		public void setId(Integer id) {
-			this.id = id;
+		public void setMessage_id(Integer message_id) {
+			this.message_id = message_id;
 		}
 	}
 
