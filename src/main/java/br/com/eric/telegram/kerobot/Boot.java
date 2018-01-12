@@ -13,8 +13,7 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 
-@SpringBootApplication
-@ComponentScan
+@SpringBootApplication(scanBasePackages = { "br.com.eric.telegram.kerobot" })
 @EnableAutoConfiguration
 public class Boot {
 
