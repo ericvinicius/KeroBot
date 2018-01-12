@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
@@ -21,7 +22,8 @@ public class ReminderAction extends Action {
 
 	private TelegramBot botApi = new RestifyProxyBuilder().target(TelegramBot.class).build();
 
-	TaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
+	@Autowired
+	TaskScheduler taskScheduler;
 
 	ScheduledFuture<?> scheduledFuture;
 
