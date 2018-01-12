@@ -24,14 +24,14 @@ public class ReminderAction extends Action {
 
 	private String getTimePart(String txt) {
 		for (String token : getPatterns()) {
-			txt = txt.substring(txt.indexOf(token.replaceAll("\\.\\*", "")), txt.length());
+			txt = txt.substring(txt.indexOf(token.replaceAll("\\.\\*", "")), txt.length()-1);
 		}
 		return txt;
 	}
 	
 	@Override
 	public List<String> getPatterns() {
-		return Arrays.asList(".*lembre em.*", ".*avise em.*", ".*avise daqui.*");
+		return Arrays.asList(".*lembr(e|ar) em.*", ".*avise em.*", ".*avise daqui.*");
 	}
 
 }
