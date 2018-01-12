@@ -1,5 +1,7 @@
 package br.com.eric.telegram.kerobot.models;
 
+import java.util.Optional;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -92,6 +94,20 @@ public class Update {
 
 	public void setShipping_query(ShippingQuery shipping_query) {
 		this.shipping_query = shipping_query;
+	}
+	
+	public Optional<String> getText() {
+		if (message != null && message.getText() != null && !message.getText().isEmpty()){
+			return Optional.of(message.getText());
+		}
+		return Optional.empty();
+	}
+	
+	public Optional<Update> getIfTextExists() {
+		if (message != null && message.getText() != null && !message.getText().isEmpty()){
+			return Optional.of(this);
+		}
+		return Optional.empty();
 	}
 
 }
