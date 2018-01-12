@@ -2,12 +2,13 @@ package br.com.eric.telegram.kerobot.action;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.ljtfreitas.restify.http.RestifyProxyBuilder;
+
 import br.com.eric.telegram.kerobot.models.Update;
 
 public class ReminderAction extends Action {
 	
-	@Autowired
-	private TelegramBot botApi;
+	private TelegramBot botApi = new RestifyProxyBuilder().target(TelegramBot.class).build();
 	
 	@Override
 	public void execute(Update update) {
