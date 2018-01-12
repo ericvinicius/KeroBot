@@ -1,5 +1,7 @@
 package br.com.eric.telegram.kerobot.action;
 
+import java.util.List;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -17,5 +19,8 @@ public abstract class Action {
 	public void info(String tag) {
 		logger.info("[" + tag + "] -> ACTION EXECUTE");
 	}
+
+	
+	abstract List<String> getPatterns();
 
 }
