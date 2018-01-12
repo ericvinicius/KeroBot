@@ -1,5 +1,6 @@
 package br.com.eric.telegram.kerobot.action;
 
+import br.com.eric.telegram.kerobot.action.reminder.ReminderAction;
 import br.com.eric.telegram.kerobot.models.Update;
 
 public enum Interpreter {
