@@ -1,7 +1,5 @@
 package br.com.eric.telegram.kerobot.action;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.github.ljtfreitas.restify.http.RestifyProxyBuilder;
 
 import br.com.eric.telegram.kerobot.models.Update;
