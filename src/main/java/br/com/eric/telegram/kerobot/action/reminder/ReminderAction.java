@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 
 import com.github.ljtfreitas.restify.http.RestifyProxyBuilder;
@@ -21,27 +21,28 @@ public class ReminderAction extends Action {
 
 	private TelegramBot botApi = new RestifyProxyBuilder().target(TelegramBot.class).build();
 
-	@Autowired
-	TaskScheduler taskScheduler;
+	TaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
 
 	ScheduledFuture<?> scheduledFuture;
 
 	@Override
 	public void execute(Update update) {
 		super.info("ReminderAction");
+		try {
+			String txt = update.getText().get();
+			String txtTime = getTimePart(txt);
+			Integer time = Integer.parseInt(txtTime.replaceAll("\\D+", ""));
+			String unit = txtTime.trim().replaceAll("\\d+", "");
 
-		String txt = update.getText().get();
-		String txtTime = getTimePart(txt);
-		Integer time = Integer.parseInt(txtTime.replaceAll("\\D+", ""));
-		String unit = txtTime.trim().replaceAll("\\d+", "");
+			CronTrigger cronTrigger = new CronTrigger("0/" + time + " * * * * *");
 
-		CronTrigger cronTrigger = new CronTrigger("0/" + time + " * * * * *");
-		
-		
-		scheduledFuture = taskScheduler.schedule(doIt(update), cronTrigger);
+			scheduledFuture = taskScheduler.schedule(doIt(update), cronTrigger);
 
-		String msg = "espera de " + time;
-		botApi.send(TOKEN, update.getMessage().getChat().getId(), msg);
+			String msg = "espera de " + time;
+			botApi.send(TOKEN, update.getMessage().getChat().getId(), msg);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private Runnable doIt(Update update) {
@@ -53,7 +54,8 @@ public class ReminderAction extends Action {
 			}
 
 			public void run() {
-				String msg = "ola " + update.getMessage().getFrom().getFirst_name() + ", para lembrar as: " + update.getMessage().getText();
+				String msg = "ola " + update.getMessage().getFrom().getFirst_name() + ", para lembrar as: "
+						+ update.getMessage().getText();
 				botApi.send(TOKEN, update.getMessage().getChat().getId(), msg);
 			}
 		}

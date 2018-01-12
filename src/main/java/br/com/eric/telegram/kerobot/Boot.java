@@ -23,9 +23,4 @@ public class Boot {
 		System.setProperty(ACTIVE_PROFILES_PROPERTY_NAME, "prod");
 		SpringApplication.run(Boot.class, args);
 	}
-
-	@Bean
-    TaskScheduler threadPoolTaskScheduler() {
-        return new ThreadPoolTaskScheduler();
-    }
 }
