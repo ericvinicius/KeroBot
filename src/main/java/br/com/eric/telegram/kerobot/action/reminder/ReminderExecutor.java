@@ -18,7 +18,7 @@ public class ReminderExecutor implements Runnable {
 
 		@Override
 		public void run() {
-			String msg = "Ola " + update.getMessage().getFrom().getFirst_name() + ", lembrete: " + reminder;
+			String msg = "@" + update.getMessage().getFrom().getUsername() + ", lembrete: " + reminder;
 			botApi.send(token, update.getMessage().getChat().getId(), msg);
 		}
 	}
