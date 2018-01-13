@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.eric.telegram.kerobot.action.Action;
 import br.com.eric.telegram.kerobot.action.TelegramBot;
-import br.com.eric.telegram.kerobot.models.Update;
+import br.com.eric.telegram.kerobot.telegram.models.Update;
 import br.com.eric.telegram.kerobot.util.Unit;
 
 @Component

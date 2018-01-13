@@ -1,4 +1,4 @@
-package br.com.eric.telegram.kerobot.models;
+package br.com.eric.telegram.kerobot.telegram.models;
 
 import java.util.Optional;
 

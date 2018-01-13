@@ -2,7 +2,7 @@ package br.com.eric.telegram.kerobot.action;
 
 import java.util.List;
 
-import br.com.eric.telegram.kerobot.models.Update;
+import br.com.eric.telegram.kerobot.telegram.models.Update;
 
 public class Interpreter {
 

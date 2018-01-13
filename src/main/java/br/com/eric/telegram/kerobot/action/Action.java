@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import br.com.eric.telegram.kerobot.models.Update;
+import br.com.eric.telegram.kerobot.telegram.models.Update;
 
 public abstract class Action {
 

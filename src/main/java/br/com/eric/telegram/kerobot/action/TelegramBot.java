@@ -5,7 +5,7 @@ import com.github.ljtfreitas.restify.http.contract.Path;
 import com.github.ljtfreitas.restify.http.contract.PathParameter;
 import com.github.ljtfreitas.restify.http.contract.QueryParameter;
 
-import br.com.eric.telegram.kerobot.models.MessageResponse;
+import br.com.eric.telegram.kerobot.telegram.models.MessageResponse;
 
 @Path("https://api.telegram.org/")
 public interface TelegramBot {

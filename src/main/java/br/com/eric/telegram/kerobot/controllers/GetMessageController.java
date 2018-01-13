@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.eric.telegram.kerobot.action.Action;
 import br.com.eric.telegram.kerobot.action.Interpreter;
 import br.com.eric.telegram.kerobot.action.reminder.ReminderAction;
-import br.com.eric.telegram.kerobot.models.Update;
+import br.com.eric.telegram.kerobot.telegram.models.Update;
 
 @Controller
 @RequestMapping("/webhook")
@@ -44,9 +44,7 @@ public class GetMessageController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public void newMessage(@RequestBody Update update) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
-		logger.info("..................................MESSAGE..................................");
-		logger.info(mapper.writeValueAsString(update));
-		logger.info("...........................................................................");
+		logger.info("[MESSAGE] " + mapper.writeValueAsString(update));
 		
 		update.getIfTextExists().ifPresent(up -> {
 			Interpreter.doAction(up, actions);
