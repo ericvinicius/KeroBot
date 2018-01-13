@@ -9,8 +9,10 @@
 # Maven
 log/
 target/
+logs/
 
 *.class
+*.log
 .tern-project
 
 # Mobile Tools for Java (J2ME)
