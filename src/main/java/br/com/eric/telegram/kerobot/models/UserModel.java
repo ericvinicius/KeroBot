@@ -21,6 +21,9 @@ public class UserModel {
 	private String fisrtName;
 	
 	private String username;
+	
+	public UserModel() {
+	}
 
 	public UserModel(Integer id, String first_name, String username, ChatModel chatModel, boolean is_bot) {
 		this.id = id;

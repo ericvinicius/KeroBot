@@ -2,6 +2,7 @@ package br.com.eric.telegram.kerobot.models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class MessageModel {
@@ -9,11 +10,16 @@ public class MessageModel {
 	@Id
 	private Integer messageId;
 
+	@OneToOne
 	private UserModel user;
 	
+	@OneToOne
 	private ChatModel chat;
 
 	private String text;
+	
+	public MessageModel() {
+	}
 
 	public MessageModel(Integer message_id, UserModel userModel, ChatModel chatModel, String text) {
 		this.messageId = message_id;

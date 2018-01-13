@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.eric.telegram.kerobot.action.Action;
 import br.com.eric.telegram.kerobot.action.Interpreter;
+import br.com.eric.telegram.kerobot.action.UpdateRegister;
 import br.com.eric.telegram.kerobot.action.reminder.ReminderAction;
 import br.com.eric.telegram.kerobot.telegram.models.Update;
 
@@ -27,14 +28,17 @@ import br.com.eric.telegram.kerobot.telegram.models.Update;
 @RequestMapping("/webhook")
 @Transactional
 public class GetMessageController {
-	
+
+	@Autowired
+	UpdateRegister updateRegister;
+
 	@Autowired
 	ReminderAction reminderAction;
-	
+
 	private List<Action> actions;
-	
+
 	private static final Logger logger = LogManager.getLogger(GetMessageController.class);
-	
+
 	@PostConstruct
 	public void init() {
 		actions = Arrays.asList(reminderAction);
@@ -44,11 +48,16 @@ public class GetMessageController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public void newMessage(@RequestBody Update update) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
-		logger.info("[MESSAGE] " + mapper.writeValueAsString(update));
-		
-		update.getIfTextExists().ifPresent(up -> {
-			Interpreter.doAction(up, actions);
-		});
+
+		boolean register = updateRegister.register(update);
+		if (register) {
+			logger.info("[MESSAGE] " + mapper.writeValueAsString(update));
+			update.getIfTextExists().ifPresent(up -> {
+				Interpreter.doAction(up, actions);
+			});
+		} else {
+			logger.info("[MESSAGE DUPLICATE] " + mapper.writeValueAsString(update));
+		}
 	}
 
 }

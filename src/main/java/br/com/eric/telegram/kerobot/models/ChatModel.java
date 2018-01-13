@@ -13,6 +13,9 @@ public class ChatModel {
 	
 	private String tittle;
 
+	public ChatModel() {
+	}
+
 	public ChatModel(Integer id, String title, String type) {
 		this.id = id;
 		tittle = title;
