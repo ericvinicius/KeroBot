@@ -26,20 +26,11 @@ public class UpdateRegister {
 	@Autowired
 	private ChatRepository chatRepository;
 
-	public boolean register(Update update) {
-		return createMessage(update).map(msg -> {
-			chatRepository.save(msg.getChat());
-			userRepository.save(msg.getUser());
-			boolean exists = messageRepository.exists(msg.getMessageId());
-			if (!exists) {
-				messageRepository.save(msg);
-			}
-			
-			return !exists;
-		}).orElse(false);
+	public boolean exists(Update update) {
+		return messageRepository.exists(update.getUpdate_id());
 	}
 
-	private Optional<MessageModel> createMessage(Update update) {
+	public Optional<MessageModel> validateMessage(Update update) {
 		return Optional.ofNullable(update.getMessage()).map(message -> {
 			User from = message.getFrom();
 			Chat chat = message.getChat();
@@ -47,11 +38,16 @@ public class UpdateRegister {
 			if (from != null && chat != null) {
 				ChatModel chatModel = new ChatModel(chat.getId(), chat.getTitle(), chat.getType());
 				UserModel userModel = new UserModel(from.getId(), from.getFirst_name(), from.getUsername(), chatModel, from.isIs_bot());
-				return new MessageModel(message.getMessage_id(), userModel, chatModel, message.getText());
+				return new MessageModel(update.getUpdate_id(), userModel, chatModel, message.getText());
 			}
 			return null;
 		});
+	}
 
+	public void register(MessageModel message) {
+		chatRepository.save(message.getChat());
+		userRepository.save(message.getUser());
+		messageRepository.save(message);
 	}
 
 }

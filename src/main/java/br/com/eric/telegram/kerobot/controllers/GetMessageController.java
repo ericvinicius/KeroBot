@@ -30,7 +30,7 @@ import br.com.eric.telegram.kerobot.telegram.models.Update;
 public class GetMessageController {
 
 	@Autowired
-	UpdateRegister updateRegister;
+	UpdateRegister updateActions;
 
 	@Autowired
 	ReminderAction reminderAction;
@@ -48,16 +48,19 @@ public class GetMessageController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public void newMessage(@RequestBody Update update) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
+		String log = mapper.writeValueAsString(update);
 
-		boolean register = updateRegister.register(update);
-		if (register) {
-			logger.info("[MESSAGE] " + mapper.writeValueAsString(update));
-			update.getIfTextExists().ifPresent(up -> {
-				Interpreter.doAction(up, actions);
-			});
-		} else {
-			logger.info("[MESSAGE DUPLICATE] " + mapper.writeValueAsString(update));
-		}
+		updateActions.validateMessage(update).ifPresent(message -> {
+			if (!updateActions.exists(update)) {
+				logger.info("[MESSAGE] " + log);
+				update.getIfTextExists().ifPresent(up -> {
+					Interpreter.doAction(up, actions);
+					updateActions.register(message);
+				});
+			} else {
+				logger.info("[MESSAGE DUPLICATE] " + log);
+			}
+		});
 	}
 
 }
