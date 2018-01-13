@@ -1,9 +1,5 @@
 package br.com.eric.telegram.kerobot.controllers;
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.LogManager;
@@ -18,10 +14,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.eric.telegram.kerobot.action.Action;
-import br.com.eric.telegram.kerobot.action.Interpreter;
+import br.com.eric.telegram.kerobot.action.Executor;
 import br.com.eric.telegram.kerobot.action.UpdateRegister;
-import br.com.eric.telegram.kerobot.action.reminder.ReminderAction;
 import br.com.eric.telegram.kerobot.telegram.models.Update;
 
 @Controller
@@ -30,19 +24,12 @@ import br.com.eric.telegram.kerobot.telegram.models.Update;
 public class GetMessageController {
 
 	@Autowired
-	UpdateRegister updateActions;
+	private Executor executor;
 
 	@Autowired
-	ReminderAction reminderAction;
-
-	private List<Action> actions;
+	private UpdateRegister updateRegister;
 
 	private static final Logger logger = LogManager.getLogger(GetMessageController.class);
-
-	@PostConstruct
-	public void init() {
-		actions = Arrays.asList(reminderAction);
-	}
 
 	@RequestMapping
 	@ResponseStatus(value = HttpStatus.OK)
@@ -50,13 +37,11 @@ public class GetMessageController {
 		ObjectMapper mapper = new ObjectMapper();
 		String log = mapper.writeValueAsString(update);
 
-		updateActions.validateMessage(update).ifPresent(message -> {
-			if (!updateActions.exists(update)) {
+		updateRegister.validateMessage(update).ifPresent(message -> {
+			if (updateRegister.isNotDuplicated(update)) {
 				logger.info("[MESSAGE] " + log);
-				update.getIfTextExists().ifPresent(up -> {
-					Interpreter.doAction(up, actions);
-					updateActions.register(message);
-				});
+				executor.execute(update);
+				updateRegister.register(message);
 			} else {
 				logger.info("[MESSAGE DUPLICATE] " + log);
 			}

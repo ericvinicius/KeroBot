@@ -1,4 +1,4 @@
-package br.com.eric.telegram.kerobot.action;
+package br.com.eric.telegram.kerobot.controllers;
 
 import com.github.ljtfreitas.restify.http.contract.Get;
 import com.github.ljtfreitas.restify.http.contract.Path;

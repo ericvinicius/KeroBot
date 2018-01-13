@@ -7,7 +7,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import com.github.ljtfreitas.restify.http.RestifyProxyBuilder;
 
-import br.com.eric.telegram.kerobot.action.TelegramBot;
+import br.com.eric.telegram.kerobot.controllers.TelegramBot;
 
 @Configuration
 public class AppConfiguration {

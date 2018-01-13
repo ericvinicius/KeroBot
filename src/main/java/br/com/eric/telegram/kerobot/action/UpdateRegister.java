@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.eric.telegram.kerobot.daos.ChatRepository;
 import br.com.eric.telegram.kerobot.daos.MessageRepository;
 import br.com.eric.telegram.kerobot.daos.UserRepository;
 import br.com.eric.telegram.kerobot.models.ChatModel;
@@ -26,8 +27,8 @@ public class UpdateRegister {
 	@Autowired
 	private ChatRepository chatRepository;
 
-	public boolean exists(Update update) {
-		return messageRepository.exists(update.getUpdate_id());
+	public boolean isNotDuplicated(Update update) {
+		return !messageRepository.exists(update.getUpdate_id());
 	}
 
 	public Optional<MessageModel> validateMessage(Update update) {
@@ -49,5 +50,6 @@ public class UpdateRegister {
 		userRepository.save(message.getUser());
 		messageRepository.save(message);
 	}
+
 
 }

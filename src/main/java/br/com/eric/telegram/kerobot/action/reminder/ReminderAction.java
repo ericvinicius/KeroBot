@@ -1,7 +1,6 @@
 package br.com.eric.telegram.kerobot.action.reminder;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,32 +8,29 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
 
 import br.com.eric.telegram.kerobot.action.Action;
-import br.com.eric.telegram.kerobot.action.TelegramBot;
+import br.com.eric.telegram.kerobot.controllers.TelegramBot;
 import br.com.eric.telegram.kerobot.telegram.models.Update;
+import br.com.eric.telegram.kerobot.util.StringUtil;
 import br.com.eric.telegram.kerobot.util.Unit;
 
 @Component
 public class ReminderAction extends Action {
 
 	@Autowired
-	TelegramBot botApi;
+	private TelegramBot botApi;
 
 	@Autowired
-	TaskScheduler taskScheduler;
+	private TaskScheduler taskScheduler;
 
 	@Override
 	public void execute(Update update) {
-		super.info("ReminderAction");
+		super.info("ReminderAction", "Registering scheduler...");
 		try {
-			String txt = update.getText().get();
-			String[] goodTxt = getParts(txt);
-			Integer time = Integer.parseInt(goodTxt[1].replaceAll("\\D+", ""));
-			String unitTxt = goodTxt[1].trim().replaceAll("\\d+", "");
-			Unit unit = Unit.getFor(unitTxt).orElseThrow(
-					() -> new IllegalArgumentException("Unidade de tempo nao reconhecida! [" + unitTxt + "]"));
+			String[] txt = getParts(update.getText().get());
+			Integer time = StringUtil.getIntergers(txt[1]);
+			Unit unit = Unit.getFor(StringUtil.removeNumbers(txt[1]));
 
-			long milis = new Date().getTime();
-			taskScheduler.schedule(doIt(update, goodTxt[0]), new Date(milis + time * unit.getTime()));
+			taskScheduler.schedule(doIt(update, txt[0]), unit.getNextDateFor(time));
 
 			String msg = "Te enviarei em " + time + unit.getName();
 			botApi.send(TOKEN, update.getMessage().getChat().getId(), msg);
@@ -67,24 +63,9 @@ public class ReminderAction extends Action {
 	}
 
 	public Runnable doIt(Update update, String reminder) {
-		return new Thread(new ReminderExecutor(update, reminder));
+		return new Thread(new ReminderExecutor(update, reminder, botApi, TOKEN));
 	}
 
-	public class ReminderExecutor implements Runnable {
-		Update update;
-		String reminder;
-
-		ReminderExecutor(Update update, String reminder) {
-			this.update = update;
-			this.reminder = reminder;
-		}
-
-		@Override
-		public void run() {
-			info("ReminderExecutor");
-			String msg = "Ola " + update.getMessage().getFrom().getFirst_name() + ", lembrete: " + reminder;
-			botApi.send(TOKEN, update.getMessage().getChat().getId(), msg);
-		}
-	}
+	
 
 }

@@ -1,4 +1,4 @@
-package br.com.eric.telegram.kerobot.action;
+package br.com.eric.telegram.kerobot.daos;
 
 import org.springframework.data.repository.CrudRepository;
 
