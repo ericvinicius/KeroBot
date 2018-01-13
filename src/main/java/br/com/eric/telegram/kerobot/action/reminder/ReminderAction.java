@@ -34,8 +34,7 @@ public class ReminderAction extends Action {
 
 			taskScheduler.schedule(doIt(update, txt[0]), unit.getNextDateFor(time));
 
-			String msg = "Te enviarei em " + time + unit.getName();
-			botApi.send(TOKEN, update.getMessage().getChat().getId(), msg);
+			botApi.send(TOKEN, update.getMessage().getChat().getId(), "Te enviarei em " + time + " " + unit.getDefaultName());
 		} catch (Exception e) {
 			botApi.send(TOKEN, update.getMessage().getChat().getId(), e.getMessage());
 		}

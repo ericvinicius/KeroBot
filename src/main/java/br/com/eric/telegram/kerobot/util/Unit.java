@@ -1,41 +1,59 @@
 package br.com.eric.telegram.kerobot.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public enum Unit {
-	SECOND("s", 1000L),
-	MINUTE("m", 1000L * 60L),
-	HOUR("h", 1000L * 60L * 60L),
-	DAY("d", 1000L * 60 * 60 * 24L),
-	WEEK("w", 1000L * 60 * 60 * 24 * 7L);
+	SECOND("segundos", 1000L, "s", "sec", "segundos?", "seconds?"),
+	MINUTE("minutos", 1000L*60L, "m", "min", "minutos?", "minutes?"),
+	HOUR("horas", 1000L*60L*60L, "h", "horas?", "hours?"),
+	DAY("dias", 1000L*60*60*24L, "d", "dias?", "days?"),
+	WEEK("semanas", 1000L*60*60*24*7L, "w", "semanas?", "weeks?");
 
-	private String name;
+	private List<String> names = new ArrayList<>();
+	private String defaultName;
 	private Long time;
 
-	Unit(String name, Long time) {
-		this.name = name;
+	Unit(String defaultName, Long time, String... names) {
+		this.defaultName = defaultName;
+		this.names = Arrays.asList(names);
 		this.time = time;
 	}
 
 	public static Unit getFor(String name) {
 		for (Unit unit : Unit.values()) {
-			if (unit.name.equals(name.toLowerCase())) {
+			if (unit.match(name.toLowerCase())) {
 				return unit;
 			}
 		}
 		throw new IllegalArgumentException("Unidade de tempo nao reconhecida! [" + name + "]");
 	}
 
+	private boolean match(String lowerCase) {
+		for (String regexName : names) {
+			if (lowerCase.matches(regexName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public Long getTime() {
 		return time;
 	}
 
-	public String getName() {
-		return name;
+	public List<String> getNames() {
+		return names;
 	}
 
 	public Date getNextDateFor(Integer multiplier) {
 		return new Date(new Date().getTime() + multiplier * this.time);
+	}
+
+	public String getDefaultName() {
+		return defaultName;
 	}
 
 }
