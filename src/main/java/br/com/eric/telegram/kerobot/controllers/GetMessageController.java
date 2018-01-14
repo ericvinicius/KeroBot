@@ -25,6 +25,9 @@ public class GetMessageController {
 
 	@Autowired
 	private Executor executor;
+	
+	@Autowired
+	private TelegramApi telegramApi;
 
 	@Autowired
 	private UpdateRegister updateRegister;
@@ -37,15 +40,20 @@ public class GetMessageController {
 		ObjectMapper mapper = new ObjectMapper();
 		String log = mapper.writeValueAsString(update);
 
-		updateRegister.validateMessage(update).ifPresent(message -> {
-			if (updateRegister.isNotDuplicated(update)) {
-				logger.info("[MESSAGE] " + log);
-				executor.execute(update);
-				updateRegister.register(message);
-			} else {
-				logger.info("[MESSAGE DUPLICATE] " + log);
-			}
-		});
+		try {
+			updateRegister.validateMessage(update).ifPresent(message -> {
+				if (updateRegister.isNotDuplicated(update)) {
+					logger.info("[MESSAGE] " + log);
+					executor.execute(update);
+					updateRegister.register(message);
+				} else {
+					logger.info("[MESSAGE DUPLICATE] " + log);
+				}
+			});
+		} catch (Exception e) {
+			telegramApi.sendMessage(TelegramApi.ADMIN_ID, "[FALHA] - " + e.getMessage());
+		}
+
 	}
 
 }

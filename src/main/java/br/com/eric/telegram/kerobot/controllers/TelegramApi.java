@@ -11,10 +11,15 @@ public interface TelegramApi {
 	
 	// https://api.telegram.org/bot480394771:AAEXAhXgyzaZPpCBNsdOreSxsclgNNmofCs/setWebhook?url=https://telegram-kero-bot.herokuapp.com/webhook
 	public final String TOKEN = "480394771:AAEXAhXgyzaZPpCBNsdOreSxsclgNNmofCs";
+	public final String ADMIN_ID = "@ericvcamargo";
 
 	@Get
 	@Path("/bot" + TOKEN + "/sendMessage")
 	public MessageResponse sendMessage(@QueryParameter("chat_id") Integer chat_id, @QueryParameter("text") String text);
+	
+	@Get
+	@Path("/bot" + TOKEN + "/sendMessage")
+	public MessageResponse sendMessage(@QueryParameter("chat_id") String chat_id, @QueryParameter("text") String text);
 
 	
 	@Get

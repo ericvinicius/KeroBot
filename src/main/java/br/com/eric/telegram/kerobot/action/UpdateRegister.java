@@ -35,10 +35,11 @@ public class UpdateRegister {
 		return Optional.ofNullable(update.getMessage()).map(message -> {
 			User from = message.getFrom();
 			Chat chat = message.getChat();
-			
+
 			if (from != null && chat != null) {
 				ChatModel chatModel = new ChatModel(chat.getId(), chat.getTitle(), chat.getType());
-				UserModel userModel = new UserModel(from.getId(), from.getFirst_name(), from.getUsername(), chatModel, from.isIs_bot());
+				UserModel userModel = new UserModel(from.getId(), from.getFirst_name(), from.getUsername(), chatModel,
+						from.isIs_bot());
 				return new MessageModel(update.getUpdate_id(), userModel, chatModel, message.getText());
 			}
 			return null;
@@ -50,6 +51,5 @@ public class UpdateRegister {
 		userRepository.save(message.getUser());
 		messageRepository.save(message);
 	}
-
 
 }

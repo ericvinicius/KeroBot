@@ -10,10 +10,10 @@ import br.com.eric.telegram.kerobot.telegram.models.Update;
 
 @Component
 public class GoodKeroExecutor {
-	
+
 	@Autowired
 	private TelegramApi botApi;
-	
+
 	@Autowired
 	private GiphyApi giphyApi;
 
