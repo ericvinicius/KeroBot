@@ -7,7 +7,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import com.github.ljtfreitas.restify.http.RestifyProxyBuilder;
 
-import br.com.eric.telegram.kerobot.controllers.TelegramBot;
+import br.com.eric.telegram.kerobot.controllers.GiphyApi;
+import br.com.eric.telegram.kerobot.controllers.TelegramApi;
 
 @Configuration
 public class AppConfiguration {
@@ -17,7 +18,12 @@ public class AppConfiguration {
 	}
 	
 	@Bean
-	TelegramBot telegram(){
-		return new RestifyProxyBuilder().target(TelegramBot.class).build();
+	TelegramApi telegram(){
+		return new RestifyProxyBuilder().target(TelegramApi.class).build();
+	}
+	
+	@Bean
+	GiphyApi giphy(){
+		return new RestifyProxyBuilder().target(GiphyApi.class).build();
 	}
 }
