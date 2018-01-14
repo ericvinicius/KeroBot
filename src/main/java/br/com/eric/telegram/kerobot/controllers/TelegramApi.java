@@ -24,6 +24,6 @@ public interface TelegramApi {
 	@Get
 	@Path("/bot" + TOKEN + "/sendVideo")
 	public MessageResponse sendVideo(@QueryParameter("chat_id") Integer chat_id,
-			@QueryParameter(value = "video", serializer = ParameterWithoutEncode.class) String videoURL);
+			@QueryParameter(value = "video") String videoURL);
 	// https://api.telegram.org/bot<token>/sendVideo?chat_id=<chat_id>&video=http://i.giphy.com/13IC4LVeP5NGNi.gif
 }

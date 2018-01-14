@@ -19,7 +19,7 @@ public class GoodKeroExecutor {
 
 	public void compliment(Update update) {
 		Response giphy = giphyApi.random(GiphyApi.Rating.G.getName(), "thanks", GiphyApi.TOKEN);
-		botApi.sendVideo(update.getMessage().getChat().getId(), giphy.getData().getUrl());
+		botApi.sendVideo(update.getMessage().getChat().getId(), giphy.getData().getImage_url());
 	}
 
 	public void thanks(Update update) {
