@@ -25,7 +25,7 @@ public class GetMessageController {
 
 	@Autowired
 	private Executor executor;
-	
+
 	@Autowired
 	private TelegramApi telegramApi;
 
@@ -51,6 +51,7 @@ public class GetMessageController {
 				}
 			});
 		} catch (Exception e) {
+			logger.error("Error", e);
 			telegramApi.sendMessage(TelegramApi.ADMIN_ID, "[FALHA] - " + e.getMessage());
 		}
 
