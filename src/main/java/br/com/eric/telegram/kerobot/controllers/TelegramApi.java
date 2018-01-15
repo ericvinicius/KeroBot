@@ -11,7 +11,7 @@ public interface TelegramApi {
 
 	// https://api.telegram.org/bot480394771:AAEXAhXgyzaZPpCBNsdOreSxsclgNNmofCs/setWebhook?url=https://telegram-kero-bot.herokuapp.com/webhook
 	public final String TOKEN = "480394771:AAEXAhXgyzaZPpCBNsdOreSxsclgNNmofCs";
-	public final Integer ADMIN_ID = 174439923;
+	public final Integer ADMIN_CHAT_ID = 174439923;
 
 	@Get
 	@Path("/bot" + TOKEN + "/sendMessage")
