@@ -18,10 +18,6 @@ public interface TelegramApi {
 	public MessageResponse sendMessage(@QueryParameter("chat_id") Integer chat_id, @QueryParameter("text") String text);
 
 	@Get
-	@Path("/bot" + TOKEN + "/sendMessage")
-	public MessageResponse sendMessage(@QueryParameter("chat_id") String chat_id, @QueryParameter("text") String text);
-
-	@Get
 	@Path("/bot" + TOKEN + "/sendVideo")
 	public MessageResponse sendVideo(@QueryParameter("chat_id") Integer chat_id,
 			@QueryParameter(value = "video") String videoURL);
