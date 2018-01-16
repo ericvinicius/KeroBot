@@ -27,14 +27,6 @@ public class UpdateRegister {
 	@Autowired
 	private ChatRepository chatRepository;
 
-	public boolean isNotDuplicated(Update update) {
-		return !messageRepository.exists(update.getUpdate_id());
-	}
-	
-	public boolean isNotDuplicated(MessageModel message) {
-		return !messageRepository.exists(message.getUpdateId());
-	}
-
 	public Optional<MessageModel> validateMessage(Update update) {
 		return Optional.ofNullable(update.getMessage()).map(message -> {
 			User from = message.getFrom();
@@ -58,9 +50,7 @@ public class UpdateRegister {
 
 	public void registerError(MessageModel message, Exception e) {
 		message.setError(e.getMessage());
-		if (isNotDuplicated(message)) {
-			messageRepository.save(message);
-		}
+		messageRepository.save(message);
 	}
 
 }
