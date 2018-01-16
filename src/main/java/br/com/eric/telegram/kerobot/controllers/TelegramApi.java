@@ -14,6 +14,7 @@ public interface TelegramApi {
 //	keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.p12 -srcstoretype jks -deststoretype pkcs12
 //	openssl pkcs12 -in keystore.p12 -out keystore.pem -nokeys
 //	Edit application.properties
+//	curl -i -X POST -H "Content-Type: multipart/form-data" -F "certificate=@keys/keystore.pem" https://api.telegram.org/bot480394771:AAEXAhXgyzaZPpCBNsdOreSxsclgNNmofCs/setWebhook\?url\=https://64.137.242.226:8443/webhook
 	public final String TOKEN = "480394771:AAEXAhXgyzaZPpCBNsdOreSxsclgNNmofCs";
 	public final Integer ADMIN_CHAT_ID = 174439923;
 
@@ -25,5 +26,4 @@ public interface TelegramApi {
 	@Path("/bot" + TOKEN + "/sendVideo")
 	public MessageResponse sendVideo(@QueryParameter("chat_id") Integer chat_id,
 			@QueryParameter(value = "video") String videoURL);
-	// https://api.telegram.org/bot<token>/sendVideo?chat_id=<chat_id>&video=http://i.giphy.com/13IC4LVeP5NGNi.gif
 }
