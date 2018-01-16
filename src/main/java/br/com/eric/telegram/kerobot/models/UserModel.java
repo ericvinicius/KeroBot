@@ -6,6 +6,7 @@ import java.util.Collection;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class UserModel {
@@ -13,6 +14,7 @@ public class UserModel {
 	@Id
 	private Integer id;
 
+	@OneToMany
 	@ElementCollection
 	private Collection<ChatModel> chats = new ArrayList<>();
 	
