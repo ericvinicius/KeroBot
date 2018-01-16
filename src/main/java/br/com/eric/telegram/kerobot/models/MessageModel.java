@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class MessageModel {
@@ -15,10 +15,10 @@ public class MessageModel {
 	
 	private Integer updateId;
 
-	@OneToOne
+	@ManyToOne
 	private UserModel user;
 	
-	@OneToOne
+	@ManyToOne
 	private ChatModel chat;
 
 	private String text;
