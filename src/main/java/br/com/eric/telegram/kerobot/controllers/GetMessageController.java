@@ -41,8 +41,9 @@ public class GetMessageController {
 			String log = mapper.writeValueAsString(update);
 			updateRegister.validateMessage(update).ifPresent(message -> {
 				logger.info("[MESSAGE] " + log);
-				executor.execute(update);
-				updateRegister.register(message);
+				if (executor.execute(update)) {
+					updateRegister.register(message);
+				}
 			});
 		} catch (Exception e) {
 			logger.error("Error", e);

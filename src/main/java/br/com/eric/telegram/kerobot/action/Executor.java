@@ -30,15 +30,17 @@ public class Executor {
 		textActions = Arrays.asList(reminderAction, goodKeroAction);
 	}
 
-	public void execute(Update update) {
-		update.getIfTextExists().ifPresent(up -> doAction(up, textActions));
+	public Boolean execute(Update update) {
+		return update.getIfTextExists().map(up -> {
+			return doAction(up, textActions);
+		}).orElse(false);
 	}
 
 	private String getBetterText(String text) {
 		return new String(text).toLowerCase();
 	}
 
-	private void doAction(Update update, List<Action> actions) {
+	private Boolean doAction(Update update, List<Action> actions) {
 		String goodTxt = getBetterText(update.getText().get());
 		for (Action action : actions) {
 			List<String> patterns = action.getPatterns();
@@ -48,10 +50,11 @@ public class Executor {
 				Matcher m = p.matcher(goodTxt);
 				if (m.find()) {
 					action.execute(update, i, m);
-					return;
+					return true;
 				}
 			}
 		}
+		return false;
 	}
 
 }

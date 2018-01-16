@@ -38,7 +38,7 @@ public class AppConfiguration {
 		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
 		registrationBean.setFilter(new ShutdownFilter());
 		registrationBean.setUrlPatterns(Collections.singleton("/shutdown"));
-
+		telegram().sendMessage(TelegramApi.ADMIN_CHAT_ID, "Kero desligando...");
 		return registrationBean;
 	}
 }
