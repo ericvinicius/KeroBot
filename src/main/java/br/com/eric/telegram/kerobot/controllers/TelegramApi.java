@@ -9,7 +9,11 @@ import br.com.eric.telegram.kerobot.telegram.models.MessageResponse;
 @Path("https://api.telegram.org/")
 public interface TelegramApi {
 
-	// https://api.telegram.org/bot480394771:AAEXAhXgyzaZPpCBNsdOreSxsclgNNmofCs/setWebhook?url=https://telegram-kero-bot.herokuapp.com/webhook
+//  https://api.telegram.org/bot480394771:AAEXAhXgyzaZPpCBNsdOreSxsclgNNmofCs/getWebhookinfo	
+//	keytool -genkey -keyalg RSA -alias 64.137.242.226 -keystore keystore.jks -storepass 50116658 -validity 360 -keysize 2048
+//	keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.p12 -srcstoretype jks -deststoretype pkcs12
+//	openssl pkcs12 -in keystore.p12 -out keystore.pem -nokeys
+//	Edit application.properties
 	public final String TOKEN = "480394771:AAEXAhXgyzaZPpCBNsdOreSxsclgNNmofCs";
 	public final Integer ADMIN_CHAT_ID = 174439923;
 
