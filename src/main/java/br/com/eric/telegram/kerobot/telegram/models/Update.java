@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import br.com.eric.telegram.kerobot.models.MessageModel;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Update {
 	private Integer update_id;
@@ -109,5 +111,4 @@ public class Update {
 		}
 		return Optional.empty();
 	}
-
 }

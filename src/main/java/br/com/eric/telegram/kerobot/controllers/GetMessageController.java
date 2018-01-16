@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.eric.telegram.kerobot.action.Executor;
 import br.com.eric.telegram.kerobot.action.UpdateRegister;
+import br.com.eric.telegram.kerobot.models.MessageModel;
 import br.com.eric.telegram.kerobot.telegram.models.Update;
 
 @Controller
@@ -41,20 +42,27 @@ public class GetMessageController {
 		String log = mapper.writeValueAsString(update);
 
 		try {
-			updateRegister.validateMessage(update).ifPresent(message -> {
-				if (updateRegister.isNotDuplicated(update)) {
-					logger.info("[MESSAGE] " + log);
-					executor.execute(update);
-					updateRegister.register(message);
-				} else {
-					logger.info("[MESSAGE DUPLICATE] " + log);
-				}
-			});
+			updateRegister.validateMessage(update).ifPresent(message -> execute(update, message, log, mapper));
 		} catch (Exception e) {
 			logger.error("Error", e);
-			telegramApi.sendMessage(TelegramApi.ADMIN_CHAT_ID, "[FALHA] - " + e.getMessage());
 		}
 
+	}
+
+	private void execute(Update update, MessageModel message, String log, ObjectMapper mapper) {
+		try {
+			if (updateRegister.isNotDuplicated(update)) {
+				logger.info("[MESSAGE] " + log);
+				executor.execute(update);
+				updateRegister.register(message);
+			} else {
+				logger.info("[MESSAGE DUPLICATE] " + log);
+			}
+		} catch (Exception e) {
+			updateRegister.registerError(message, e);
+			telegramApi.sendMessage(TelegramApi.ADMIN_CHAT_ID, "[FALHA] - " + e.getMessage());
+			logger.error("Error", e);
+		}
 	}
 
 }

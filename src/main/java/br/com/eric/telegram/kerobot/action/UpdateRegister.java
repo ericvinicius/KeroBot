@@ -30,6 +30,10 @@ public class UpdateRegister {
 	public boolean isNotDuplicated(Update update) {
 		return !messageRepository.exists(update.getUpdate_id());
 	}
+	
+	public boolean isNotDuplicated(MessageModel message) {
+		return !messageRepository.exists(message.getUpdateId());
+	}
 
 	public Optional<MessageModel> validateMessage(Update update) {
 		return Optional.ofNullable(update.getMessage()).map(message -> {
@@ -50,6 +54,13 @@ public class UpdateRegister {
 		chatRepository.save(message.getChat());
 		userRepository.save(message.getUser());
 		messageRepository.save(message);
+	}
+
+	public void registerError(MessageModel message, Exception e) {
+		message.setError(e.getMessage());
+		if (isNotDuplicated(message)) {
+			messageRepository.save(message);
+		}
 	}
 
 }

@@ -18,6 +18,8 @@ public class MessageModel {
 
 	private String text;
 	
+	private String error;
+	
 	public MessageModel() {
 	}
 
@@ -98,6 +100,14 @@ public class MessageModel {
 
 	public Integer getUpdateId() {
 		return updateId;
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
 	}
 
 }
