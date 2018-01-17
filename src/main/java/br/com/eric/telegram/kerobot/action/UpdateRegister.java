@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.eric.telegram.kerobot.daos.ChatRepository;
-import br.com.eric.telegram.kerobot.daos.MessageRepository;
 import br.com.eric.telegram.kerobot.daos.UserRepository;
 import br.com.eric.telegram.kerobot.models.ChatModel;
 import br.com.eric.telegram.kerobot.models.MessageModel;
@@ -17,9 +16,6 @@ import br.com.eric.telegram.kerobot.telegram.models.User;
 
 @Service
 public class UpdateRegister {
-
-	@Autowired
-	private MessageRepository messageRepository;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -45,12 +41,7 @@ public class UpdateRegister {
 	public void register(MessageModel message) {
 		chatRepository.save(message.getChat());
 		userRepository.save(message.getUser());
-		messageRepository.save(message);
-	}
-
-	public void registerError(MessageModel message, Exception e) {
-		message.setError(e.getMessage());
-		messageRepository.save(message);
+		// messageRepository.save(message);
 	}
 
 }
