@@ -26,4 +26,9 @@ public class GoodKeroExecutor {
 		botApi.sendMessage(update.getMessage().getChat().getId(), "Hehe, magina");
 	}
 
+	public void goodTime(Update update, String phrase) {
+		Response giphy = giphyApi.random(GiphyApi.Rating.G.getName(), phrase, GiphyApi.TOKEN);
+		botApi.sendVideo(update.getMessage().getChat().getId(), giphy.getData().getImage_url());
+	}
+
 }

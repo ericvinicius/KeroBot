@@ -23,12 +23,11 @@ public class ReminderAction extends Action {
 
 	@Autowired
 	private ScheduledRepository scheduledRepository;
-	
+
 	private final List<String> PATTERNS = Arrays.asList(
-			"(?<start>.*)(lembr(e|ar) (em|daqui|as))(?<end>.*)",
-			"(?<start>.*)(avis(e|ar) (em|daqui|as))(?<end>.*)",
-			"(?<start>.*)(envi(ar|e) (em|daqui|as))(?<end>.*)"
-			);
+			"(?<start>.*)( +me +)?(lembr(e|ar) +(em|daqui))(?<end>.*)",
+			"(?<start>.*)( +me +)?(avis(e|ar) +(em|daqui))(?<end>.*)",
+			"(?<start>.*)( +me +)?(envi(ar|e) +(em|daqui))(?<end>.*)");
 
 	@Override
 	public void execute(Update update, int patternPosition, Matcher matcher) {
@@ -38,10 +37,11 @@ public class ReminderAction extends Action {
 			Integer time = StringUtil.getIntergers(txt[1]);
 			Unit unit = Unit.getFor(StringUtil.removeNumbers(txt[1]));
 
-			Scheduled scheduled = new Scheduled(txt[0], unit.getNextDateFor(time), "Reminder", update.getMessage().getFrom().getUsername(), update.getMessage().getChat().getId());
-			scheduledRepository.save(scheduled);
+			scheduledRepository.save(new Scheduled(txt[0], unit.getNextDateFor(time), "Reminder",
+					update.getMessage().getFrom().getUsername(), update.getMessage().getChat().getId()));
 
-			botApi.sendMessage(update.getMessage().getChat().getId(), "Te enviarei em " + time + " " + unit.getDefaultName());
+			botApi.sendMessage(update.getMessage().getChat().getId(),
+					"Te enviarei em " + time + " " + unit.getDefaultName());
 		} catch (Exception e) {
 			botApi.sendMessage(update.getMessage().getChat().getId(), e.getMessage());
 		}

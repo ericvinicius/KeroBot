@@ -23,8 +23,9 @@ public enum Unit {
 	}
 
 	public static Unit getFor(String name) {
+		String goodName = name.toLowerCase().trim();
 		for (Unit unit : Unit.values()) {
-			if (unit.match(name.toLowerCase())) {
+			if (unit.match(goodName)) {
 				return unit;
 			}
 		}
