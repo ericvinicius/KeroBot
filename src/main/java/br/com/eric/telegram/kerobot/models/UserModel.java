@@ -3,7 +3,6 @@ package br.com.eric.telegram.kerobot.models;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -15,7 +14,6 @@ public class UserModel {
 	private Integer id;
 
 	@OneToMany
-	@ElementCollection
 	private Collection<ChatModel> chats = new ArrayList<>();
 	
 	private Boolean bot;
