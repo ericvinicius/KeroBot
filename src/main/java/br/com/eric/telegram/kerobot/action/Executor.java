@@ -31,7 +31,7 @@ public class Executor {
 	private List<Action> textActions;
 	
 	private static final Logger logger = LogManager.getLogger(Executor.class);
-
+	
 	@PostConstruct
 	public void init() {
 		textActions = Arrays.asList(reminderAction, goodKeroAction);
