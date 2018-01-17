@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,15 +24,29 @@ public class Executor {
 
 	@Autowired
 	private GoodKeroAction goodKeroAction;
+	
+	@Autowired
+	private UpdateRegister updateRegister;
 
 	private List<Action> textActions;
+	
+	private static final Logger logger = LogManager.getLogger(Executor.class);
 
 	@PostConstruct
 	public void init() {
 		textActions = Arrays.asList(reminderAction, goodKeroAction);
 	}
 
-	public Boolean execute(Update update) {
+	public void execute(Update update) {
+		updateRegister.validateMessage(update).ifPresent(message -> {
+			logger.info("[MESSAGE] " + update.toJson());
+			if (checkAndDo(update)) {
+				updateRegister.register(message);
+			}
+		});
+	}
+	
+	private Boolean checkAndDo(Update update) {
 		return update.getIfTextExists().map(up -> {
 			return doAction(up, textActions);
 		}).orElse(false);

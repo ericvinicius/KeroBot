@@ -3,6 +3,8 @@ package br.com.eric.telegram.kerobot.telegram.models;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Update {
@@ -15,7 +17,7 @@ public class Update {
 	private ChosenInlineResult chosen_inline_result;
 	private CallbackQuery callback_query;
 	private ShippingQuery shipping_query;
-	
+
 	public Integer getUpdate_id() {
 		return update_id;
 	}
@@ -38,6 +40,16 @@ public class Update {
 				+ ", channel_post=" + channel_post + ", edited_channel_post=" + edited_channel_post + ", inline_query="
 				+ inline_query + ", chosen_inline_result=" + chosen_inline_result + ", callback_query=" + callback_query
 				+ ", shipping_query=" + shipping_query + "]";
+	}
+
+	public String toJson() {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			return mapper.writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return toString();
 	}
 
 	public Message getEdited_message() {
@@ -95,16 +107,16 @@ public class Update {
 	public void setShipping_query(ShippingQuery shipping_query) {
 		this.shipping_query = shipping_query;
 	}
-	
+
 	public Optional<String> getText() {
-		if (message != null && message.getText() != null && !message.getText().isEmpty()){
+		if (message != null && message.getText() != null && !message.getText().isEmpty()) {
 			return Optional.of(message.getText());
 		}
 		return Optional.empty();
 	}
-	
+
 	public Optional<Update> getIfTextExists() {
-		if (message != null && message.getText() != null && !message.getText().isEmpty()){
+		if (message != null && message.getText() != null && !message.getText().isEmpty()) {
 			return Optional.of(this);
 		}
 		return Optional.empty();

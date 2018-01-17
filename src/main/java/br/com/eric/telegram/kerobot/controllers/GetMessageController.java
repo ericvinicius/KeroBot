@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import br.com.eric.telegram.kerobot.action.Executor;
-import br.com.eric.telegram.kerobot.action.UpdateRegister;
 import br.com.eric.telegram.kerobot.telegram.models.Update;
 
 @Controller
@@ -26,9 +23,6 @@ public class GetMessageController {
 	private Executor executor;
 
 	@Autowired
-	private UpdateRegister updateRegister;
-
-	@Autowired
 	private TelegramApi telegramApi;
 
 	private static final Logger logger = LogManager.getLogger(GetMessageController.class);
@@ -37,14 +31,7 @@ public class GetMessageController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public void newMessage(@RequestBody Update update) {
 		try {
-			ObjectMapper mapper = new ObjectMapper();
-			String log = mapper.writeValueAsString(update);
-			updateRegister.validateMessage(update).ifPresent(message -> {
-				logger.info("[MESSAGE] " + log);
-				if (executor.execute(update)) {
-					updateRegister.register(message);
-				}
-			});
+			executor.execute(update);
 		} catch (Exception e) {
 			logger.error("Error", e);
 			trySendError(e);
