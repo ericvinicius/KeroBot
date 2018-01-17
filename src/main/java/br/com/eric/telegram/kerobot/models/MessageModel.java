@@ -30,7 +30,7 @@ public class MessageModel {
 
 	public MessageModel(Integer updateId, UserModel userModel, ChatModel chatModel, String text) {
 		this.updateId = updateId;
-		userModel.addChat(chatModel);
+		userModel.setLastChat(chatModel);
 		this.user = userModel;
 		this.chat = chatModel;
 		this.text = text;

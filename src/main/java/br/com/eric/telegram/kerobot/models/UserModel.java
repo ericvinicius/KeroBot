@@ -1,11 +1,8 @@
 package br.com.eric.telegram.kerobot.models;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class UserModel {
@@ -13,8 +10,8 @@ public class UserModel {
 	@Id
 	private Integer id;
 
-	@OneToMany
-	private Collection<ChatModel> chats = new ArrayList<>();
+	@OneToOne
+	private ChatModel lastChat;
 	
 	private Boolean bot;
 	
@@ -29,20 +26,20 @@ public class UserModel {
 		this.id = id;
 		this.fisrtName = first_name;
 		this.username = username;
+		lastChat = chatModel;
 		this.bot = is_bot;
-		this.chats.add(chatModel);
 	}
 
 	public Integer getId() {
 		return id;
 	}
 
-	public Collection<ChatModel> getChats() {
-		return chats;
+	public ChatModel getLastChat() {
+		return lastChat;
 	}
 
-	public void setChats(Collection<ChatModel> chats) {
-		this.chats = chats;
+	public void setLastChat(ChatModel chats) {
+		this.lastChat = chats;
 	}
 
 	public Boolean getBot() {
@@ -69,18 +66,12 @@ public class UserModel {
 		this.username = username;
 	}
 
-	public void addChat(ChatModel chatModel) {
-		if (!chats.contains(chatModel)) {
-			chats.add(chatModel);
-		}
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((bot == null) ? 0 : bot.hashCode());
-		result = prime * result + ((chats == null) ? 0 : chats.hashCode());
+		result = prime * result + ((lastChat == null) ? 0 : lastChat.hashCode());
 		result = prime * result + ((fisrtName == null) ? 0 : fisrtName.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
@@ -101,10 +92,10 @@ public class UserModel {
 				return false;
 		} else if (!bot.equals(other.bot))
 			return false;
-		if (chats == null) {
-			if (other.chats != null)
+		if (lastChat == null) {
+			if (other.lastChat != null)
 				return false;
-		} else if (!chats.equals(other.chats))
+		} else if (!lastChat.equals(other.lastChat))
 			return false;
 		if (fisrtName == null) {
 			if (other.fisrtName != null)
