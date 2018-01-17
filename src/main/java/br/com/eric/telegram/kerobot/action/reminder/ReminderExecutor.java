@@ -1,22 +1,19 @@
 package br.com.eric.telegram.kerobot.action.reminder;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import br.com.eric.telegram.kerobot.controllers.TelegramApi;
-import br.com.eric.telegram.kerobot.telegram.models.Update;
+import br.com.eric.telegram.kerobot.models.Scheduled;
 
-public class ReminderExecutor implements Runnable {
-		private Update update;
-		private String reminder;
-		private TelegramApi botApi;
+@Service
+public class ReminderExecutor {
+	
+	@Autowired
+	private TelegramApi botApi;
 
-		ReminderExecutor(Update update, String reminder, TelegramApi botApi) {
-			this.update = update;
-			this.reminder = reminder;
-			this.botApi = botApi;
-		}
-
-		@Override
-		public void run() {
-			String msg = "@" + update.getMessage().getFrom().getUsername() + ", lembrete: " + reminder;
-			botApi.sendMessage(update.getMessage().getChat().getId(), msg);
-		}
+	public void execute(Scheduled s) {
+		String msg = "@" + s.getUserName() + ", lembrete: " + s.getText();
+		botApi.sendMessage(s.getChatId(), msg);
 	}
+}

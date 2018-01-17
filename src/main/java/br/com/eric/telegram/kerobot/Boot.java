@@ -12,10 +12,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import br.com.eric.telegram.kerobot.controllers.TelegramApi;
 
-
+@EnableScheduling
 @SpringBootApplication
 public class Boot extends SpringBootServletInitializer {
 

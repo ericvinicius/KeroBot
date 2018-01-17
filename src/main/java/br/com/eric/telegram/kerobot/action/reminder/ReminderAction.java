@@ -5,11 +5,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
 
 import br.com.eric.telegram.kerobot.action.Action;
 import br.com.eric.telegram.kerobot.controllers.TelegramApi;
+import br.com.eric.telegram.kerobot.daos.ScheduledRepository;
+import br.com.eric.telegram.kerobot.models.Scheduled;
 import br.com.eric.telegram.kerobot.telegram.models.Update;
 import br.com.eric.telegram.kerobot.util.StringUtil;
 import br.com.eric.telegram.kerobot.util.Unit;
@@ -21,7 +22,7 @@ public class ReminderAction extends Action {
 	private TelegramApi botApi;
 
 	@Autowired
-	private TaskScheduler taskScheduler;
+	private ScheduledRepository scheduledRepository;
 	
 	private final List<String> PATTERNS = Arrays.asList(
 			"(?<start>.*)(lembr(e|ar) (em|daqui|as))(?<end>.*)",
@@ -37,7 +38,8 @@ public class ReminderAction extends Action {
 			Integer time = StringUtil.getIntergers(txt[1]);
 			Unit unit = Unit.getFor(StringUtil.removeNumbers(txt[1]));
 
-			taskScheduler.schedule(doIt(update, txt[0]), unit.getNextDateFor(time));
+			Scheduled scheduled = new Scheduled(txt[0], unit.getNextDateFor(time), "Reminder", update.getMessage().getFrom().getUsername(), update.getMessage().getChat().getId());
+			scheduledRepository.save(scheduled);
 
 			botApi.sendMessage(update.getMessage().getChat().getId(), "Te enviarei em " + time + " " + unit.getDefaultName());
 		} catch (Exception e) {
@@ -55,10 +57,6 @@ public class ReminderAction extends Action {
 	@Override
 	public List<String> getPatterns() {
 		return PATTERNS;
-	}
-
-	public Runnable doIt(Update update, String reminder) {
-		return new Thread(new ReminderExecutor(update, reminder, botApi));
 	}
 
 }
