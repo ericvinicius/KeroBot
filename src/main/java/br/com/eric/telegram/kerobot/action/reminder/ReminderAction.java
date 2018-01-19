@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.eric.telegram.kerobot.action.Action;
-import br.com.eric.telegram.kerobot.controllers.TelegramApi;
 import br.com.eric.telegram.kerobot.daos.ScheduledRepository;
 import br.com.eric.telegram.kerobot.models.Scheduled;
+import br.com.eric.telegram.kerobot.telegram.TelegramApi;
 import br.com.eric.telegram.kerobot.telegram.models.Update;
 import br.com.eric.telegram.kerobot.util.StringUtil;
 import br.com.eric.telegram.kerobot.util.Unit;

@@ -3,8 +3,8 @@ package br.com.eric.telegram.kerobot.action.reminder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.eric.telegram.kerobot.controllers.TelegramApi;
 import br.com.eric.telegram.kerobot.models.Scheduled;
+import br.com.eric.telegram.kerobot.telegram.TelegramApi;
 
 @Service
 public class ReminderExecutor {

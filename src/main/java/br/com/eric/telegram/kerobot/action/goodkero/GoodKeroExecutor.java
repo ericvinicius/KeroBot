@@ -3,9 +3,9 @@ package br.com.eric.telegram.kerobot.action.goodkero;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.eric.telegram.kerobot.controllers.GiphyApi;
-import br.com.eric.telegram.kerobot.controllers.TelegramApi;
+import br.com.eric.telegram.kerobot.gifhy.GiphyApi;
 import br.com.eric.telegram.kerobot.gifhy.models.Response;
+import br.com.eric.telegram.kerobot.telegram.TelegramApi;
 import br.com.eric.telegram.kerobot.telegram.models.Update;
 
 @Component

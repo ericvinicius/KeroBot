@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import br.com.eric.telegram.kerobot.action.Executor;
+import br.com.eric.telegram.kerobot.telegram.TelegramApi;
 import br.com.eric.telegram.kerobot.telegram.models.Update;
 
 @Controller

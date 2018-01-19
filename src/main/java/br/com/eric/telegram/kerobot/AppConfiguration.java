@@ -11,9 +11,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import com.github.ljtfreitas.restify.http.RestifyProxyBuilder;
 
-import br.com.eric.telegram.kerobot.controllers.GiphyApi;
-import br.com.eric.telegram.kerobot.controllers.TelegramApi;
 import br.com.eric.telegram.kerobot.filter.ShutdownFilter;
+import br.com.eric.telegram.kerobot.gifhy.GiphyApi;
+import br.com.eric.telegram.kerobot.telegram.TelegramApi;
 
 @Configuration
 public class AppConfiguration {

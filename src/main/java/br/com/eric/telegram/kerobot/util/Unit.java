@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 public enum Unit {
-	SECOND("segundos", 1000L, "s", "sec", "segundos?", "seconds?"),
-	MINUTE("minutos", 1000L*60L, "m", "min", "minutos?", "minutes?"),
+	SECOND("segundos", 1000L, "s", "secs?", "segundos?", "seconds?"),
+	MINUTE("minutos", 1000L*60L, "m", "mins?", "minutos?", "minutes?"),
 	HOUR("horas", 1000L*60L*60L, "h", "horas?", "hours?"),
 	DAY("dias", 1000L*60*60*24L, "d", "dias?", "days?"),
 	WEEK("semanas", 1000L*60*60*24*7L, "w", "semanas?", "weeks?");
