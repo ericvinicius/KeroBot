@@ -34,7 +34,9 @@ public class GoodKeroAction extends Action {
 			goodKeroExecutor.thanks(update);
 			break;
 		case 2:
-			goodKeroExecutor.goodTime(update, matcher.group("word") + " " + matcher.group("time"), matcher.group("time"));
+			String word = matcher.group("word");
+			String time = matcher.group("time");
+			goodKeroExecutor.goodTime(update, word+" "+time, time);
 		}
 		
 	}
