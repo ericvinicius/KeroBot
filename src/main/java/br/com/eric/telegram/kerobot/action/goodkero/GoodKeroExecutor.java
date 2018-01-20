@@ -1,6 +1,7 @@
 package br.com.eric.telegram.kerobot.action.goodkero;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,7 @@ public class GoodKeroExecutor {
 	}
 
 	public void goodTime(Update update, String phrase, String time) {
-		Calendar c = Calendar.getInstance();
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("America/Sao_Paulo"));
 		int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
 		Integer chatId = update.getMessage().getChat().getId();
 
