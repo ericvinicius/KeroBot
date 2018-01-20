@@ -30,7 +30,7 @@ public class GoodKeroExecutor {
 		botApi.sendMessage(update.getMessage().getChat().getId(), "Hehe, magina");
 	}
 
-	public void goodTime(Update update, String time) {
+	public void goodTime(Update update, String phrase, String time) {
 		Calendar c = Calendar.getInstance();
 		int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
 		Integer chatId = update.getMessage().getChat().getId();

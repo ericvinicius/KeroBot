@@ -19,7 +19,7 @@ public class GoodKeroAction extends Action {
 	private final List<String> PATTERNS = Arrays.asList(
 			"(((kero+|@?cutekerobot) +)?(seu? +)?(lind(o+|inho+)|fof(o+|inho+)|gat(o+|inho+))((kero+|@?cutekerobot))?)",
 			"(((kero+|@?cutekerobot) +)?(((muito+ +)?obrigad(inh)?(o+|a+))|(vale(u+|w+)|vlw+)|(thank(s+)?|tks+))((kero+|@?cutekerobot))?)",
-			"^(?!.*( nao | nunca | no )).*(?<word>bom|boa) (?<time>dia|tarde|noite).*"
+			"^(?!.*( nao | nunca | no )).*(?<word>bom|boa) +(?<time>dia|tarde|noite).*"
 			);
 	
 	@Override
@@ -34,7 +34,7 @@ public class GoodKeroAction extends Action {
 			goodKeroExecutor.thanks(update);
 			break;
 		case 2:
-			goodKeroExecutor.goodTime(update, matcher.group("word") + " " + matcher.group("time"));
+			goodKeroExecutor.goodTime(update, matcher.group("word") + " " + matcher.group("time"), matcher.group("time"));
 		}
 		
 	}
