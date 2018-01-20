@@ -1,5 +1,6 @@
 package br.com.eric.telegram.kerobot.action;
 
+import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.eric.telegram.kerobot.action.goodkero.GoodKeroAction;
 import br.com.eric.telegram.kerobot.action.reminder.ReminderAction;
+import br.com.eric.telegram.kerobot.action.reminder.delete.DeleteReminderAction;
 import br.com.eric.telegram.kerobot.telegram.models.Update;
 
 @Service
@@ -27,6 +29,9 @@ public class Executor {
 	
 	@Autowired
 	private UpdateRegister updateRegister;
+	
+	@Autowired
+	private DeleteReminderAction deleteReminderAction;
 
 	private List<Action> textActions;
 	
@@ -34,7 +39,7 @@ public class Executor {
 	
 	@PostConstruct
 	public void init() {
-		textActions = Arrays.asList(reminderAction, goodKeroAction);
+		textActions = Arrays.asList(reminderAction, goodKeroAction, deleteReminderAction);
 	}
 
 	public void execute(Update update) {
@@ -53,7 +58,7 @@ public class Executor {
 	}
 
 	private String getBetterText(String text) {
-		return new String(text).toLowerCase();
+	    return Normalizer.normalize(text, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toLowerCase();
 	}
 
 	private Boolean doAction(Update update, List<Action> actions) {

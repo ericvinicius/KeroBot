@@ -17,9 +17,9 @@ public class GoodKeroAction extends Action {
 	private GoodKeroExecutor goodKeroExecutor;
 
 	private final List<String> PATTERNS = Arrays.asList(
-			"(((kero+|@?CuteKeroBot) +)?(seu? +)?(lind(o+|inho+)|fof(o+|inho+)|gat(o+|inho+))((kero+|@?CuteKeroBot))?)",
-			"(((kero+|@?CuteKeroBot) +)?(((muito+ +)?obrigad(inh)?(o+|a+))|(vale(u+|w+)|vlw+)|(thank(s+)?|tks+))((kero+|@?CuteKeroBot))?)",
-			"^(?!.*( nao | não | nunca | no )).*(?<word>bom|boa) (?<time>dia|tarde|noite).*"
+			"(((kero+|@?cutekerobot) +)?(seu? +)?(lind(o+|inho+)|fof(o+|inho+)|gat(o+|inho+))((kero+|@?cutekerobot))?)",
+			"(((kero+|@?cutekerobot) +)?(((muito+ +)?obrigad(inh)?(o+|a+))|(vale(u+|w+)|vlw+)|(thank(s+)?|tks+))((kero+|@?cutekerobot))?)",
+			"^(?!.*( nao | nunca | no )).*(?<word>bom|boa) (?<time>dia|tarde|noite).*"
 			);
 	
 	@Override

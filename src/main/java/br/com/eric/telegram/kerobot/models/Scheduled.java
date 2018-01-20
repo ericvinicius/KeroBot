@@ -22,18 +22,22 @@ public class Scheduled {
 	
 	private String userName;
 	
+	private Integer userId;
+	
 	private Integer chatId;
 	
 	@Deprecated
 	public Scheduled() {
 	}
 
-	public Scheduled(String text, Date time, String category, String to, Integer chatId) {
+	public Scheduled(String text, Date time, String category, String to, Integer chatId, Integer userId) {
 		this.text = text;
 		this.userName = to;
 		this.chatId = chatId;
+		this.userId = userId;
 		this.time = time.getTime();
 		this.category = category;
+		
 	}
 
 	public String getText() {
@@ -74,6 +78,14 @@ public class Scheduled {
 
 	public void setChatId(Integer chatId) {
 		this.chatId = chatId;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
 }

@@ -38,7 +38,8 @@ public class ReminderAction extends Action {
 			Unit unit = Unit.getFor(StringUtil.removeNumbers(txt[1]));
 
 			scheduledRepository.save(new Scheduled(txt[0], unit.getNextDateFor(time), "Reminder",
-					update.getMessage().getFrom().getUsername(), update.getMessage().getChat().getId()));
+					update.getMessage().getFrom().getUsername(), update.getMessage().getChat().getId(),
+					update.getMessage().getFrom().getId()));
 
 			botApi.sendMessage(update.getMessage().getChat().getId(),
 					"Te enviarei em " + time + " " + unit.getDefaultName());
