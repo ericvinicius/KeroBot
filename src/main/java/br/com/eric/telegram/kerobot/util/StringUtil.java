@@ -10,4 +10,9 @@ public class StringUtil {
 		return txt.trim().replaceAll("\\d+", "");
 	}
 
+	public static String fixNumberWith3Digits(int number) {
+		String numberAsString = String.valueOf(number);
+		return "000".substring(numberAsString.length()) + numberAsString;
+	}
+
 }

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.eric.telegram.kerobot.action.goodkero.GoodKeroAction;
+import br.com.eric.telegram.kerobot.action.pokemon.PokemonAction;
 import br.com.eric.telegram.kerobot.action.reminder.ReminderAction;
 import br.com.eric.telegram.kerobot.action.reminder.delete.DeleteReminderAction;
 import br.com.eric.telegram.kerobot.telegram.models.Update;
@@ -32,6 +33,9 @@ public class Executor {
 	
 	@Autowired
 	private DeleteReminderAction deleteReminderAction;
+	
+	@Autowired
+	private PokemonAction pokemonAction;
 
 	private List<Action> textActions;
 	
@@ -39,7 +43,7 @@ public class Executor {
 	
 	@PostConstruct
 	public void init() {
-		textActions = Arrays.asList(reminderAction, goodKeroAction, deleteReminderAction);
+		textActions = Arrays.asList(reminderAction, goodKeroAction, deleteReminderAction, pokemonAction);
 	}
 
 	public void execute(Update update) {
