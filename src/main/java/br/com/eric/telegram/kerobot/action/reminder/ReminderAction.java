@@ -25,9 +25,9 @@ public class ReminderAction extends Action {
 	private ScheduledRepository scheduledRepository;
 
 	private final List<String> PATTERNS = Arrays.asList(
-			"(?<start>.*)( +me +)?(lembr(e|ar) +(em|daqui))(?<end>.*)",
-			"(?<start>.*)( +me +)?(avis(e|ar) +(em|daqui))(?<end>.*)",
-			"(?<start>.*)( +me +)?(envi(ar|e) +(em|daqui))(?<end>.*)");
+			"(?<start>(?s).*)( +me +)?(lembr(e|ar) +(em|daqui))(?<end>.*)",
+			"(?<start>(?s).*)( +me +)?(avis(e|ar) +(em|daqui))(?<end>.*)",
+			"(?<start>(?s).*)( +me +)?(envi(ar|e) +(em|daqui))(?<end>.*)");
 
 	@Override
 	public void execute(Update update, int patternPosition, Matcher matcher) {

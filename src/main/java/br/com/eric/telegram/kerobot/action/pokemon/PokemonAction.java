@@ -17,7 +17,7 @@ public class PokemonAction extends Action {
 	private PokemonExecutor pokemonExecutor;
 
 	private final List<String> PATTERNS = Arrays.asList(
-			"pokemon # +?(?<pokemon>\\d+)"
+			"pokemon # *(?<pokemon>\\d+)"
 			);
 	
 	@Override

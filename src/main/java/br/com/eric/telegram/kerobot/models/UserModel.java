@@ -6,19 +6,19 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class UserModel {
-	
+
 	@Id
 	private Integer id;
 
 	@OneToOne
 	private ChatModel lastChat;
-	
+
 	private Boolean bot;
-	
+
 	private String fisrtName;
-	
+
 	private String username;
-	
+
 	public UserModel() {
 	}
 
@@ -26,7 +26,7 @@ public class UserModel {
 		this.id = id;
 		this.fisrtName = first_name;
 		this.username = username;
-		lastChat = chatModel;
+		this.lastChat = chatModel;
 		this.bot = is_bot;
 	}
 
@@ -114,6 +114,5 @@ public class UserModel {
 			return false;
 		return true;
 	}
-	
-	
+
 }
