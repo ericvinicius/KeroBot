@@ -17,26 +17,27 @@ public class HoursAction extends Action {
 	private HoursExecutor hoursExecutor;
 
 	private final List<String> PATTERNS = Arrays.asList(
-			"entrando...",
-			"saindo...",
-			"(listar|ver|consultar) horas...");
+			"(?<username>@\\w+ )?entrando...",
+			"(?<username>@\\w+ )?saindo...",
+			"(?<username>@\\w+ )?(listar|ver|consultar) horas...");
 
 	@Override
 	public void execute(Update update, int patternPosition, Matcher matcher) {
 		super.info("HoursRegister", "kero controll hours to you");
 
+		String username = matcher.group("username");
 		switch (patternPosition) {
 		case 0:
 			super.info("HoursRegister", "ENTER");
-			hoursExecutor.enter(update);
+			hoursExecutor.enter(update, username);
 			break;
 		case 1:
 			super.info("HoursRegister", "EXIT");
-			hoursExecutor.exit(update);
+			hoursExecutor.exit(update, username);
 			break;
 		case 2:
 			super.info("HoursRegister", "LIST");
-			hoursExecutor.list(update);
+			hoursExecutor.list(update, username);
 			break;
 		}
 

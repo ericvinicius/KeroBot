@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.eric.telegram.kerobot.daos.HourRepository;
+import br.com.eric.telegram.kerobot.daos.UserRepository;
 import br.com.eric.telegram.kerobot.models.Hour;
+import br.com.eric.telegram.kerobot.models.UserModel;
 import br.com.eric.telegram.kerobot.telegram.TelegramApi;
 import br.com.eric.telegram.kerobot.telegram.models.Update;
 
@@ -25,24 +27,44 @@ public class HoursExecutor {
 	@Autowired
 	private HourRepository hourRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+
 	private static DateTimeFormatter FORMATTER_TIME = DateTimeFormatter.ofPattern("HH:mm");
 
-	public void enter(Update update) {
+	public void enter(Update update, String username) {
+		Integer userId = getUserId(update, username);
 		LocalDate today = LocalDate.now(SP_ZONE_ID);
 		LocalDateTime now = LocalDateTime.now(SP_ZONE_ID);
-		Optional<Hour> hour = hourRepository.findOneByDay(today);
+		Optional<Hour> hour = hourRepository.findOneByDayAndUserId(today, userId);
 		if (!hour.isPresent()) {
-			hourRepository.save(new Hour(now, today, update.getMessage().getFrom().getId()));
+			hourRepository.save(new Hour(now, today, userId));
 			botApi.sendMessage(update.getMessage().getChat().getId(), "Horario de entrada registrado... " + now);
 		} else {
 			botApi.sendMessage(update.getMessage().getChat().getId(), "Horario de entrada ja esta registrado...");
 		}
 	}
 
-	public void exit(Update update) {
+	private Integer getUserId(Update update, String username) {
+		if (username != null && !username.isEmpty()) {
+			// TODO: check if user is in chat (telegram method: getChatMember)
+			Optional<UserModel> user = userRepository.findOneByUsername(username.replaceAll("@", "").trim());
+			if (user.isPresent()) {
+				return user.get().getId();
+			} else {
+				botApi.sendMessage(update.getMessage().getChat().getId(), "Usuario [" + username
+						+ "] nao encontrado, irei registrar no usuario @" + update.getMessage().getFrom().getUsername());
+			}
+		}
+
+		return update.getMessage().getFrom().getId();
+	}
+
+	public void exit(Update update, String username) {
+		Integer userId = getUserId(update, username);
 		LocalDate today = LocalDate.now(SP_ZONE_ID);
 		LocalDateTime now = LocalDateTime.now(SP_ZONE_ID);
-		Optional<Hour> hour = hourRepository.findOneByDay(today);
+		Optional<Hour> hour = hourRepository.findOneByDayAndUserId(today, userId);
 		if (hour.isPresent()) {
 			Hour h = hour.get();
 			h.setExit(now);
@@ -53,9 +75,10 @@ public class HoursExecutor {
 		}
 	}
 
-	public void list(Update update) {
+	public void list(Update update, String username) {
+		Integer userId = getUserId(update, username);
 		StringBuilder builder = new StringBuilder();
-		hourRepository.findByUserId(update.getMessage().getFrom().getId()).forEach(h -> {
+		hourRepository.findByUserId(userId).forEach(h -> {
 			builder.append(h.getDay()).append(" => ").append(h.getEnterHour().format(FORMATTER_TIME)).append(" | ")
 					.append(h.getExitHour().format(FORMATTER_TIME)).append(" => ").append(h.getHours()).append("\n");
 		});

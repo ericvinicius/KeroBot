@@ -12,6 +12,6 @@ public interface HourRepository extends CrudRepository<Hour, Integer> {
 
 	List<Hour> findByUserId(Integer id);
 
-	Optional<Hour> findOneByDay(LocalDate today);
+	Optional<Hour> findOneByDayAndUserId(LocalDate today, Integer userId);
 
 }
