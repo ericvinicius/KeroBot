@@ -28,23 +28,23 @@ public class Executor {
 
 	@Autowired
 	private GoodKeroAction goodKeroAction;
-	
+
 	@Autowired
 	private UpdateRegister updateRegister;
-	
+
 	@Autowired
 	private DeleteReminderAction deleteReminderAction;
-	
+
 	@Autowired
 	private PokemonAction pokemonAction;
-	
+
 	@Autowired
 	private HoursAction hoursAction;
 
 	private List<Action> textActions;
-	
+
 	private static final Logger logger = LogManager.getLogger(Executor.class);
-	
+
 	@PostConstruct
 	public void init() {
 		textActions = Arrays.asList(reminderAction, goodKeroAction, deleteReminderAction, pokemonAction, hoursAction);
@@ -57,7 +57,7 @@ public class Executor {
 			checkAndDo(update);
 		});
 	}
-	
+
 	private Boolean checkAndDo(Update update) {
 		return update.getIfTextExists().map(up -> {
 			return doAction(up, textActions);
@@ -65,7 +65,7 @@ public class Executor {
 	}
 
 	private String getBetterText(String text) {
-	    return Normalizer.normalize(text, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toLowerCase();
+		return Normalizer.normalize(text, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toLowerCase();
 	}
 
 	private Boolean doAction(Update update, List<Action> actions) {

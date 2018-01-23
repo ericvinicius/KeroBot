@@ -35,64 +35,40 @@ public class HoursExecutor {
 	private static final Logger logger = LogManager.getLogger(HoursExecutor.class);
 	private static DateTimeFormatter FORMATTER_TIME = DateTimeFormatter.ofPattern("HH:mm");
 
-	public void enter(Update update, String username) {
-		Integer userId = getUserId(update, username);
-		LocalDate today = LocalDate.now(SP_ZONE_ID);
-		LocalDateTime now = LocalDateTime.now(SP_ZONE_ID);
-		Optional<Hour> hour = hourRepository.findOneByDayAndUserId(today, userId);
-		if (!hour.isPresent()) {
-			hourRepository.save(new Hour(now, today, userId));
-			botApi.sendMessage(update.getMessage().getChat().getId(), "Horario de entrada registrado... " + now);
+	public void enter(Update update, String u) {
+		String username = getUserId(update, u);
+		boolean entered = enter(username);
+		if (entered) {
+			botApi.sendMessage(update.getMessage().getChat().getId(), "Horario de entrada registrado... ");
 		} else {
 			botApi.sendMessage(update.getMessage().getChat().getId(), "Horario de entrada ja esta registrado...");
 		}
 	}
 
-	private Integer getUserId(Update update, String username) {
-		logger.info("CHECKING USER...");
-		if (username != null && !username.isEmpty()) {
-			logger.info("...HAS NAME...");
-			// TODO: check if user is in chat (telegram method: getChatMember)
-			Optional<UserModel> user = userRepository.findOneByUsername(username.replaceAll("@", "").trim());
-			if (user.isPresent()) {
-				logger.info("...USER USED");
-				return user.get().getId();
-			} else {
-				logger.info("...USER NOT USED");
-				botApi.sendMessage(update.getMessage().getChat().getId(),
-						"Usuario [" + username + "] nao encontrado, irei registrar no usuario @"
-								+ update.getMessage().getFrom().getUsername());
-			}
-		}
-
-		return update.getMessage().getFrom().getId();
+	private String getUserId(Update update, String username) {
+		// TODO: check if user is in chat (telegram method: getChatMember)
+		return  username != null ? username : update.getMessage().getFrom().getUsername();
 	}
 
-	public void exit(Update update, String username) {
-		Integer userId = getUserId(update, username);
-		LocalDate today = LocalDate.now(SP_ZONE_ID);
-		LocalDateTime now = LocalDateTime.now(SP_ZONE_ID);
-		Optional<Hour> hour = hourRepository.findOneByDayAndUserId(today, userId);
-		if (hour.isPresent()) {
-			Hour h = hour.get();
-			h.setExit(now);
-			hourRepository.save(h);
-			botApi.sendMessage(update.getMessage().getChat().getId(), "Horario de saida registrado... " + now);
+	public void exit(Update update, String u) {
+		String username = getUserId(update, u);
+		boolean exited = exit(username);
+		if (exited) {
+			botApi.sendMessage(update.getMessage().getChat().getId(), "Horario de saida registrado... ");
 		} else {
-			botApi.sendMessage(update.getMessage().getChat().getId(), "Voce não registrou entrada hoje...");
+			botApi.sendMessage(update.getMessage().getChat().getId(), "Voce não registrou entrada hoje...");			
 		}
 	}
 
-	public void list(Update update, String username) {
-		Integer userId = getUserId(update, username);
+	public void list(Update update) {
 		StringBuilder builder = new StringBuilder();
-		hourRepository.findByUserId(userId).forEach(h -> {
+		hourRepository.findByUserId(update.getMessage().getFrom().getId()).forEach(h -> {
 			
 			String enter = h.getEnterHour() != null ? h.getEnterHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
 			String exit = h.getExitHour() != null ? h.getExitHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
 			
 			builder.append(h.getDay()).append(" => ").append(enter).append(" | ").append(exit).append(" => ")
-					.append(h.getHours()).append("\n");
+					.append(h.difference()).append("\n");
 		});
 
 		if (builder.length() == 0) {
@@ -100,6 +76,42 @@ public class HoursExecutor {
 		} else {
 			botApi.sendMessage(update.getMessage().getChat().getId(), builder.toString());
 		}
+	}
+
+	public boolean enter(String username) {
+		logger.info("entering... " + username);
+		Optional<UserModel> u = userRepository.findOneByUsername(username.replaceAll("@", "").trim());
+		if (u.isPresent()) {
+			UserModel user = u.get();
+			LocalDate today = LocalDate.now(SP_ZONE_ID);
+			LocalDateTime now = LocalDateTime.now(SP_ZONE_ID);
+			Optional<Hour> hour = hourRepository.findOneByDayAndUserId(today, user.getId());
+			if (!hour.isPresent()) {
+				hourRepository.save(new Hour(now, today, user.getId()));
+				logger.info("entered! " + username);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean exit(String username) {
+		logger.info("exiting... " + username);
+		Optional<UserModel> u = userRepository.findOneByUsername(username.replaceAll("@", "").trim());
+		if (u.isPresent()) {
+			UserModel user = u.get();
+			LocalDate today = LocalDate.now(SP_ZONE_ID);
+			LocalDateTime now = LocalDateTime.now(SP_ZONE_ID);
+			Optional<Hour> hour = hourRepository.findOneByDayAndUserId(today, user.getId());
+			if (hour.isPresent()) {
+				Hour h = hour.get();
+				h.setExit(now);
+				hourRepository.save(h);
+				logger.info("exited! " + username);
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

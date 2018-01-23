@@ -72,7 +72,7 @@ public class Hour {
 		this.userId = userId;
 	}
 
-	public Long getHours() {
+	public Long difference() {
 		try {
 			return ChronoUnit.HOURS.between(enterHour, exitHour);
 		} catch (Exception e) {
