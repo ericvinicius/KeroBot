@@ -89,7 +89,7 @@ public class HoursExecutor {
 		hourRepository.findByUserId(userId).forEach(h -> {
 			
 			String enter = h.getEnterHour() != null ? h.getEnterHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
-			String exit = h.getEnterHour() != null ? h.getExitHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
+			String exit = h.getExitHour() != null ? h.getExitHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
 			
 			builder.append(h.getDay()).append(" => ").append(enter).append(" | ").append(exit).append(" => ")
 					.append(h.getHours()).append("\n");
