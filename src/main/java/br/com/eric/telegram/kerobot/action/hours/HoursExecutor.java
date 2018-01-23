@@ -46,14 +46,19 @@ public class HoursExecutor {
 	}
 
 	private Integer getUserId(Update update, String username) {
+		System.out.println("CHECKING USER...");
 		if (username != null && !username.isEmpty()) {
+			System.out.println("...HAS NAME...");
 			// TODO: check if user is in chat (telegram method: getChatMember)
 			Optional<UserModel> user = userRepository.findOneByUsername(username.replaceAll("@", "").trim());
 			if (user.isPresent()) {
+				System.out.println("...USER USED");
 				return user.get().getId();
 			} else {
-				botApi.sendMessage(update.getMessage().getChat().getId(), "Usuario [" + username
-						+ "] nao encontrado, irei registrar no usuario @" + update.getMessage().getFrom().getUsername());
+				System.out.println("...USER NOT USED");
+				botApi.sendMessage(update.getMessage().getChat().getId(),
+						"Usuario [" + username + "] nao encontrado, irei registrar no usuario @"
+								+ update.getMessage().getFrom().getUsername());
 			}
 		}
 
@@ -79,8 +84,12 @@ public class HoursExecutor {
 		Integer userId = getUserId(update, username);
 		StringBuilder builder = new StringBuilder();
 		hourRepository.findByUserId(userId).forEach(h -> {
-			builder.append(h.getDay()).append(" => ").append(h.getEnterHour().format(FORMATTER_TIME)).append(" | ")
-					.append(h.getExitHour().format(FORMATTER_TIME)).append(" => ").append(h.getHours()).append("\n");
+			
+			String enter = h.getEnterHour() != null ? h.getEnterHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
+			String exit = h.getEnterHour() != null ? h.getExitHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
+			
+			builder.append(h.getDay()).append(" => ").append(enter).append(" | ").append(exit).append(" => ")
+					.append(h.getHours()).append("\n");
 		});
 
 		if (builder.length() == 0) {

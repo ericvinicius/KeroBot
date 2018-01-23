@@ -17,9 +17,9 @@ public class HoursAction extends Action {
 	private HoursExecutor hoursExecutor;
 
 	private final List<String> PATTERNS = Arrays.asList(
-			"(?<username>@\\w+ )?entrando...",
-			"(?<username>@\\w+ )?saindo...",
-			"(?<username>@\\w+ )?(listar|ver|consultar) horas...");
+			"(?<username>@\\w+ )?/ponto_entrada",
+			"(?<username>@\\w+ )?/ponto_saida",
+			"(?<username>@\\w+ )?/(listar|ver|consultar)_horas");
 
 	@Override
 	public void execute(Update update, int patternPosition, Matcher matcher) {
@@ -40,7 +40,6 @@ public class HoursAction extends Action {
 			hoursExecutor.list(update, username);
 			break;
 		}
-
 	}
 
 	@Override
