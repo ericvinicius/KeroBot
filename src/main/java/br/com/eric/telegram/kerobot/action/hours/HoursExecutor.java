@@ -6,6 +6,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +32,7 @@ public class HoursExecutor {
 	@Autowired
 	private UserRepository userRepository;
 
+	private static final Logger logger = LogManager.getLogger(HoursExecutor.class);
 	private static DateTimeFormatter FORMATTER_TIME = DateTimeFormatter.ofPattern("HH:mm");
 
 	public void enter(Update update, String username) {
@@ -46,16 +49,16 @@ public class HoursExecutor {
 	}
 
 	private Integer getUserId(Update update, String username) {
-		System.out.println("CHECKING USER...");
+		logger.info("CHECKING USER...");
 		if (username != null && !username.isEmpty()) {
-			System.out.println("...HAS NAME...");
+			logger.info("...HAS NAME...");
 			// TODO: check if user is in chat (telegram method: getChatMember)
 			Optional<UserModel> user = userRepository.findOneByUsername(username.replaceAll("@", "").trim());
 			if (user.isPresent()) {
-				System.out.println("...USER USED");
+				logger.info("...USER USED");
 				return user.get().getId();
 			} else {
-				System.out.println("...USER NOT USED");
+				logger.info("...USER NOT USED");
 				botApi.sendMessage(update.getMessage().getChat().getId(),
 						"Usuario [" + username + "] nao encontrado, irei registrar no usuario @"
 								+ update.getMessage().getFrom().getUsername());
