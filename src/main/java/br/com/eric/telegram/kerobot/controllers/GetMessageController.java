@@ -31,6 +31,7 @@ public class GetMessageController {
 	@RequestMapping
 	@ResponseStatus(value = HttpStatus.OK)
 	public void newMessage(@RequestBody Update update) {
+		logger.info("[MESSAGE] " + update.toJson());
 		try {
 			executor.execute(update);
 		} catch (Exception e) {
