@@ -73,7 +73,11 @@ public class Hour {
 	}
 
 	public Long getHours() {
-		return ChronoUnit.HOURS.between(enterHour, exitHour);
+		try {
+			return ChronoUnit.HOURS.between(enterHour, exitHour);
+		} catch (Exception e) {
+		}
+		return 0L;
 	}
 
 }
