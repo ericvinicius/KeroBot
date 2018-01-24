@@ -1,5 +1,7 @@
 package br.com.eric.telegram.kerobot.models;
 
+import static br.com.eric.telegram.kerobot.util.StringUtil.fixNumberWith2Digits;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -9,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+
+import br.com.eric.telegram.kerobot.util.StringUtil;
 
 @Entity
 public class Hour {
@@ -76,7 +80,7 @@ public class Hour {
 		try {
 			long hours = ChronoUnit.HOURS.between(enterHour, exitHour);
 			long minutes = ChronoUnit.MINUTES.between(enterHour, exitHour);
-			return hours + ":" + (minutes-(60*hours));
+			return hours + ":" + fixNumberWith2Digits((minutes-(60*hours)));
 		} catch (Exception e) {
 			return "0:00";
 		}
