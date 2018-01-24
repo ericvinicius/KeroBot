@@ -72,12 +72,14 @@ public class Hour {
 		this.userId = userId;
 	}
 
-	public Long difference() {
+	public String difference() {
 		try {
-			return ChronoUnit.HOURS.between(enterHour, exitHour);
+			long hours = ChronoUnit.HOURS.between(enterHour, exitHour);
+			long minutes = ChronoUnit.MINUTES.between(enterHour, exitHour);
+			return hours + ":" + (minutes-(60*hours));
 		} catch (Exception e) {
+			return "0:00";
 		}
-		return 0L;
 	}
 
 }

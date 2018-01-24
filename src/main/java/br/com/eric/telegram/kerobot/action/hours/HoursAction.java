@@ -16,8 +16,10 @@ public class HoursAction extends Action {
 	@Autowired
 	private HoursExecutor hoursExecutor;
 
-	private final List<String> PATTERNS = Arrays.asList("(?<username>@\\w+ )?\\/ponto_entrada",
-			"(?<username>@\\w+ )?\\/ponto_saida", "\\/(listar|ver|consultar)_horas");
+	private final List<String> PATTERNS = Arrays.asList(
+			"(?<username>@\\w+ )?\\/ponto_entrada",
+			"(?<username>@\\w+ )?\\/ponto_saida", 
+			"\\/(listar|ver|consultar)_horas");
 
 	@Override
 	public void execute(Update update, int patternPosition, Matcher matcher) {
