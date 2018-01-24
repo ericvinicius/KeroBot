@@ -1,5 +1,6 @@
 package br.com.eric.telegram.kerobot.daos;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
@@ -13,5 +14,7 @@ public interface ScheduledRepository extends CrudRepository<Scheduled, Integer> 
 	void deleteByChatIdAndUserId(Integer chatId, Integer userId);
 
 	Optional<Scheduled> findFirstByChatIdAndUserIdOrderByIdDesc(Integer chatId, Integer userId);
+
+	List<Scheduled> findAllByChatIdAndUserIdOrderByIdDesc(Integer id, Integer id2);
 
 }

@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Scheduled {
@@ -14,16 +15,21 @@ public class Scheduled {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	@NotNull
 	private String text;
 	
 	private String category;
 	
+	@NotNull
 	private Long time;
 	
+	@NotNull
 	private String userName;
 	
+	@NotNull
 	private Integer userId;
 	
+	@NotNull
 	private Integer chatId;
 	
 	@Deprecated

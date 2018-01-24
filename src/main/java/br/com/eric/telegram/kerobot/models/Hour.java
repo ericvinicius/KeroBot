@@ -12,8 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
-import br.com.eric.telegram.kerobot.util.StringUtil;
-
 @Entity
 public class Hour {
 
