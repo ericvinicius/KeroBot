@@ -17,12 +17,14 @@ public class TelegramApiExecutor {
 		return api.sendMessage(chat_id, text);
 	}
 
-	public MessageResponse sendMessageOrEditMessage(Integer chat_id, String text, InlineKeyboardMarkup inlineKeyboardMarkup, MessageType type, Integer messageId) {
+	public MessageResponse sendMessageOrEditMessage(Integer chat_id, String text, InlineKeyboardMarkup inlineKeyboardMarkup, MessageType type, Integer messageId, String callBackQueryId) {
 		if (type == MessageType.MESSAGE) {
 			return api.sendMessage(chat_id, text, inlineKeyboardMarkup);
 		} 
 		
-		return api.editMessageText(chat_id, text, messageId, inlineKeyboardMarkup);
+		MessageResponse response = api.editMessageText(chat_id, text, messageId, inlineKeyboardMarkup);
+		api.answerCallbackQuery(callBackQueryId);
+		return response;
 	}
 
 	public MessageResponse sendVideo(Integer chat_id, String videoURL) {

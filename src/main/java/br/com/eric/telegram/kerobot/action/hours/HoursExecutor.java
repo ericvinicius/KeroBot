@@ -17,6 +17,7 @@ import br.com.eric.telegram.kerobot.models.Hour;
 import br.com.eric.telegram.kerobot.models.InlineKeyboardButton;
 import br.com.eric.telegram.kerobot.models.InlineKeyboardMarkup;
 import br.com.eric.telegram.kerobot.models.MessageModel;
+import br.com.eric.telegram.kerobot.models.MessageType;
 import br.com.eric.telegram.kerobot.models.UserModel;
 import br.com.eric.telegram.kerobot.telegram.TelegramApiExecutor;
 
@@ -56,7 +57,8 @@ public class HoursExecutor {
 
 	public void list(MessageModel message) {
 		StringBuilder builder = new StringBuilder();
-		hourRepository.findByUserId(message.getChat().getId()).forEach(h -> {
+		Integer chatId = message.getChat().getId();
+		hourRepository.findByUserId(chatId).forEach(h -> {
 			
 			String enter = h.getEnterHour() != null ? h.getEnterHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
 			String exit = h.getExitHour() != null ? h.getExitHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
@@ -70,10 +72,14 @@ public class HoursExecutor {
 		InlineKeyboardButton[][] buttons = {linha_1, {}}; 
 		InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(buttons);
 		
+		MessageType messageType = message.getType();
+		String callback_query_id = messageType.getString("callback_query_id");
+		
+		Integer messageId = message.getMessageId();
 		if (builder.length() == 0) {
-			botApi.sendMessageOrEditMessage(message.getChat().getId(), "Voce nao possui horas registradas...", inlineKeyboardMarkup, message.getType(), message.getMessageId());
+			botApi.sendMessageOrEditMessage(chatId, "Voce nao possui horas registradas...", inlineKeyboardMarkup, messageType, messageId, callback_query_id);
 		} else {
-			botApi.sendMessageOrEditMessage(message.getChat().getId(), builder.toString(), inlineKeyboardMarkup, message.getType(), message.getMessageId());
+			botApi.sendMessageOrEditMessage(chatId, builder.toString(), inlineKeyboardMarkup, messageType, messageId, callback_query_id);
 		}
 	}
 

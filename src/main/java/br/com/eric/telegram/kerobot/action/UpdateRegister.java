@@ -46,10 +46,13 @@ public class UpdateRegister {
 			if (from != null && message != null && query.getData() != null && !query.getData().isEmpty()) {
 				Chat chat = message.getChat();
 				if (chat != null) {
+					
 					ChatModel chatModel = new ChatModel(chat.getId(), chat.getTitle(), chat.getType());
 					UserModel userModel = new UserModel(from.getId(), from.getFirst_name(), from.getUsername(), chatModel,
 							from.isIs_bot());
-					return new MessageModel(message.getMessage_id(), update.getUpdate_id(), userModel, chatModel, query.getData(), MessageType.CALLBACK_QUERY);
+					MessageType callbackQuery = MessageType.CALLBACK_QUERY;
+					callbackQuery.put("callback_query_id", query.getId());
+					return new MessageModel(message.getMessage_id(), update.getUpdate_id(), userModel, chatModel, query.getData(), callbackQuery);
 				}
 			}
 			return null;
