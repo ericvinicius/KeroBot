@@ -40,46 +40,58 @@ public class HoursExecutor {
 
 	public void enter(MessageModel message, String u) {
 		String username = getUserId(message, u);
-		enter(username);
-		list(message);
+		boolean enter = enter(username);
+		if (enter) {
+			list(message);
+		} else {
+			botApi.sendMessage(message.getChat().getId(), "Falha ao marcar entrada :(");
+		}
 	}
 
 	private String getUserId(MessageModel message, String username) {
 		// TODO: check if user is in chat (telegram method: getChatMember)
-		return  username != null ? username : message.getFrom().getUsername();
+		return username != null ? username : message.getFrom().getUsername();
 	}
 
 	public void exit(MessageModel message, String u) {
 		String username = getUserId(message, u);
-		exit(username);
-		list(message);
+		boolean exit = exit(username);
+		if (exit) {
+			list(message);
+		} else {
+			botApi.sendMessage(message.getChat().getId(), "Voce ja entrou no trabalho para sair...?");
+		}
+
 	}
 
 	public void list(MessageModel message) {
 		StringBuilder builder = new StringBuilder();
 		Integer chatId = message.getChat().getId();
 		hourRepository.findByUserId(message.getFrom().getId()).forEach(h -> {
-			
+
 			String enter = h.getEnterHour() != null ? h.getEnterHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
 			String exit = h.getExitHour() != null ? h.getExitHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
-			
+
 			builder.append(h.getDay()).append(" => ").append(enter).append(" | ").append(exit).append(" => ")
 					.append(h.difference()).append("\n");
 		});
 
-		InlineKeyboardButton[] linha_1 = {new InlineKeyboardButton("Entrando :(", "/ponto_entrada"), new InlineKeyboardButton("Saindo :)", "/ponto_saida")};
-		
-		InlineKeyboardButton[][] buttons = {linha_1, {}}; 
+		InlineKeyboardButton[] linha_1 = { new InlineKeyboardButton("Entrando :(", "/ponto_entrada"),
+				new InlineKeyboardButton("Saindo :)", "/ponto_saida") };
+
+		InlineKeyboardButton[][] buttons = { linha_1, {} };
 		InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(buttons);
-		
+
 		MessageType messageType = message.getType();
 		String callback_query_id = messageType.getString("callback_query_id");
-		
+
 		Integer messageId = message.getMessageId();
 		if (builder.length() == 0) {
-			botApi.sendMessageOrEditMessage(chatId, "Voce nao possui horas registradas...", inlineKeyboardMarkup, messageType, messageId, callback_query_id);
+			botApi.sendMessageOrEditMessage(chatId, "Voce nao possui horas registradas...", inlineKeyboardMarkup,
+					messageType, messageId, callback_query_id);
 		} else {
-			botApi.sendMessageOrEditMessage(chatId, builder.toString(), inlineKeyboardMarkup, messageType, messageId, callback_query_id);
+			botApi.sendMessageOrEditMessage(chatId, builder.toString(), inlineKeyboardMarkup, messageType, messageId,
+					callback_query_id);
 		}
 	}
 
@@ -99,7 +111,7 @@ public class HoursExecutor {
 		}
 		return false;
 	}
-	
+
 	public boolean exit(String username) {
 		logger.info("exiting... " + username);
 		Optional<UserModel> u = userRepository.findOneByUsername(username.replaceAll("@", "").trim());
