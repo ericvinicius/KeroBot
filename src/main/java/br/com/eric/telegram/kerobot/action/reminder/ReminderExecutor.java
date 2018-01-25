@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,11 +69,21 @@ public class ReminderExecutor {
 		StringBuilder builder = new StringBuilder();
 		Integer chatId = message.getChat().getId();
 		Integer userId = message.getFrom().getId();
+		
+		
 		builder.append("Seus Lembretes: \n");
-		scheduledRepository.findAllByChatIdAndUserIdOrderByIdDesc(chatId, userId).forEach(s -> {
-			LocalDateTime date = Instant.ofEpochMilli(s.getTime()).atZone(SP_ZONE_ID).toLocalDateTime();
-			builder.append(date.format(FORMATTER_TIME)).append(" | ").append(s.getText()).append("\n");
-		});
-		botApi.sendMessage(chatId, builder.toString());
+		List<Scheduled> reminders = scheduledRepository.findAllByChatIdAndUserIdOrderByIdDesc(chatId, userId);
+		for (Scheduled scheduled : reminders) {
+			LocalDateTime date = Instant.ofEpochMilli(scheduled.getTime()).atZone(SP_ZONE_ID).toLocalDateTime();
+			builder.append(date.format(FORMATTER_TIME)).append(" | ").append(scheduled.getText()).append("\n");
+		}
+		
+		String txt = builder.toString();
+		if (reminders.isEmpty()) {
+			txt = "Voce nao possui lembretes, neste chat";
+		}
+		
+		
+		botApi.sendMessage(chatId, txt);
 	}
 }
