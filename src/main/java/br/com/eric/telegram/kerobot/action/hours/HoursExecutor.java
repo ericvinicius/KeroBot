@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.log4j.LogManager;
@@ -65,17 +66,19 @@ public class HoursExecutor {
 	}
 
 	public void list(MessageModel message) {
-		StringBuilder builder = new StringBuilder();
 		Integer chatId = message.getChat().getId();
-		hourRepository.findByUserId(message.getFrom().getId()).forEach(h -> {
+		List<Hour> hours = hourRepository.findByUserId(message.getFrom().getId());
 
+		StringBuilder builder = new StringBuilder();
+		builder.append("Horas de @").append(message.getFrom().getUsername()).append("\n");
+		for (Hour h : hours) {
 			String enter = h.getEnterHour() != null ? h.getEnterHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
 			String exit = h.getExitHour() != null ? h.getExitHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
 
 			builder.append(h.getDay()).append(" => ").append(enter).append(" | ").append(exit).append(" => ")
 					.append(h.difference()).append("\n");
-		});
-
+		}
+		
 		InlineKeyboardButton[] linha_1 = { new InlineKeyboardButton("Entrando :(", "/ponto_entrada"),
 				new InlineKeyboardButton("Saindo :)", "/ponto_saida") };
 
@@ -86,7 +89,7 @@ public class HoursExecutor {
 		String callback_query_id = messageType.getString("callback_query_id");
 
 		Integer messageId = message.getMessageId();
-		if (builder.length() == 0) {
+		if (hours.isEmpty()) {
 			botApi.sendMessageOrEditMessage(chatId, "Voce nao possui horas registradas...", inlineKeyboardMarkup,
 					messageType, messageId, callback_query_id);
 		} else {
