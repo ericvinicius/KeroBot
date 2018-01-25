@@ -39,24 +39,17 @@ public class HoursExecutor {
 	private static final Logger logger = LogManager.getLogger(HoursExecutor.class);
 	private static DateTimeFormatter FORMATTER_TIME = DateTimeFormatter.ofPattern("HH:mm");
 
-	public void enter(MessageModel message, String u) {
-		String username = getUserId(message, u);
-		boolean enter = enter(username);
+	public void enter(MessageModel message) {
+		boolean enter = enter(message.getFrom().getUsername());
 		if (enter) {
 			list(message);
 		} else {
-			botApi.sendMessage(message.getChat().getId(), "Falha ao marcar entrada :(");
+			botApi.sendMessage(message.getChat().getId(), "Voce ja entrou hoje!");
 		}
 	}
 
-	private String getUserId(MessageModel message, String username) {
-		// TODO: check if user is in chat (telegram method: getChatMember)
-		return username != null ? username : message.getFrom().getUsername();
-	}
-
-	public void exit(MessageModel message, String u) {
-		String username = getUserId(message, u);
-		boolean exit = exit(username);
+	public void exit(MessageModel message) {
+		boolean exit = exit(message.getFrom().getUsername());
 		if (exit) {
 			list(message);
 		} else {
