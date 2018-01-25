@@ -47,5 +47,5 @@ public interface TelegramApi {
 
 	@Get
 	@Path("/bot" + TOKEN + "/answerCallbackQuery")
-	public boolean answerCallbackQuery(@QueryParameter("callback_query_id")String callBackQueryId);
+	public void answerCallbackQuery(@QueryParameter("callback_query_id")String callBackQueryId);
 }
