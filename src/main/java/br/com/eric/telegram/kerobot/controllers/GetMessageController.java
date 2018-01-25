@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import br.com.eric.telegram.kerobot.action.Executor;
 import br.com.eric.telegram.kerobot.action.hours.HoursExecutor;
 import br.com.eric.telegram.kerobot.telegram.TelegramApi;
+import br.com.eric.telegram.kerobot.telegram.TelegramApiExecutor;
 import br.com.eric.telegram.kerobot.telegram.models.Update;
 
 @Controller
@@ -26,7 +27,7 @@ public class GetMessageController {
 	private Executor executor;
 
 	@Autowired
-	private TelegramApi telegramApi;
+	private TelegramApiExecutor telegramApi;
 	
 	@Autowired
 	private HoursExecutor hoursExecutor;

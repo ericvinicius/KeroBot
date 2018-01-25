@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.eric.telegram.kerobot.models.MessageModel;
-import br.com.eric.telegram.kerobot.telegram.TelegramApi;
+import br.com.eric.telegram.kerobot.telegram.TelegramApiExecutor;
 import br.com.eric.telegram.kerobot.util.StringUtil;
 
 @Component
 public class PokemonExecutor {
 
 	@Autowired
-	private TelegramApi botApi;
+	private TelegramApiExecutor botApi;
 
 	public void execute(MessageModel message, String pokemon) {
 		String url = "";

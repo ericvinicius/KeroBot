@@ -18,7 +18,7 @@ import br.com.eric.telegram.kerobot.models.InlineKeyboardButton;
 import br.com.eric.telegram.kerobot.models.InlineKeyboardMarkup;
 import br.com.eric.telegram.kerobot.models.MessageModel;
 import br.com.eric.telegram.kerobot.models.UserModel;
-import br.com.eric.telegram.kerobot.telegram.TelegramApi;
+import br.com.eric.telegram.kerobot.telegram.TelegramApiExecutor;
 
 @Component
 public class HoursExecutor {
@@ -26,7 +26,7 @@ public class HoursExecutor {
 	private static final ZoneId SP_ZONE_ID = ZoneId.of("America/Sao_Paulo");
 
 	@Autowired
-	private TelegramApi botApi;
+	private TelegramApiExecutor botApi;
 
 	@Autowired
 	private HourRepository hourRepository;
@@ -39,12 +39,8 @@ public class HoursExecutor {
 
 	public void enter(MessageModel message, String u) {
 		String username = getUserId(message, u);
-		boolean entered = enter(username);
-		if (entered) {
-			botApi.sendMessage(message.getChat().getId(), "Horario de entrada registrado... ");
-		} else {
-			botApi.sendMessage(message.getChat().getId(), "Horario de entrada ja esta registrado...");
-		}
+		enter(username);
+		list(message);
 	}
 
 	private String getUserId(MessageModel message, String username) {
@@ -54,12 +50,8 @@ public class HoursExecutor {
 
 	public void exit(MessageModel message, String u) {
 		String username = getUserId(message, u);
-		boolean exited = exit(username);
-		if (exited) {
-			botApi.sendMessage(message.getChat().getId(), "Horario de saida registrado... ");
-		} else {
-			botApi.sendMessage(message.getChat().getId(), "Voce não registrou entrada hoje...");			
-		}
+		exit(username);
+		list(message);
 	}
 
 	public void list(MessageModel message) {
@@ -79,9 +71,9 @@ public class HoursExecutor {
 		InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(buttons);
 		
 		if (builder.length() == 0) {
-			botApi.sendMessage(message.getChat().getId(), "Voce nao possui horas registradas...", inlineKeyboardMarkup);
+			botApi.sendMessageOrEditMessage(message.getChat().getId(), "Voce nao possui horas registradas...", inlineKeyboardMarkup, message.getType(), message.getMessageId());
 		} else {
-			botApi.sendMessage(message.getChat().getId(), builder.toString(), inlineKeyboardMarkup);
+			botApi.sendMessageOrEditMessage(message.getChat().getId(), builder.toString(), inlineKeyboardMarkup, message.getType(), message.getMessageId());
 		}
 	}
 

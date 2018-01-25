@@ -1,7 +1,6 @@
 package br.com.eric.telegram.kerobot.telegram;
 
 import com.github.ljtfreitas.restify.http.contract.Get;
-import com.github.ljtfreitas.restify.http.contract.Header;
 import com.github.ljtfreitas.restify.http.contract.Path;
 import com.github.ljtfreitas.restify.http.contract.QueryParameter;
 
@@ -30,7 +29,6 @@ public interface TelegramApi {
 	
 	@Get
 	@Path("/bot" + TOKEN + "/sendMessage")
-	@Header(name = "Content-Type", value = "application/json")
 	public MessageResponse sendMessage(@QueryParameter("chat_id") Integer chat_id, @QueryParameter("text") String text, @QueryParameter("reply_markup") InlineKeyboardMarkup inlineKeyboardMarkup);
 
 	@Get
@@ -42,4 +40,8 @@ public interface TelegramApi {
 	@Path("/bot" + TOKEN + "/sendPhoto")
 	public MessageResponse sendPhoto(@QueryParameter("chat_id") Integer chat_id,
 			@QueryParameter(value = "photo") String photoURL);
+
+	@Get
+	@Path("/bot" + TOKEN + "/editMessageText")
+	public MessageResponse editMessageText(@QueryParameter("chat_id") Integer chat_id, @QueryParameter("text") String text, @QueryParameter("message_id") Integer messageId, @QueryParameter("reply_markup") InlineKeyboardMarkup inlineKeyboardMarkup);
 }

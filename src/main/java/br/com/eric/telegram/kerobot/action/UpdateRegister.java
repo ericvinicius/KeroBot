@@ -34,7 +34,7 @@ public class UpdateRegister {
 				ChatModel chatModel = new ChatModel(chat.getId(), chat.getTitle(), chat.getType());
 				UserModel userModel = new UserModel(from.getId(), from.getFirst_name(), from.getUsername(), chatModel,
 						from.isIs_bot());
-				return new MessageModel(update.getUpdate_id(), userModel, chatModel, message.getText(), MessageType.MESSAGE);
+				return new MessageModel(message.getMessage_id(), update.getUpdate_id(), userModel, chatModel, message.getText(), MessageType.MESSAGE);
 			}
 			return null;
 		}).orElse(null);
@@ -49,7 +49,7 @@ public class UpdateRegister {
 					ChatModel chatModel = new ChatModel(chat.getId(), chat.getTitle(), chat.getType());
 					UserModel userModel = new UserModel(from.getId(), from.getFirst_name(), from.getUsername(), chatModel,
 							from.isIs_bot());
-					return new MessageModel(update.getUpdate_id(), userModel, chatModel, query.getData(), MessageType.CALLBACK_QUERY);
+					return new MessageModel(message.getMessage_id(), update.getUpdate_id(), userModel, chatModel, query.getData(), MessageType.CALLBACK_QUERY);
 				}
 			}
 			return null;

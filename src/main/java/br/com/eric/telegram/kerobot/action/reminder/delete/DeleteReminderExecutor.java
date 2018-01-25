@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component;
 
 import br.com.eric.telegram.kerobot.daos.ScheduledRepository;
 import br.com.eric.telegram.kerobot.models.Scheduled;
-import br.com.eric.telegram.kerobot.telegram.TelegramApi;
+import br.com.eric.telegram.kerobot.telegram.TelegramApiExecutor;
 
 @Component
 public class DeleteReminderExecutor {
 
 	@Autowired
-	private TelegramApi botApi;
+	private TelegramApiExecutor botApi;
 
 	@Autowired
 	private ScheduledRepository scheduledRepository;

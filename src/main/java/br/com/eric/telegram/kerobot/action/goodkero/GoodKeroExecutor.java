@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 import br.com.eric.telegram.kerobot.gifhy.GiphyApi;
 import br.com.eric.telegram.kerobot.gifhy.models.Response;
 import br.com.eric.telegram.kerobot.models.MessageModel;
-import br.com.eric.telegram.kerobot.telegram.TelegramApi;
+import br.com.eric.telegram.kerobot.telegram.TelegramApiExecutor;
 
 @Component
 public class GoodKeroExecutor {
 
 	@Autowired
-	private TelegramApi botApi;
+	private TelegramApiExecutor botApi;
 
 	@Autowired
 	private GiphyApi giphyApi;

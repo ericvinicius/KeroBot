@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import br.com.eric.telegram.kerobot.daos.ScheduledRepository;
 import br.com.eric.telegram.kerobot.models.MessageModel;
 import br.com.eric.telegram.kerobot.models.Scheduled;
-import br.com.eric.telegram.kerobot.telegram.TelegramApi;
+import br.com.eric.telegram.kerobot.telegram.TelegramApiExecutor;
 import br.com.eric.telegram.kerobot.util.StringUtil;
 import br.com.eric.telegram.kerobot.util.Unit;
 
@@ -21,7 +21,7 @@ import br.com.eric.telegram.kerobot.util.Unit;
 public class ReminderExecutor {
 
 	@Autowired
-	private TelegramApi botApi;
+	private TelegramApiExecutor botApi;
 
 	@Autowired
 	private ScheduledRepository scheduledRepository;

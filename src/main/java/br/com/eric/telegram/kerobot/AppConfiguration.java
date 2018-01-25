@@ -22,6 +22,7 @@ import br.com.eric.telegram.kerobot.telegram.TelegramApi;
 
 @Configuration
 public class AppConfiguration {
+	
 	@Bean
 	TaskScheduler threadPoolTaskScheduler() {
 		return new ThreadPoolTaskScheduler();
@@ -31,7 +32,7 @@ public class AppConfiguration {
 	TelegramApi telegram() {
 		return new RestifyProxyBuilder().target(TelegramApi.class).build();
 	}
-
+	
 	@Bean
 	GiphyApi giphy() {
 		return new RestifyProxyBuilder().target(GiphyApi.class).build();
