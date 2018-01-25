@@ -58,7 +58,7 @@ public class HoursExecutor {
 	public void list(MessageModel message) {
 		StringBuilder builder = new StringBuilder();
 		Integer chatId = message.getChat().getId();
-		hourRepository.findByUserId(chatId).forEach(h -> {
+		hourRepository.findByUserId(message.getFrom().getId()).forEach(h -> {
 			
 			String enter = h.getEnterHour() != null ? h.getEnterHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
 			String exit = h.getExitHour() != null ? h.getExitHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
