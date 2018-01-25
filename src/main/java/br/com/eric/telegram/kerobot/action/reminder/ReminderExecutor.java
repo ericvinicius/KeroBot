@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.regex.Matcher;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,12 +45,13 @@ public class ReminderExecutor {
 			Integer time = StringUtil.getIntergers(txt[1]);
 			Unit unit = Unit.getFor(StringUtil.removeNumbers(txt[1]));
 
-			scheduledRepository.save(new Scheduled(txt[0], unit.getNextDateFor(time), "Reminder",
-					update.getMessage().getFrom().getUsername(), update.getMessage().getChat().getId(),
-					update.getMessage().getFrom().getId()));
+			Date dateTime = unit.getNextDateFor(time);
+			scheduledRepository
+					.save(new Scheduled(txt[0], dateTime, "Reminder", update.getMessage().getFrom().getUsername(),
+							update.getMessage().getChat().getId(), update.getMessage().getFrom().getId()));
 
-			botApi.sendMessage(update.getMessage().getChat().getId(),
-					"Te enviarei em " + time + " " + unit.getDefaultName());
+			LocalDateTime date = Instant.ofEpochMilli(dateTime.getTime()).atZone(SP_ZONE_ID).toLocalDateTime();
+			botApi.sendMessage(update.getMessage().getChat().getId(), "Registrado em " + date.format(FORMATTER_TIME));
 		} catch (Exception e) {
 			botApi.sendMessage(update.getMessage().getChat().getId(), e.getMessage());
 		}

@@ -52,7 +52,6 @@ public class Executor {
 
 	public void execute(Update update) {
 		updateRegister.validateMessage(update).ifPresent(message -> {
-			logger.info("[MESSAGE] " + update.toJson());
 			updateRegister.register(message);
 			checkAndDo(update);
 		});
