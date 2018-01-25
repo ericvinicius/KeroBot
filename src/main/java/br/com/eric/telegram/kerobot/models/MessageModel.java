@@ -4,7 +4,7 @@ public class MessageModel {
 
 	private Integer updateId;
 
-	private UserModel user;
+	private UserModel from;
 	
 	private ChatModel chat;
 
@@ -12,23 +12,27 @@ public class MessageModel {
 	
 	private String error;
 	
+	private MessageType type;
+	
+	@Deprecated
 	public MessageModel() {
 	}
 
-	public MessageModel(Integer updateId, UserModel userModel, ChatModel chatModel, String text) {
+	public MessageModel(Integer updateId, UserModel userModel, ChatModel chatModel, String text, MessageType type) {
 		this.updateId = updateId;
+		this.type = type;
 		userModel.setLastChat(chatModel);
-		this.user = userModel;
+		this.from = userModel;
 		this.chat = chatModel;
 		this.text = text;
 	}
 
-	public UserModel getUser() {
-		return user;
+	public UserModel getFrom() {
+		return from;
 	}
 
-	public void setUser(UserModel user) {
-		this.user = user;
+	public void setFrom(UserModel user) {
+		this.from = user;
 	}
 
 	public String getText() {
@@ -54,7 +58,7 @@ public class MessageModel {
 		result = prime * result + ((chat == null) ? 0 : chat.hashCode());
 		result = prime * result + ((updateId == null) ? 0 : updateId.hashCode());
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
-		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		result = prime * result + ((from == null) ? 0 : from.hashCode());
 		return result;
 	}
 
@@ -82,10 +86,10 @@ public class MessageModel {
 				return false;
 		} else if (!text.equals(other.text))
 			return false;
-		if (user == null) {
-			if (other.user != null)
+		if (from == null) {
+			if (other.from != null)
 				return false;
-		} else if (!user.equals(other.user))
+		} else if (!from.equals(other.from))
 			return false;
 		return true;
 	}
@@ -100,6 +104,14 @@ public class MessageModel {
 
 	public void setError(String error) {
 		this.error = error;
+	}
+
+	public MessageType getType() {
+		return type;
+	}
+
+	public void setType(MessageType type) {
+		this.type = type;
 	}
 
 }

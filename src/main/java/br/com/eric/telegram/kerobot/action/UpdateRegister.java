@@ -9,8 +9,10 @@ import br.com.eric.telegram.kerobot.daos.ChatRepository;
 import br.com.eric.telegram.kerobot.daos.UserRepository;
 import br.com.eric.telegram.kerobot.models.ChatModel;
 import br.com.eric.telegram.kerobot.models.MessageModel;
+import br.com.eric.telegram.kerobot.models.MessageType;
 import br.com.eric.telegram.kerobot.models.UserModel;
 import br.com.eric.telegram.kerobot.telegram.models.Chat;
+import br.com.eric.telegram.kerobot.telegram.models.Message;
 import br.com.eric.telegram.kerobot.telegram.models.Update;
 import br.com.eric.telegram.kerobot.telegram.models.User;
 
@@ -24,7 +26,7 @@ public class UpdateRegister {
 	private ChatRepository chatRepository;
 
 	public Optional<MessageModel> validateMessage(Update update) {
-		return Optional.ofNullable(update.getMessage()).map(message -> {
+		MessageModel messageModel = Optional.ofNullable(update.getMessage()).map(message -> {
 			User from = message.getFrom();
 			Chat chat = message.getChat();
 
@@ -32,16 +34,42 @@ public class UpdateRegister {
 				ChatModel chatModel = new ChatModel(chat.getId(), chat.getTitle(), chat.getType());
 				UserModel userModel = new UserModel(from.getId(), from.getFirst_name(), from.getUsername(), chatModel,
 						from.isIs_bot());
-				return new MessageModel(update.getUpdate_id(), userModel, chatModel, message.getText());
+				return new MessageModel(update.getUpdate_id(), userModel, chatModel, message.getText(), MessageType.MESSAGE);
 			}
 			return null;
-		});
+		}).orElse(null);
+		
+		MessageModel messageModel2 = Optional.ofNullable(update.getCallback_query()).map(query -> {
+			User from = query.getFrom();
+			Message message = query.getMessage();
+
+			if (from != null && message != null) {
+				Chat chat = message.getChat();
+				if (chat != null) {
+					ChatModel chatModel = new ChatModel(chat.getId(), chat.getTitle(), chat.getType());
+					UserModel userModel = new UserModel(from.getId(), from.getFirst_name(), from.getUsername(), chatModel,
+							from.isIs_bot());
+					return new MessageModel(update.getUpdate_id(), userModel, chatModel, message.getText(), MessageType.CALLBACK_QUERY);
+				}
+			}
+			return null;
+		}).orElse(null);
+		
+		return getFirstNonNull(messageModel, messageModel2);
+	}
+	
+	public Optional<MessageModel> getFirstNonNull(MessageModel...messageModels) {
+		for (MessageModel messageModel : messageModels) {
+			if (messageModel != null) {
+				return Optional.of(messageModel);
+			}
+		}
+		return Optional.empty();
 	}
 
 	public void register(MessageModel message) {
 		chatRepository.save(message.getChat());
-		userRepository.save(message.getUser());
-		// messageRepository.save(message);
+		userRepository.save(message.getFrom());
 	}
 
 }

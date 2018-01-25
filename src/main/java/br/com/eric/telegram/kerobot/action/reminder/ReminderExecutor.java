@@ -47,8 +47,8 @@ public class ReminderExecutor {
 
 			Date dateTime = unit.getNextDateFor(time);
 			scheduledRepository
-					.save(new Scheduled(txt[0], dateTime, "Reminder", message.getUser().getUsername(),
-							message.getChat().getId(), message.getUser().getId()));
+					.save(new Scheduled(txt[0], dateTime, "Reminder", message.getFrom().getUsername(),
+							message.getChat().getId(), message.getFrom().getId()));
 
 			LocalDateTime date = Instant.ofEpochMilli(dateTime.getTime()).atZone(SP_ZONE_ID).toLocalDateTime();
 			botApi.sendMessage(message.getChat().getId(), "Lembrete registrado em " + date.format(FORMATTER_TIME));
@@ -67,7 +67,7 @@ public class ReminderExecutor {
 	public void listReminders(MessageModel message) {
 		StringBuilder builder = new StringBuilder();
 		Integer chatId = message.getChat().getId();
-		Integer userId = message.getUser().getId();
+		Integer userId = message.getFrom().getId();
 		builder.append("Seus Lembretes: \n");
 		scheduledRepository.findAllByChatIdAndUserIdOrderByIdDesc(chatId, userId).forEach(s -> {
 			LocalDateTime date = Instant.ofEpochMilli(s.getTime()).atZone(SP_ZONE_ID).toLocalDateTime();

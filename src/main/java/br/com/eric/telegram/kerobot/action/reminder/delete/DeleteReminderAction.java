@@ -21,7 +21,7 @@ public class DeleteReminderAction extends Action {
 	@Override
 	public void execute(MessageModel update, int patternPosition, Matcher matcher) {
 		Integer chatId = update.getChat().getId();
-		Integer userId = update.getUser().getId();
+		Integer userId = update.getFrom().getId();
 		deleteReminderExecutor.deleteLast(chatId, userId);
 	}
 

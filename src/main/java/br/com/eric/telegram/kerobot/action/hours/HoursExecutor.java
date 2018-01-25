@@ -49,7 +49,7 @@ public class HoursExecutor {
 
 	private String getUserId(MessageModel message, String username) {
 		// TODO: check if user is in chat (telegram method: getChatMember)
-		return  username != null ? username : message.getUser().getUsername();
+		return  username != null ? username : message.getFrom().getUsername();
 	}
 
 	public void exit(MessageModel message, String u) {

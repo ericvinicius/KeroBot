@@ -53,6 +53,7 @@ public class Executor {
 
 	public void execute(Update update) {
 		updateRegister.validateMessage(update).ifPresent(message -> {
+			logger.info("Message Type: " + message.getType());
 			updateRegister.register(message);
 			doAction(message, textActions);
 		});
