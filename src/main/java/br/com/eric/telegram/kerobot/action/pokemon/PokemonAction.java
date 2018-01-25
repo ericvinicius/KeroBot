@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.eric.telegram.kerobot.action.Action;
-import br.com.eric.telegram.kerobot.telegram.models.Update;
+import br.com.eric.telegram.kerobot.models.MessageModel;
 
 @Component
 public class PokemonAction extends Action {
@@ -21,9 +21,9 @@ public class PokemonAction extends Action {
 			);
 	
 	@Override
-	public void execute(Update update, int patternPosition, Matcher matcher) {
+	public void execute(MessageModel message, int patternPosition, Matcher matcher) {
 		super.info("PokemonAction", "kero like pokemon too!");
-		pokemonExecutor.execute(update, matcher.group("pokemon"));
+		pokemonExecutor.execute(message, matcher.group("pokemon"));
 	}
 
 	@Override

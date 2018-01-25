@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 import br.com.eric.telegram.kerobot.gifhy.GiphyApi;
 import br.com.eric.telegram.kerobot.gifhy.models.Response;
+import br.com.eric.telegram.kerobot.models.MessageModel;
 import br.com.eric.telegram.kerobot.telegram.TelegramApi;
-import br.com.eric.telegram.kerobot.telegram.models.Update;
 
 @Component
 public class GoodKeroExecutor {
@@ -22,19 +22,19 @@ public class GoodKeroExecutor {
 	
 	private static int NIGHT_TRIES = 0;
 
-	public void compliment(Update update) {
+	public void compliment(MessageModel message) {
 		Response giphy = giphyApi.random(GiphyApi.Rating.G.getName(), "thanks", GiphyApi.TOKEN);
-		botApi.sendVideo(update.getMessage().getChat().getId(), giphy.getData().getImage_url());
+		botApi.sendVideo(message.getChat().getId(), giphy.getData().getImage_url());
 	}
 
-	public void thanks(Update update) {
-		botApi.sendMessage(update.getMessage().getChat().getId(), "Hehe, magina");
+	public void thanks(MessageModel message) {
+		botApi.sendMessage(message.getChat().getId(), "Hehe, magina");
 	}
 
-	public void goodTime(Update update, String phrase, String time) {
+	public void goodTime(MessageModel message, String phrase, String time) {
 		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("America/Sao_Paulo"));
 		int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-		Integer chatId = update.getMessage().getChat().getId();
+		Integer chatId = message.getChat().getId();
 
 		if (time.equals("dia") && timeOfDay >= 6 && timeOfDay < 12) {
 			doIt(chatId, time);

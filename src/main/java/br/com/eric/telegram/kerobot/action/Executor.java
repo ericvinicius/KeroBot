@@ -18,6 +18,7 @@ import br.com.eric.telegram.kerobot.action.hours.HoursAction;
 import br.com.eric.telegram.kerobot.action.pokemon.PokemonAction;
 import br.com.eric.telegram.kerobot.action.reminder.ReminderAction;
 import br.com.eric.telegram.kerobot.action.reminder.delete.DeleteReminderAction;
+import br.com.eric.telegram.kerobot.models.MessageModel;
 import br.com.eric.telegram.kerobot.telegram.models.Update;
 
 @Service
@@ -53,22 +54,16 @@ public class Executor {
 	public void execute(Update update) {
 		updateRegister.validateMessage(update).ifPresent(message -> {
 			updateRegister.register(message);
-			checkAndDo(update);
+			doAction(message, textActions);
 		});
-	}
-
-	private Boolean checkAndDo(Update update) {
-		return update.getIfTextExists().map(up -> {
-			return doAction(up, textActions);
-		}).orElse(false);
 	}
 
 	private String getBetterText(String text) {
 		return Normalizer.normalize(text, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toLowerCase();
 	}
 
-	private Boolean doAction(Update update, List<Action> actions) {
-		String goodTxt = getBetterText(update.getText().get());
+	private Boolean doAction(MessageModel message, List<Action> actions) {
+		String goodTxt = getBetterText(message.getText());
 		for (Action action : actions) {
 			List<String> patterns = action.getPatterns();
 			for (int i = 0; i < patterns.size(); i++) {
@@ -76,7 +71,7 @@ public class Executor {
 				Pattern p = Pattern.compile(pattern);
 				Matcher m = p.matcher(goodTxt);
 				if (m.find()) {
-					action.execute(update, i, m);
+					action.execute(message, i, m);
 					return true;
 				}
 			}

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.eric.telegram.kerobot.action.Action;
-import br.com.eric.telegram.kerobot.telegram.models.Update;
+import br.com.eric.telegram.kerobot.models.MessageModel;
 
 @Component
 public class GoodKeroAction extends Action {
@@ -23,20 +23,20 @@ public class GoodKeroAction extends Action {
 			);
 	
 	@Override
-	public void execute(Update update, int patternPosition, Matcher matcher) {
+	public void execute(MessageModel message, int patternPosition, Matcher matcher) {
 		super.info("GoodKeroAction", "kero is a good boy!");
 		
 		switch (patternPosition) {
 		case 0:
-			goodKeroExecutor.compliment(update);
+			goodKeroExecutor.compliment(message);
 			break;
 		case 1:
-			goodKeroExecutor.thanks(update);
+			goodKeroExecutor.thanks(message);
 			break;
 		case 2:
 			String word = matcher.group("word");
 			String time = matcher.group("time");
-			goodKeroExecutor.goodTime(update, word+" "+time, time);
+			goodKeroExecutor.goodTime(message, word+" "+time, time);
 		}
 		
 	}

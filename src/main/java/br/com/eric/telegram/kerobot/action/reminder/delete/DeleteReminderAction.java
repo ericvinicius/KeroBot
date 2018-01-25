@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.eric.telegram.kerobot.action.Action;
-import br.com.eric.telegram.kerobot.telegram.models.Update;
+import br.com.eric.telegram.kerobot.models.MessageModel;
 
 @Component
 public class DeleteReminderAction extends Action {
@@ -19,9 +19,9 @@ public class DeleteReminderAction extends Action {
 	private final List<String> PATTERNS = Arrays.asList("(kero+|@?cutekerobot),? deletar ultimo lembrete.*");
 
 	@Override
-	public void execute(Update update, int patternPosition, Matcher matcher) {
-		Integer chatId = update.getMessage().getChat().getId();
-		Integer userId = update.getMessage().getFrom().getId();
+	public void execute(MessageModel update, int patternPosition, Matcher matcher) {
+		Integer chatId = update.getChat().getId();
+		Integer userId = update.getUser().getId();
 		deleteReminderExecutor.deleteLast(chatId, userId);
 	}
 

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.eric.telegram.kerobot.action.Action;
-import br.com.eric.telegram.kerobot.telegram.models.Update;
+import br.com.eric.telegram.kerobot.models.MessageModel;
 
 @Component
 public class ReminderAction extends Action {
@@ -23,12 +23,12 @@ public class ReminderAction extends Action {
 			"/listar_lembretes");
 
 	@Override
-	public void execute(Update update, int patternPosition, Matcher matcher) {
+	public void execute(MessageModel message, int patternPosition, Matcher matcher) {
 		super.info("ReminderAction", "Registering scheduler...");
 		if (patternPosition == 3) {
-			reminderExecutor.listReminders(update);
+			reminderExecutor.listReminders(message);
 		} else {
-			reminderExecutor.saveReminder(update, matcher);
+			reminderExecutor.saveReminder(message, matcher);
 		}
 	}
 

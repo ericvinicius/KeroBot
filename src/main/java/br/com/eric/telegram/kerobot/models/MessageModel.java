@@ -1,24 +1,11 @@
 package br.com.eric.telegram.kerobot.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
-@Entity
 public class MessageModel {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	
 	private Integer updateId;
 
-	@ManyToOne
 	private UserModel user;
 	
-	@ManyToOne
 	private ChatModel chat;
 
 	private String text;
@@ -113,14 +100,6 @@ public class MessageModel {
 
 	public void setError(String error) {
 		this.error = error;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 }

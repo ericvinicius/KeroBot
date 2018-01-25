@@ -3,8 +3,8 @@ package br.com.eric.telegram.kerobot.action.pokemon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.com.eric.telegram.kerobot.models.MessageModel;
 import br.com.eric.telegram.kerobot.telegram.TelegramApi;
-import br.com.eric.telegram.kerobot.telegram.models.Update;
 import br.com.eric.telegram.kerobot.util.StringUtil;
 
 @Component
@@ -13,11 +13,11 @@ public class PokemonExecutor {
 	@Autowired
 	private TelegramApi botApi;
 
-	public void execute(Update update, String pokemon) {
+	public void execute(MessageModel message, String pokemon) {
 		String url = "";
 		int pokmeonNumber = Integer.parseInt(pokemon);
 		url = send(pokmeonNumber);
-		botApi.sendPhoto(update.getMessage().getChat().getId(), url);
+		botApi.sendPhoto(message.getChat().getId(), url);
 	}
 
 	private String send(int pokmeonNumber) {

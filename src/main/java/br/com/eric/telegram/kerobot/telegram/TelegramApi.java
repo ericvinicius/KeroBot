@@ -1,9 +1,11 @@
 package br.com.eric.telegram.kerobot.telegram;
 
 import com.github.ljtfreitas.restify.http.contract.Get;
+import com.github.ljtfreitas.restify.http.contract.Header;
 import com.github.ljtfreitas.restify.http.contract.Path;
 import com.github.ljtfreitas.restify.http.contract.QueryParameter;
 
+import br.com.eric.telegram.kerobot.models.InlineKeyboardMarkup;
 import br.com.eric.telegram.kerobot.telegram.models.MessageResponse;
 
 @Path("https://api.telegram.org/")
@@ -25,6 +27,11 @@ public interface TelegramApi {
 	@Get
 	@Path("/bot" + TOKEN + "/sendMessage")
 	public MessageResponse sendMessage(@QueryParameter("chat_id") Integer chat_id, @QueryParameter("text") String text);
+	
+	@Get
+	@Path("/bot" + TOKEN + "/sendMessage")
+	@Header(name = "Content-Type", value = "application/json")
+	public MessageResponse sendMessage(@QueryParameter("chat_id") Integer chat_id, @QueryParameter("text") String text, @QueryParameter("reply_markup") InlineKeyboardMarkup inlineKeyboardMarkup);
 
 	@Get
 	@Path("/bot" + TOKEN + "/sendVideo")

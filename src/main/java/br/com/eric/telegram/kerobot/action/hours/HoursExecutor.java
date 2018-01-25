@@ -14,9 +14,11 @@ import org.springframework.stereotype.Component;
 import br.com.eric.telegram.kerobot.daos.HourRepository;
 import br.com.eric.telegram.kerobot.daos.UserRepository;
 import br.com.eric.telegram.kerobot.models.Hour;
+import br.com.eric.telegram.kerobot.models.InlineKeyboardButton;
+import br.com.eric.telegram.kerobot.models.InlineKeyboardMarkup;
+import br.com.eric.telegram.kerobot.models.MessageModel;
 import br.com.eric.telegram.kerobot.models.UserModel;
 import br.com.eric.telegram.kerobot.telegram.TelegramApi;
-import br.com.eric.telegram.kerobot.telegram.models.Update;
 
 @Component
 public class HoursExecutor {
@@ -35,34 +37,34 @@ public class HoursExecutor {
 	private static final Logger logger = LogManager.getLogger(HoursExecutor.class);
 	private static DateTimeFormatter FORMATTER_TIME = DateTimeFormatter.ofPattern("HH:mm");
 
-	public void enter(Update update, String u) {
-		String username = getUserId(update, u);
+	public void enter(MessageModel message, String u) {
+		String username = getUserId(message, u);
 		boolean entered = enter(username);
 		if (entered) {
-			botApi.sendMessage(update.getMessage().getChat().getId(), "Horario de entrada registrado... ");
+			botApi.sendMessage(message.getChat().getId(), "Horario de entrada registrado... ");
 		} else {
-			botApi.sendMessage(update.getMessage().getChat().getId(), "Horario de entrada ja esta registrado...");
+			botApi.sendMessage(message.getChat().getId(), "Horario de entrada ja esta registrado...");
 		}
 	}
 
-	private String getUserId(Update update, String username) {
+	private String getUserId(MessageModel message, String username) {
 		// TODO: check if user is in chat (telegram method: getChatMember)
-		return  username != null ? username : update.getMessage().getFrom().getUsername();
+		return  username != null ? username : message.getUser().getUsername();
 	}
 
-	public void exit(Update update, String u) {
-		String username = getUserId(update, u);
+	public void exit(MessageModel message, String u) {
+		String username = getUserId(message, u);
 		boolean exited = exit(username);
 		if (exited) {
-			botApi.sendMessage(update.getMessage().getChat().getId(), "Horario de saida registrado... ");
+			botApi.sendMessage(message.getChat().getId(), "Horario de saida registrado... ");
 		} else {
-			botApi.sendMessage(update.getMessage().getChat().getId(), "Voce não registrou entrada hoje...");			
+			botApi.sendMessage(message.getChat().getId(), "Voce não registrou entrada hoje...");			
 		}
 	}
 
-	public void list(Update update) {
+	public void list(MessageModel message) {
 		StringBuilder builder = new StringBuilder();
-		hourRepository.findByUserId(update.getMessage().getFrom().getId()).forEach(h -> {
+		hourRepository.findByUserId(message.getChat().getId()).forEach(h -> {
 			
 			String enter = h.getEnterHour() != null ? h.getEnterHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
 			String exit = h.getExitHour() != null ? h.getExitHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
@@ -71,10 +73,15 @@ public class HoursExecutor {
 					.append(h.difference()).append("\n");
 		});
 
+		InlineKeyboardButton[] linha_1 = {new InlineKeyboardButton("Entrando :(", "/ponto_entrada"), new InlineKeyboardButton("Saindo :)", "/ponto_saida")};
+		
+		InlineKeyboardButton[][] buttons = {linha_1, {}}; 
+		InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(buttons);
+		
 		if (builder.length() == 0) {
-			botApi.sendMessage(update.getMessage().getChat().getId(), "Voce nao possui horas registradas...");
+			botApi.sendMessage(message.getChat().getId(), "Voce nao possui horas registradas...", inlineKeyboardMarkup);
 		} else {
-			botApi.sendMessage(update.getMessage().getChat().getId(), builder.toString());
+			botApi.sendMessage(message.getChat().getId(), builder.toString(), inlineKeyboardMarkup);
 		}
 	}
 

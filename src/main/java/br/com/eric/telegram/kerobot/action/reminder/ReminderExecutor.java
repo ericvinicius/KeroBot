@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.eric.telegram.kerobot.daos.ScheduledRepository;
+import br.com.eric.telegram.kerobot.models.MessageModel;
 import br.com.eric.telegram.kerobot.models.Scheduled;
 import br.com.eric.telegram.kerobot.telegram.TelegramApi;
-import br.com.eric.telegram.kerobot.telegram.models.Update;
 import br.com.eric.telegram.kerobot.util.StringUtil;
 import br.com.eric.telegram.kerobot.util.Unit;
 
@@ -34,11 +34,11 @@ public class ReminderExecutor {
 		botApi.sendMessage(s.getChatId(), msg);
 	}
 
-	public void saveReminder(Update update, Matcher matcher) {
+	public void saveReminder(MessageModel message, Matcher matcher) {
 		try {
-			String[] txt = getParts(update.getText().get(), matcher);
+			String[] txt = getParts(message.getText(), matcher);
 			if (txt[0] == null || txt[0].isEmpty()) {
-				botApi.sendMessage(update.getMessage().getChat().getId(), "É para lembrar do que? Aceito doces...");
+				botApi.sendMessage(message.getChat().getId(), "É para lembrar do que? Aceito doces...");
 				return;
 			}
 
@@ -47,13 +47,13 @@ public class ReminderExecutor {
 
 			Date dateTime = unit.getNextDateFor(time);
 			scheduledRepository
-					.save(new Scheduled(txt[0], dateTime, "Reminder", update.getMessage().getFrom().getUsername(),
-							update.getMessage().getChat().getId(), update.getMessage().getFrom().getId()));
+					.save(new Scheduled(txt[0], dateTime, "Reminder", message.getUser().getUsername(),
+							message.getChat().getId(), message.getUser().getId()));
 
 			LocalDateTime date = Instant.ofEpochMilli(dateTime.getTime()).atZone(SP_ZONE_ID).toLocalDateTime();
-			botApi.sendMessage(update.getMessage().getChat().getId(), "Registrado em " + date.format(FORMATTER_TIME));
+			botApi.sendMessage(message.getChat().getId(), "Lembrete registrado em " + date.format(FORMATTER_TIME));
 		} catch (Exception e) {
-			botApi.sendMessage(update.getMessage().getChat().getId(), e.getMessage());
+			botApi.sendMessage(message.getChat().getId(), e.getMessage());
 		}
 	}
 
@@ -64,10 +64,10 @@ public class ReminderExecutor {
 		return parts;
 	}
 
-	public void listReminders(Update update) {
+	public void listReminders(MessageModel message) {
 		StringBuilder builder = new StringBuilder();
-		Integer chatId = update.getMessage().getChat().getId();
-		Integer userId = update.getMessage().getFrom().getId();
+		Integer chatId = message.getChat().getId();
+		Integer userId = message.getUser().getId();
 		builder.append("Seus Lembretes: \n");
 		scheduledRepository.findAllByChatIdAndUserIdOrderByIdDesc(chatId, userId).forEach(s -> {
 			LocalDateTime date = Instant.ofEpochMilli(s.getTime()).atZone(SP_ZONE_ID).toLocalDateTime();

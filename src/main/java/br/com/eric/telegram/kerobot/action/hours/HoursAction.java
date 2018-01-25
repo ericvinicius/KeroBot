@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.eric.telegram.kerobot.action.Action;
-import br.com.eric.telegram.kerobot.telegram.models.Update;
+import br.com.eric.telegram.kerobot.models.MessageModel;
 
 @Component
 public class HoursAction extends Action {
@@ -22,21 +22,21 @@ public class HoursAction extends Action {
 			"\\/(listar|ver|consultar)_horas");
 
 	@Override
-	public void execute(Update update, int patternPosition, Matcher matcher) {
+	public void execute(MessageModel message, int patternPosition, Matcher matcher) {
 		super.info("HoursRegister", "kero controll hours to you");
 
 		switch (patternPosition) {
 		case 0:
 			super.info("HoursRegister", "ENTER");
-			hoursExecutor.enter(update, matcher.group("username"));
+			hoursExecutor.enter(message, matcher.group("username"));
 			break;
 		case 1:
 			super.info("HoursRegister", "EXIT");
-			hoursExecutor.exit(update, matcher.group("username"));
+			hoursExecutor.exit(message, matcher.group("username"));
 			break;
 		case 2:
 			super.info("HoursRegister", "LIST");
-			hoursExecutor.list(update);
+			hoursExecutor.list(message);
 			break;
 		}
 	}
