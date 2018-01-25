@@ -30,7 +30,7 @@ public class UpdateRegister {
 			User from = message.getFrom();
 			Chat chat = message.getChat();
 
-			if (from != null && chat != null) {
+			if (from != null && chat != null && message.getText() != null && !message.getText().isEmpty()) {
 				ChatModel chatModel = new ChatModel(chat.getId(), chat.getTitle(), chat.getType());
 				UserModel userModel = new UserModel(from.getId(), from.getFirst_name(), from.getUsername(), chatModel,
 						from.isIs_bot());
@@ -39,23 +39,23 @@ public class UpdateRegister {
 			return null;
 		}).orElse(null);
 		
-		MessageModel messageModel2 = Optional.ofNullable(update.getCallback_query()).map(query -> {
+		MessageModel messageModelFromQuery = Optional.ofNullable(update.getCallback_query()).map(query -> {
 			User from = query.getFrom();
 			Message message = query.getMessage();
 
-			if (from != null && message != null) {
+			if (from != null && message != null && query.getData() != null && !query.getData().isEmpty()) {
 				Chat chat = message.getChat();
 				if (chat != null) {
 					ChatModel chatModel = new ChatModel(chat.getId(), chat.getTitle(), chat.getType());
 					UserModel userModel = new UserModel(from.getId(), from.getFirst_name(), from.getUsername(), chatModel,
 							from.isIs_bot());
-					return new MessageModel(update.getUpdate_id(), userModel, chatModel, message.getText(), MessageType.CALLBACK_QUERY);
+					return new MessageModel(update.getUpdate_id(), userModel, chatModel, query.getData(), MessageType.CALLBACK_QUERY);
 				}
 			}
 			return null;
 		}).orElse(null);
 		
-		return getFirstNonNull(messageModel, messageModel2);
+		return getFirstNonNull(messageModel, messageModelFromQuery);
 	}
 	
 	public Optional<MessageModel> getFirstNonNull(MessageModel...messageModels) {
