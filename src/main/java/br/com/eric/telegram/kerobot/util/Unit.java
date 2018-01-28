@@ -57,4 +57,13 @@ public enum Unit {
 		return defaultName;
 	}
 
+	public static Unit getFor(Long lastTime) {
+		for (Unit unit : Unit.values()) {
+			if (lastTime % unit.getTime() == 0) {
+				return unit;
+			}
+		}
+		return null;
+	}
+
 }

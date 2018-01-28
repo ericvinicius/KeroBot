@@ -72,11 +72,7 @@ public class HoursExecutor {
 					.append(h.difference()).append("\n");
 		}
 		
-		InlineKeyboardButton[] linha_1 = { new InlineKeyboardButton("Entrando :(", "/ponto_entrada"),
-				new InlineKeyboardButton("Saindo :)", "/ponto_saida") };
-
-		InlineKeyboardButton[][] buttons = { linha_1, {} };
-		InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(buttons);
+		InlineKeyboardMarkup inlineKeyboardMarkup = createButtons();
 
 		MessageType messageType = message.getType();
 		String callback_query_id = messageType.getString("callback_query_id");
@@ -89,6 +85,15 @@ public class HoursExecutor {
 			botApi.sendMessageOrEditMessage(chatId, builder.toString(), inlineKeyboardMarkup, messageType, messageId,
 					callback_query_id);
 		}
+	}
+
+	private InlineKeyboardMarkup createButtons() {
+		InlineKeyboardButton[] linha_1 = { new InlineKeyboardButton("Entrando :(", "/ponto_entrada"),
+				new InlineKeyboardButton("Saindo :)", "/ponto_saida") };
+
+		InlineKeyboardButton[][] buttons = { linha_1, {} };
+		InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(buttons);
+		return inlineKeyboardMarkup;
 	}
 
 	public boolean enter(String username) {

@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.eric.telegram.kerobot.daos.ScheduledRepository;
+import br.com.eric.telegram.kerobot.models.InlineKeyboardButton;
+import br.com.eric.telegram.kerobot.models.InlineKeyboardMarkup;
 import br.com.eric.telegram.kerobot.models.MessageModel;
 import br.com.eric.telegram.kerobot.models.Scheduled;
 import br.com.eric.telegram.kerobot.telegram.TelegramApiExecutor;
@@ -32,7 +34,31 @@ public class ReminderExecutor {
 
 	public void execute(Scheduled s) {
 		String msg = "@" + s.getUserName() + ", lembrete: " + s.getText();
-		botApi.sendMessage(s.getChatId(), msg);
+		botApi.sendMessage(s.getChatId(), msg, createButtons(s.getPeriod()));
+	}
+
+	private InlineKeyboardMarkup createButtons(Long lastTime) {
+		
+		InlineKeyboardButton[] linha_1 = { new InlineKeyboardButton("+15m", "/snooze_reminder_15m"),
+				new InlineKeyboardButton("+1h", "/snooze_reminder_1h"),
+				new InlineKeyboardButton("+3h", "/snooze_reminder_3h"),
+				new InlineKeyboardButton("+5h", "/snooze_reminder_5h"),
+				new InlineKeyboardButton("+12h", "/snooze_reminder_12h"),
+				new InlineKeyboardButton("+1d", "/snooze_reminder_1d"),
+				new InlineKeyboardButton("+3d", "/snooze_reminder_3d")
+		};
+		
+		Unit unit = Unit.getFor(lastTime);
+		if (unit != null) {
+			int times = (int) (lastTime / unit.getTime());
+			linha_1[6] = new InlineKeyboardButton("+=", "/snooze_reminder_" + times + unit.getNames().get(0));
+		}
+
+		InlineKeyboardButton[][] buttons = { linha_1, {
+			new InlineKeyboardButton("finish", "/snooze_reminder_cancel")
+		} };
+		InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(buttons);
+		return inlineKeyboardMarkup;
 	}
 
 	public void saveReminder(MessageModel message, Matcher matcher) {
@@ -47,9 +73,8 @@ public class ReminderExecutor {
 			Unit unit = Unit.getFor(StringUtil.removeNumbers(txt[1]));
 
 			Date dateTime = unit.getNextDateFor(time);
-			scheduledRepository
-					.save(new Scheduled(txt[0], dateTime, "Reminder", message.getFrom().getUsername(),
-							message.getChat().getId(), message.getFrom().getId()));
+			scheduledRepository.save(new Scheduled(txt[0], dateTime, "Reminder", message.getFrom().getUsername(),
+					message.getChat().getId(), message.getFrom().getId(), unit.getTime() * time));
 
 			LocalDateTime date = Instant.ofEpochMilli(dateTime.getTime()).atZone(SP_ZONE_ID).toLocalDateTime();
 			botApi.sendMessage(message.getChat().getId(), "Lembrete registrado em " + date.format(FORMATTER_TIME));
@@ -69,21 +94,37 @@ public class ReminderExecutor {
 		StringBuilder builder = new StringBuilder();
 		Integer chatId = message.getChat().getId();
 		Integer userId = message.getFrom().getId();
-		
-		
+
 		builder.append("Seus Lembretes: \n");
 		List<Scheduled> reminders = scheduledRepository.findAllByChatIdAndUserIdOrderByIdDesc(chatId, userId);
 		for (Scheduled scheduled : reminders) {
 			LocalDateTime date = Instant.ofEpochMilli(scheduled.getTime()).atZone(SP_ZONE_ID).toLocalDateTime();
 			builder.append(date.format(FORMATTER_TIME)).append(" | ").append(scheduled.getText()).append("\n");
 		}
-		
+
 		String txt = builder.toString();
 		if (reminders.isEmpty()) {
 			txt = "Voce nao possui lembretes, neste chat";
 		}
-		
-		
+
 		botApi.sendMessage(chatId, txt);
+	}
+
+	public void snooze(MessageModel message, Matcher matcher) {
+		String snooze = matcher.group("end");
+		String originalMessage = message.getType().getString("message_text");
+		String messageToSave = originalMessage.replaceAll(".*lembrete: ", "");
+
+		try {
+			Integer time = StringUtil.getIntergers(snooze);
+			Unit unit = Unit.getFor(StringUtil.removeNumbers(snooze));
+
+
+			Date dateTime = unit.getNextDateFor(time);
+			scheduledRepository.save(new Scheduled(messageToSave, dateTime, "Reminder", message.getFrom().getUsername(),
+					message.getChat().getId(), message.getFrom().getId(), unit.getTime() * time));
+		} catch (Exception e) {
+		}
+		botApi.editMessage(message.getChat().getId(), message.getMessageId(), originalMessage);
 	}
 }

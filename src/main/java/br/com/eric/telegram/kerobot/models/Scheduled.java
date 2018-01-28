@@ -23,6 +23,8 @@ public class Scheduled {
 	@NotNull
 	private Long time;
 	
+	private Long period;
+	
 	@NotNull
 	private String userName;
 	
@@ -36,11 +38,12 @@ public class Scheduled {
 	public Scheduled() {
 	}
 
-	public Scheduled(String text, Date time, String category, String to, Integer chatId, Integer userId) {
+	public Scheduled(String text, Date time, String category, String to, Integer chatId, Integer userId, Long period) {
 		this.text = text;
 		this.userName = to;
 		this.chatId = chatId;
 		this.userId = userId;
+		this.period = period;
 		this.time = time.getTime();
 		this.category = category;
 		
@@ -92,6 +95,22 @@ public class Scheduled {
 
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Long getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(Long period) {
+		this.period = period;
 	}
 
 }

@@ -20,13 +20,16 @@ public class ReminderAction extends Action {
 			"(?<start>(?s).*)( +me +)?(lembr(e|ar) +(em|daqui))(?<end>.*)",
 			"(?<start>(?s).*)( +me +)?(avis(e|ar) +(em|daqui))(?<end>.*)",
 			"(?<start>(?s).*)( +me +)?(envi(ar|e) +(em|daqui))(?<end>.*)",
-			"/listar_lembretes");
+			"/listar_lembretes",
+			"/snooze_reminder_(?<end>.*)");
 
 	@Override
 	public void execute(MessageModel message, int patternPosition, Matcher matcher) {
 		super.info("ReminderAction", "Registering scheduler...");
 		if (patternPosition == 3) {
 			reminderExecutor.listReminders(message);
+		} else if (patternPosition == 4) { 
+			reminderExecutor.snooze(message, matcher);
 		} else {
 			reminderExecutor.saveReminder(message, matcher);
 		}

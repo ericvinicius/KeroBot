@@ -52,6 +52,7 @@ public class UpdateRegister {
 							from.isIs_bot());
 					MessageType callbackQuery = MessageType.CALLBACK_QUERY;
 					callbackQuery.put("callback_query_id", query.getId());
+					callbackQuery.put("message_text", message.getText());
 					return new MessageModel(message.getMessage_id(), update.getUpdate_id(), userModel, chatModel, query.getData(), callbackQuery);
 				}
 			}

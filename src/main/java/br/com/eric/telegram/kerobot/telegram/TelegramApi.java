@@ -44,6 +44,10 @@ public interface TelegramApi {
 	@Get
 	@Path("/bot" + TOKEN + "/editMessageText")
 	public MessageResponse editMessageText(@QueryParameter("chat_id") Integer chat_id, @QueryParameter("text") String text, @QueryParameter("message_id") Integer messageId, @QueryParameter("reply_markup") InlineKeyboardMarkup inlineKeyboardMarkup);
+	
+	@Get
+	@Path("/bot" + TOKEN + "/editMessageText")
+	public MessageResponse editMessageText(@QueryParameter("chat_id") Integer chat_id, @QueryParameter("text") String text, @QueryParameter("message_id") Integer messageId);
 
 	@Get
 	@Path("/bot" + TOKEN + "/answerCallbackQuery")

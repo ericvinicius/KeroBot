@@ -16,6 +16,10 @@ public class TelegramApiExecutor {
 	public MessageResponse sendMessage(Integer chat_id, String text) {
 		return api.sendMessage(chat_id, text);
 	}
+	
+	public MessageResponse sendMessage(Integer chat_id, String text, InlineKeyboardMarkup inlineKeyboardMarkup) {
+		return api.sendMessage(chat_id, text, inlineKeyboardMarkup);
+	}
 
 	public MessageResponse sendMessageOrEditMessage(Integer chat_id, String text, InlineKeyboardMarkup inlineKeyboardMarkup, MessageType type, Integer messageId, String callBackQueryId) {
 		if (type == MessageType.MESSAGE) {
@@ -26,12 +30,16 @@ public class TelegramApiExecutor {
 		api.answerCallbackQuery(callBackQueryId);
 		return response;
 	}
-
+	
 	public MessageResponse sendVideo(Integer chat_id, String videoURL) {
 		return api.sendVideo(chat_id, videoURL);
 	}
 
 	public MessageResponse sendPhoto(Integer chat_id, String photoURL) {
 		return api.sendPhoto(chat_id, photoURL);
+	}
+
+	public MessageResponse editMessage(Integer chat_id, Integer messageId, String text) {
+		return api.editMessageText(chat_id, text, messageId);
 	}
 }
