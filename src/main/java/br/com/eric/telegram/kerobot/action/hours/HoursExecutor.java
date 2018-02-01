@@ -145,7 +145,7 @@ public class HoursExecutor {
 		Optional<UserModel> u = userRepository.findOneByUsername(message.getFrom().getUsername().replaceAll("@", "").trim());
 		if (u.isPresent()) {
 			UserModel user = u.get();
-			LocalDate today = LocalDate.now(SP_ZONE_ID);
+			LocalDate today = LocalDate.now(SP_ZONE_ID).minusDays(1);
 			Optional<Hour> hour = hourRepository.findOneByDayAndUserId(today, user.getId());
 			hour.ifPresent(h -> {
 				boolean add = true;
