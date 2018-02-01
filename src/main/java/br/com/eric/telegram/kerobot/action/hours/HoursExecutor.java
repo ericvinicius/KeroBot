@@ -158,7 +158,7 @@ public class HoursExecutor {
 				} else if (hourTxt == "saida") {
 					h.getExitAddOrRemove(10, add);
 				}
-				
+				hourRepository.save(h);
 				list(message);
 			});
 		}
