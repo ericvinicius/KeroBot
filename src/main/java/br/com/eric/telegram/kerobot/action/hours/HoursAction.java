@@ -44,8 +44,11 @@ public class HoursAction extends Action {
 		case 3:
 			super.info("HoursRegister", "REFRESH");
 			hoursExecutor.refresh(message);
+			break;
 		case 4:
+			super.info("HoursRegister", "EDIT");
 			hoursExecutor.edit(message, matcher);
+			break;
 			
 		}
 	}
