@@ -152,18 +152,18 @@ public class HoursExecutor {
 			hour.ifPresent(h -> {
 				logger.info("diference: " + h.difference());
 				int add = 0;
-				if (action == "-") {
+				if (action.equals("-")) {
 					logger.info("Subtract");
 					add = -10;
-				} else if (action == "+") {
+				} else if (action.equals("+")) {
 					logger.info("Add");
 					add = 10;
 				}
 				
-				if (hourTxt == "entrada") {
+				if (hourTxt.equals("entrada")) {
 					logger.info("Enter");
 					h.enterAddMinutes(add);
-				} else if (hourTxt == "saida") {
+				} else if (hourTxt.equals("saida")) {
 					logger.info("Exit");
 					h.exitaddMinutes(add);
 				}
