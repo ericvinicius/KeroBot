@@ -88,8 +88,11 @@ public class HoursExecutor {
 	}
 
 	private InlineKeyboardMarkup createButtons() {
-		InlineKeyboardButton[] linha_1 = { new InlineKeyboardButton("Entrando :(", "/ponto_entrada"),
-				new InlineKeyboardButton("Saindo :)", "/ponto_saida") };
+		InlineKeyboardButton[] linha_1 = { 
+				new InlineKeyboardButton("Entrando :(", "/ponto_entrada"),
+				new InlineKeyboardButton("Saindo :)", "/ponto_saida"),
+				new InlineKeyboardButton("§", "/ponto_refresh"),
+		};
 
 		InlineKeyboardButton[][] buttons = { linha_1, {} };
 		InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(buttons);
@@ -130,6 +133,10 @@ public class HoursExecutor {
 			}
 		}
 		return false;
+	}
+
+	public void refresh(MessageModel message) {
+		list(message);
 	}
 
 }

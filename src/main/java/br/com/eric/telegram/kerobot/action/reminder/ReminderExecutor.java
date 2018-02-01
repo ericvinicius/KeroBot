@@ -45,7 +45,7 @@ public class ReminderExecutor {
 				new InlineKeyboardButton("+1h", "/snooze_reminder_1h"),
 				new InlineKeyboardButton("+3h", "/snooze_reminder_3h"),
 				new InlineKeyboardButton("+1d", "/snooze_reminder_1d"),
-				new InlineKeyboardButton("end", "/snooze_reminder_cancel") };
+				new InlineKeyboardButton("×", "/snooze_reminder_cancel") };
 
 		Unit unit = Unit.getFor(lastTime);
 		if (unit != null) {

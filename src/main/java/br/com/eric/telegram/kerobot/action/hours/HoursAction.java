@@ -19,7 +19,9 @@ public class HoursAction extends Action {
 	private final List<String> PATTERNS = Arrays.asList(
 			"\\/ponto_entrada",
 			"\\/ponto_saida", 
-			"\\/(listar|ver|consultar)_horas");
+			"\\/(listar|ver|consultar)_horas",
+			"\\/ponto_refresh" 
+			);
 
 	@Override
 	public void execute(MessageModel message, int patternPosition, Matcher matcher) {
@@ -38,6 +40,10 @@ public class HoursAction extends Action {
 			super.info("HoursRegister", "LIST");
 			hoursExecutor.list(message);
 			break;
+		case 3:
+			super.info("HoursRegister", "REFRESH");
+			hoursExecutor.refresh(message);
+			
 		}
 	}
 
