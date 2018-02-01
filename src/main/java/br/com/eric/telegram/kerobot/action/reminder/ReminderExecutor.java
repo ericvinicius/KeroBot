@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,7 @@ public class ReminderExecutor {
 
 	private static DateTimeFormatter FORMATTER_TIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 	private static final ZoneId SP_ZONE_ID = ZoneId.of("America/Sao_Paulo");
+	private static final Logger logger = LogManager.getLogger(ReminderExecutor.class);
 
 	public void execute(Scheduled s) {
 		String msg = "@" + s.getUserName() + ", lembrete: " + s.getText();
@@ -38,23 +41,19 @@ public class ReminderExecutor {
 	}
 
 	private InlineKeyboardMarkup createButtons(Long lastTime) {
-		
-		InlineKeyboardButton[] linha_1 = { 
-				new InlineKeyboardButton("+15m", "/snooze_reminder_15m"),
+		InlineKeyboardButton[] linha_1 = { new InlineKeyboardButton("+15m", "/snooze_reminder_15m"),
 				new InlineKeyboardButton("+1h", "/snooze_reminder_1h"),
 				new InlineKeyboardButton("+3h", "/snooze_reminder_3h"),
-				new InlineKeyboardButton("+1d", "/snooze_reminder_1d")
-		};
-		
+				new InlineKeyboardButton("+1d", "/snooze_reminder_1d"),
+				new InlineKeyboardButton("end", "/snooze_reminder_cancel") };
+
 		Unit unit = Unit.getFor(lastTime);
 		if (unit != null) {
 			int times = (int) (lastTime / unit.getTime());
 			linha_1[3] = new InlineKeyboardButton("+=", "/snooze_reminder_" + times + unit.getNames().get(0));
 		}
 
-		InlineKeyboardButton[][] buttons = { linha_1, {
-			new InlineKeyboardButton("end", "/snooze_reminder_cancel")
-		} };
+		InlineKeyboardButton[][] buttons = { linha_1, {} };
 		InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(buttons);
 		return inlineKeyboardMarkup;
 	}
@@ -112,17 +111,27 @@ public class ReminderExecutor {
 		String snooze = matcher.group("end");
 		String originalMessage = message.getType().getString("message_text");
 		String messageToSave = originalMessage.replaceAll(".*lembrete: ", "");
+		Date dateTime;
 
 		try {
 			Integer time = StringUtil.getIntergers(snooze);
 			Unit unit = Unit.getFor(StringUtil.removeNumbers(snooze));
 
-
-			Date dateTime = unit.getNextDateFor(time);
+			dateTime = unit.getNextDateFor(time);
 			scheduledRepository.save(new Scheduled(messageToSave, dateTime, "Reminder", message.getFrom().getUsername(),
 					message.getChat().getId(), message.getFrom().getId(), unit.getTime() * time));
+		} catch (NumberFormatException nfe) {
+			logger.info("Terminando acoes de snooze");
+			botApi.editMessage(message.getChat().getId(), message.getMessageId(), originalMessage);
+			return;
 		} catch (Exception e) {
+			e.printStackTrace();
+			botApi.editMessage(message.getChat().getId(), message.getMessageId(), "Falha ao adiar!");
+			return;
 		}
-		botApi.editMessage(message.getChat().getId(), message.getMessageId(), originalMessage);
+
+		String when = Instant.ofEpochMilli(dateTime.getTime()).atZone(SP_ZONE_ID).toLocalDateTime()
+				.format(FORMATTER_TIME);
+		botApi.editMessage(message.getChat().getId(), message.getMessageId(), "Lembrete adiado para " + when);
 	}
 }
