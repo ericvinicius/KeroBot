@@ -39,23 +39,21 @@ public class ReminderExecutor {
 
 	private InlineKeyboardMarkup createButtons(Long lastTime) {
 		
-		InlineKeyboardButton[] linha_1 = { new InlineKeyboardButton("+15m", "/snooze_reminder_15m"),
+		InlineKeyboardButton[] linha_1 = { 
+				new InlineKeyboardButton("+15m", "/snooze_reminder_15m"),
 				new InlineKeyboardButton("+1h", "/snooze_reminder_1h"),
 				new InlineKeyboardButton("+3h", "/snooze_reminder_3h"),
-				new InlineKeyboardButton("+5h", "/snooze_reminder_5h"),
-				new InlineKeyboardButton("+12h", "/snooze_reminder_12h"),
-				new InlineKeyboardButton("+1d", "/snooze_reminder_1d"),
-				new InlineKeyboardButton("+3d", "/snooze_reminder_3d")
+				new InlineKeyboardButton("+1d", "/snooze_reminder_1d")
 		};
 		
 		Unit unit = Unit.getFor(lastTime);
 		if (unit != null) {
 			int times = (int) (lastTime / unit.getTime());
-			linha_1[6] = new InlineKeyboardButton("+=", "/snooze_reminder_" + times + unit.getNames().get(0));
+			linha_1[3] = new InlineKeyboardButton("+=", "/snooze_reminder_" + times + unit.getNames().get(0));
 		}
 
 		InlineKeyboardButton[][] buttons = { linha_1, {
-			new InlineKeyboardButton("finish", "/snooze_reminder_cancel")
+			new InlineKeyboardButton("end", "/snooze_reminder_cancel")
 		} };
 		InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(buttons);
 		return inlineKeyboardMarkup;
