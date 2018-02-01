@@ -26,7 +26,10 @@ public class TelegramApiExecutor {
 			return api.sendMessage(chat_id, text, inlineKeyboardMarkup);
 		} 
 		
-		MessageResponse response = api.editMessageText(chat_id, text, messageId, inlineKeyboardMarkup);
+		MessageResponse response = null;
+		try {
+			response = api.editMessageText(chat_id, text, messageId, inlineKeyboardMarkup);
+		} catch (Exception e) {}
 		api.answerCallbackQuery(callBackQueryId);
 		return response;
 	}
