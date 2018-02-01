@@ -144,10 +144,11 @@ public class HoursExecutor {
 		logger.info("hora = [" + hourTxt + "]");
 		logger.info("action = [" + action + "]");
 
-		Optional<UserModel> u = userRepository.findOneByUsername(message.getFrom().getUsername().replaceAll("@", "").trim());
+		Optional<UserModel> u = userRepository
+				.findOneByUsername(message.getFrom().getUsername().replaceAll("@", "").trim());
 		if (u.isPresent()) {
 			UserModel user = u.get();
-			LocalDate today = LocalDate.now(SP_ZONE_ID).minusDays(1);
+			LocalDate today = LocalDate.now(SP_ZONE_ID);
 			Optional<Hour> hour = hourRepository.findOneByDayAndUserId(today, user.getId());
 			hour.ifPresent(h -> {
 				logger.info("diference: " + h.difference());
@@ -159,7 +160,7 @@ public class HoursExecutor {
 					logger.info("Add");
 					add = 10;
 				}
-				
+
 				if (hourTxt.equals("entrada")) {
 					logger.info("Enter");
 					h.enterAddMinutes(add);
@@ -167,7 +168,7 @@ public class HoursExecutor {
 					logger.info("Exit");
 					h.exitaddMinutes(add);
 				}
-				
+
 				logger.info("diference after: " + h.difference());
 				hourRepository.save(h);
 				list(message);
