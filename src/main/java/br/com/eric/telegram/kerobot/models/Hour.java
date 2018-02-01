@@ -84,17 +84,11 @@ public class Hour {
 		}
 	}
 
-	public void getEnterAddOrRemove(int i, boolean add) {
-		if (!add) {
-			i = i * -1;
-		}
+	public void getEnterAddMinutes(int i) {
 		enterHour.plusMinutes(i);
 	}
 
-	public void getExitAddOrRemove(int i, boolean add) {
-		if (!add) {
-			i = i * -1;
-		}
+	public void getExitAddMinutes(int i) {
 		exitHour = exitHour.plusMinutes(i);
 		
 	}

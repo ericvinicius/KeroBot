@@ -141,6 +141,8 @@ public class HoursExecutor {
 	public void edit(MessageModel message, Matcher matcher) {
 		String hourTxt = matcher.group("hour");
 		String action = matcher.group("action");
+		logger.info("hora = [" + hourTxt + "]");
+		logger.info("action = [" + action + "]");
 
 		Optional<UserModel> u = userRepository.findOneByUsername(message.getFrom().getUsername().replaceAll("@", "").trim());
 		if (u.isPresent()) {
@@ -148,16 +150,19 @@ public class HoursExecutor {
 			LocalDate today = LocalDate.now(SP_ZONE_ID).minusDays(1);
 			Optional<Hour> hour = hourRepository.findOneByDayAndUserId(today, user.getId());
 			hour.ifPresent(h -> {
-				boolean add = true;
+				int add = 0;
 				if (action == "-") {
-					add = false;
+					add = -10;
+				} else if (action == "+") {
+					add = 10;
 				}
 				
 				if (hourTxt == "entrada") {
-					h.getEnterAddOrRemove(10, add);
+					h.getEnterAddMinutes(add);
 				} else if (hourTxt == "saida") {
-					h.getExitAddOrRemove(10, add);
+					h.getExitAddMinutes(add);
 				}
+				
 				hourRepository.save(h);
 				list(message);
 			});
