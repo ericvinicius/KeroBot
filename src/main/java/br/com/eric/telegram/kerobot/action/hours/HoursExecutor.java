@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -71,7 +72,7 @@ public class HoursExecutor {
 			builder.append(h.getDay()).append(" => ").append(enter).append(" | ").append(exit).append(" => ")
 					.append(h.difference()).append("\n");
 		}
-		
+
 		InlineKeyboardMarkup inlineKeyboardMarkup = createButtons();
 
 		MessageType messageType = message.getType();
@@ -88,11 +89,9 @@ public class HoursExecutor {
 	}
 
 	private InlineKeyboardMarkup createButtons() {
-		InlineKeyboardButton[] linha_1 = { 
-				new InlineKeyboardButton("Entrando :(", "/ponto_entrada"),
+		InlineKeyboardButton[] linha_1 = { new InlineKeyboardButton("Entrando :(", "/ponto_entrada"),
 				new InlineKeyboardButton("Saindo :)", "/ponto_saida"),
-				new InlineKeyboardButton("§", "/ponto_refresh"),
-		};
+				new InlineKeyboardButton("§", "/ponto_refresh"), };
 
 		InlineKeyboardButton[][] buttons = { linha_1, {} };
 		InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(buttons);
@@ -137,6 +136,33 @@ public class HoursExecutor {
 
 	public void refresh(MessageModel message) {
 		list(message);
+	}
+
+	public void edit(MessageModel message, Matcher matcher) {
+		String hourTxt = matcher.group("hour");
+		String action = matcher.group("action");
+
+		Optional<UserModel> u = userRepository.findOneByUsername(message.getFrom().getUsername().replaceAll("@", "").trim());
+		if (u.isPresent()) {
+			UserModel user = u.get();
+			LocalDate today = LocalDate.now(SP_ZONE_ID);
+			Optional<Hour> hour = hourRepository.findOneByDayAndUserId(today, user.getId());
+			hour.ifPresent(h -> {
+				boolean add = true;
+				if (action == "-") {
+					add = false;
+				}
+				
+				if (hourTxt == "entrada") {
+					h.getEnterAddOrRemove(10, add);
+				} else if (hourTxt == "saida") {
+					h.getExitAddOrRemove(10, add);
+				}
+				
+				list(message);
+			});
+		}
+
 	}
 
 }

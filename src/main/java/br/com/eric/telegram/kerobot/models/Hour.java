@@ -84,4 +84,21 @@ public class Hour {
 		}
 	}
 
+	public void getEnterAddOrRemove(int i, boolean add) {
+		if (add) {
+			enterHour.plusMinutes(i);
+		} else {
+			enterHour.minusMinutes(i);
+		}
+	}
+
+	public void getExitAddOrRemove(int i, boolean add) {
+		if (add) {
+			exitHour.plusMinutes(i);
+		} else {
+			exitHour.minusMinutes(i);
+		}
+		
+	}
+
 }

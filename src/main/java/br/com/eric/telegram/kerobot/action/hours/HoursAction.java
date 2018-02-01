@@ -20,7 +20,8 @@ public class HoursAction extends Action {
 			"\\/ponto_entrada",
 			"\\/ponto_saida", 
 			"\\/(listar|ver|consultar)_horas",
-			"\\/ponto_refresh" 
+			"\\/ponto_refresh",
+			"\\/edit_ponto (?<hour>(entrada|saida)) (?<action>(+|-))"
 			);
 
 	@Override
@@ -43,6 +44,8 @@ public class HoursAction extends Action {
 		case 3:
 			super.info("HoursRegister", "REFRESH");
 			hoursExecutor.refresh(message);
+		case 4:
+			hoursExecutor.edit(message, matcher);
 			
 		}
 	}
