@@ -84,12 +84,12 @@ public class Hour {
 		}
 	}
 
-	public void getEnterAddMinutes(int i) {
-		enterHour.plusMinutes(i);
+	public void enterAddMinutes(int i) {
+		setEnter(enterHour.plusMinutes(i));
 	}
 
-	public void getExitAddMinutes(int i) {
-		exitHour = exitHour.plusMinutes(i);
+	public void exitaddMinutes(int i) {
+		setExit(exitHour.plusMinutes(i));
 		
 	}
 

@@ -150,19 +150,25 @@ public class HoursExecutor {
 			LocalDate today = LocalDate.now(SP_ZONE_ID).minusDays(1);
 			Optional<Hour> hour = hourRepository.findOneByDayAndUserId(today, user.getId());
 			hour.ifPresent(h -> {
+				logger.info("diference: " + h.difference());
 				int add = 0;
 				if (action == "-") {
+					logger.info("Subtract");
 					add = -10;
 				} else if (action == "+") {
+					logger.info("Add");
 					add = 10;
 				}
 				
 				if (hourTxt == "entrada") {
-					h.getEnterAddMinutes(add);
+					logger.info("Enter");
+					h.enterAddMinutes(add);
 				} else if (hourTxt == "saida") {
-					h.getExitAddMinutes(add);
+					logger.info("Exit");
+					h.exitaddMinutes(add);
 				}
 				
+				logger.info("diference after: " + h.difference());
 				hourRepository.save(h);
 				list(message);
 			});
