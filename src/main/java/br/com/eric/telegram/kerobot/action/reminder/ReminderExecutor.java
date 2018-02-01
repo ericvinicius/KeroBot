@@ -45,12 +45,12 @@ public class ReminderExecutor {
 				new InlineKeyboardButton("+1h", "/snooze_reminder_1h"),
 				new InlineKeyboardButton("+3h", "/snooze_reminder_3h"),
 				new InlineKeyboardButton("+1d", "/snooze_reminder_1d"),
-				new InlineKeyboardButton("×", "/snooze_reminder_cancel") };
+				new InlineKeyboardButton(":x:", "/snooze_reminder_cancel") };
 
 		Unit unit = Unit.getFor(lastTime);
 		if (unit != null) {
 			int times = (int) (lastTime / unit.getTime());
-			linha_1[3] = new InlineKeyboardButton("+=", "/snooze_reminder_" + times + unit.getNames().get(0));
+			linha_1[3] = new InlineKeyboardButton(":recycle:", "/snooze_reminder_" + times + unit.getNames().get(0));
 		}
 
 		InlineKeyboardButton[][] buttons = { linha_1, {} };

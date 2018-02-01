@@ -1,5 +1,7 @@
 package br.com.eric.telegram.kerobot.action.hours;
 
+import static com.vdurmont.emoji.EmojiParser.parseToUnicode;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -89,9 +91,11 @@ public class HoursExecutor {
 	}
 
 	private InlineKeyboardMarkup createButtons() {
-		InlineKeyboardButton[] linha_1 = { new InlineKeyboardButton("Entrando :(", "/ponto_entrada"),
-				new InlineKeyboardButton("Saindo :)", "/ponto_saida"),
-				new InlineKeyboardButton("§", "/ponto_refresh"), };
+		InlineKeyboardButton[] linha_1 = { 
+				new InlineKeyboardButton(parseToUnicode(":arrow_up:"), "/ponto_entrada"),
+				new InlineKeyboardButton(parseToUnicode(":arrow_down:"), "/ponto_saida"),
+				new InlineKeyboardButton(parseToUnicode(":recycle:"), "/ponto_refresh"), 
+			};
 
 		InlineKeyboardButton[][] buttons = { linha_1, {} };
 		InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(buttons);
