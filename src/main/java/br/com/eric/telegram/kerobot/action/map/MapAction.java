@@ -16,21 +16,25 @@ public class MapAction extends Action {
 	@Autowired
 	private MapExecutor executor;
 
-	private final List<String> PATTERNS = Arrays.asList("\\/key (?<key>\\w+) (?<value>\\w+)?", "\\/keys");
+	private final List<String> PATTERNS = Arrays.asList(
+			"\\/key (?<key>\\w+) (?<value>\\w+)",
+			"\\/key (?<key>\\w+)",
+			"\\/keys");
 
 	@Override
 	public void execute(MessageModel message, int patternPosition, Matcher matcher) {
 		super.info("MapAction", "Kero has keyMap to save your thinks");
 
-		if (patternPosition == 1) {
+		if (patternPosition == 2) {
+			super.info("MapAction", "List keys");
 			executor.list(message);
+		} else if (patternPosition == 1) {
+			super.info("MapAction", "get key");
+			executor.get(message, matcher.group("key"));
 		} else if (patternPosition == 0) {
-			try {
-				String value = matcher.group("value");
-				executor.edit(message, matcher.group("key"), value);
-			} catch(Exception e) {
-				executor.get(message, matcher.group("key"));
-			}
+			super.info("MapAction", "edit key");
+			String value = matcher.group("value");
+			executor.edit(message, matcher.group("key"), value);
 		}
 	}
 
