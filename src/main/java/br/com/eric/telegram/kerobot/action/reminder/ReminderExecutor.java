@@ -1,5 +1,7 @@
 package br.com.eric.telegram.kerobot.action.reminder;
 
+import static com.vdurmont.emoji.EmojiParser.parseToUnicode;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -45,7 +47,7 @@ public class ReminderExecutor {
 				new InlineKeyboardButton("+1h", "/snooze_reminder_1h"),
 				new InlineKeyboardButton("+3h", "/snooze_reminder_3h"),
 				new InlineKeyboardButton("+1d", "/snooze_reminder_1d"),
-				new InlineKeyboardButton(":x:", "/snooze_reminder_cancel") };
+				new InlineKeyboardButton(parseToUnicode(":x:"), "/snooze_reminder_cancel") };
 
 		Unit unit = Unit.getFor(lastTime);
 		if (unit != null) {
