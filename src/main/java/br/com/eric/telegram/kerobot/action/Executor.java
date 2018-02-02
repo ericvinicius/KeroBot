@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.eric.telegram.kerobot.action.goodkero.GoodKeroAction;
 import br.com.eric.telegram.kerobot.action.hours.HoursAction;
+import br.com.eric.telegram.kerobot.action.map.MapAction;
 import br.com.eric.telegram.kerobot.action.pokemon.PokemonAction;
 import br.com.eric.telegram.kerobot.action.reminder.ReminderAction;
 import br.com.eric.telegram.kerobot.action.reminder.delete.DeleteReminderAction;
@@ -41,6 +42,9 @@ public class Executor {
 
 	@Autowired
 	private HoursAction hoursAction;
+	
+	@Autowired
+	private MapAction mapAction;
 
 	private List<Action> textActions;
 
@@ -48,7 +52,7 @@ public class Executor {
 
 	@PostConstruct
 	public void init() {
-		textActions = Arrays.asList(reminderAction, goodKeroAction, deleteReminderAction, pokemonAction, hoursAction);
+		textActions = Arrays.asList(reminderAction, goodKeroAction, deleteReminderAction, pokemonAction, hoursAction, mapAction);
 	}
 
 	public void execute(Update update) {

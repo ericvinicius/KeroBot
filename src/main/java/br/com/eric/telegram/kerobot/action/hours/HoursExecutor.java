@@ -68,11 +68,12 @@ public class HoursExecutor {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Horas de @").append(message.getFrom().getUsername()).append("\n");
 		for (Hour h : hours) {
-			String enter = h.getEnterHour() != null ? h.getEnterHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
-			String exit = h.getExitHour() != null ? h.getExitHour().format(FORMATTER_TIME) : "<SEM_REGISTRO>";
+			String enter = h.getEnterHour() != null ? h.getEnterHour().format(FORMATTER_TIME) : "__:__";
+			String exit = h.getExitHour() != null ? h.getExitHour().format(FORMATTER_TIME) : "__:__";
 
 			builder.append(h.getDay()).append(" => ").append(enter).append(" | ").append(exit).append(" => ")
 					.append(h.difference()).append("\n");
+	
 		}
 
 		InlineKeyboardMarkup inlineKeyboardMarkup = createButtons();
