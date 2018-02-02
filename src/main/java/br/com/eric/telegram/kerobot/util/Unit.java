@@ -58,11 +58,13 @@ public enum Unit {
 	}
 
 	public static Unit getFor(Long lastTime) {
-		for (Unit unit : Unit.values()) {
-			if (lastTime % unit.getTime() == 0) {
-				return unit;
+		try {
+			for (Unit unit : Unit.values()) {
+				if (lastTime % unit.getTime() == 0) {
+					return unit;
+				}
 			}
-		}
+		} catch (Exception e) {}
 		return null;
 	}
 
