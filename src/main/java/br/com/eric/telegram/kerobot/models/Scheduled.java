@@ -123,4 +123,8 @@ public class Scheduled {
 		this.frequently = frequently;
 	}
 
+	public void refresh() {
+		this.period = new Date().getTime() + period;
+	}
+
 }

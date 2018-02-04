@@ -22,7 +22,7 @@ public class Scheduler {
 	
 	private static final Logger logger = LogManager.getLogger(Scheduler.class);
 	
-	@Scheduled(fixedRate = 2000)
+	@Scheduled(fixedRate = 10*1000)
 	public void scheduleTaskWithFixedRate() {
 		Iterable<br.com.eric.telegram.kerobot.models.Scheduled> scheduleds = scheduledRepository.findAllByTimeLessThan(new Date().getTime());
 		scheduleds.forEach(s -> {

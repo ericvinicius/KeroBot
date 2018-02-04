@@ -42,6 +42,10 @@ public class ReminderExecutor {
 	public void execute(Scheduled s) {
 		String msg = "@" + s.getUserName() + ", lembrete: " + s.getText();
 		botApi.sendMessage(s.getChatId(), msg, createButtons(s));
+		if (s.isFrequently()) {
+			s.refresh();
+			scheduledRepository.save(s);
+		}
 	}
 
 	private InlineKeyboardMarkup createButtons(Scheduled s) {
