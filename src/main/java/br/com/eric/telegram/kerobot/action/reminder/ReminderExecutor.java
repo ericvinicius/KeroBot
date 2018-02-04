@@ -67,7 +67,7 @@ public class ReminderExecutor {
 					new InlineKeyboardButton("+15m", "/snooze_reminder_15m"),
 					new InlineKeyboardButton("+1h", "/snooze_reminder_1h") };
 			InlineKeyboardButton[] linha_2 = new InlineKeyboardButton[] {
-					new InlineKeyboardButton("Cancelar Recorrente", "/frequently_reminder_cancel"),
+					new InlineKeyboardButton("Cancelar Recorrente", "/frequently_reminder_cancel_" + s.getId()),
 					new InlineKeyboardButton(parseToUnicode(":x:"), "/snooze_reminder_cancel") };
 			buttons = new InlineKeyboardButton[][] { linha_1, linha_2 };
 		}
