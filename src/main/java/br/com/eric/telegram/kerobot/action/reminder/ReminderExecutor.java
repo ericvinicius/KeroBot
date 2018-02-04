@@ -219,6 +219,7 @@ public class ReminderExecutor {
 		Scheduled scheduled = scheduledRepository.findOne(scheduledId);
 		scheduled.setFrequently(true);
 		scheduledRepository.save(scheduled);
+		logger.info("Salvando lembrete como recorrente...");
 		botApi.editMessage(message.getChat().getId(), message.getMessageId(), "Lembrete agora é recorrente!");
 	}
 
@@ -226,6 +227,7 @@ public class ReminderExecutor {
 		Scheduled scheduled = scheduledRepository.findOne(Integer.parseInt(matcher.group("end").trim()));
 		scheduled.setFrequently(false);
 		scheduledRepository.save(scheduled);
+		logger.info("Removendo lembrete como recorrente...");
 		botApi.editMessage(message.getChat().getId(), message.getMessageId(), "Lembrete NÃO é mais recorrente!");
 	}
 }

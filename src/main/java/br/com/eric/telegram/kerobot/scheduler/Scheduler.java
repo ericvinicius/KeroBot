@@ -2,6 +2,8 @@ package br.com.eric.telegram.kerobot.scheduler;
 
 import java.util.Date;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -18,6 +20,8 @@ public class Scheduler {
 	@Autowired
 	private ScheduledRepository scheduledRepository;
 	
+	private static final Logger logger = LogManager.getLogger(Scheduler.class);
+	
 	@Scheduled(fixedRate = 2000)
 	public void scheduleTaskWithFixedRate() {
 		Iterable<br.com.eric.telegram.kerobot.models.Scheduled> scheduleds = scheduledRepository.findAllByTimeLessThan(new Date().getTime());
@@ -25,6 +29,7 @@ public class Scheduler {
 			reminderExecutor.execute(s);
 			if (!s.isFrequently()) {
 				scheduledRepository.delete(s);
+				logger.info("Deletando lembrete que nao é recorrente...");
 			}
 		});
 	}
