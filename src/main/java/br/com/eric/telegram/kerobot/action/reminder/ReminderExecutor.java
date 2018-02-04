@@ -6,9 +6,11 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -39,25 +41,40 @@ public class ReminderExecutor {
 
 	public void execute(Scheduled s) {
 		String msg = "@" + s.getUserName() + ", lembrete: " + s.getText();
-		botApi.sendMessage(s.getChatId(), msg, createButtons(s.getPeriod()));
+		botApi.sendMessage(s.getChatId(), msg, createButtons(s));
 	}
 
-	private InlineKeyboardMarkup createButtons(Long lastTime) {
-		InlineKeyboardButton[] linha_1 = { new InlineKeyboardButton("+15m", "/snooze_reminder_15m"),
-				new InlineKeyboardButton("+1h", "/snooze_reminder_1h"),
-				new InlineKeyboardButton("+3h", "/snooze_reminder_3h"),
-				new InlineKeyboardButton("+1d", "/snooze_reminder_1d"),
-				new InlineKeyboardButton(parseToUnicode(":x:"), "/snooze_reminder_cancel") };
+	private InlineKeyboardMarkup createButtons(Scheduled s) {
+		Long period = s.getPeriod();
+		InlineKeyboardButton[][] buttons;
+		if (s.isFrequently()) {
+			InlineKeyboardButton[] linha_1 = new InlineKeyboardButton[] {
+					new InlineKeyboardButton("+15m", "/snooze_reminder_15m"),
+					new InlineKeyboardButton("+1h", "/snooze_reminder_1h"),
+					new InlineKeyboardButton("+3h", "/snooze_reminder_3h"),
+					new InlineKeyboardButton("+1d", "/snooze_reminder_1d"),
+					new InlineKeyboardButton(parseToUnicode(":x:"), "/snooze_reminder_cancel") };
 
-		Unit unit = Unit.getFor(lastTime);
-		if (unit != null) {
-			int times = (int) (lastTime / unit.getTime());
-			linha_1[3] = new InlineKeyboardButton(":recycle:", "/snooze_reminder_" + times + unit.getNames().get(0));
+			Unit unit = Unit.getFor(period);
+			if (unit != null) {
+				int times = (int) (period / unit.getTime());
+				linha_1[3] = new InlineKeyboardButton(parseToUnicode(":recycle:"),
+						"/snooze_reminder_" + times + unit.getNames().get(0));
+			}
+			buttons = new InlineKeyboardButton[][] { linha_1, {} };
+		} else {
+			InlineKeyboardButton[] linha_1 = new InlineKeyboardButton[] {
+					new InlineKeyboardButton("+15m", "/snooze_reminder_15m"),
+					new InlineKeyboardButton("+1h", "/snooze_reminder_1h") };
+			InlineKeyboardButton[] linha_2 = new InlineKeyboardButton[] {
+					new InlineKeyboardButton("Cancelar Recorrente", "/frequently_reminder_cancel"),
+					new InlineKeyboardButton(parseToUnicode(":x:"), "/snooze_reminder_cancel") };
+			buttons = new InlineKeyboardButton[][] { linha_1, linha_2 };
 		}
 
-		InlineKeyboardButton[][] buttons = { linha_1, {} };
 		InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(buttons);
 		return inlineKeyboardMarkup;
+
 	}
 
 	public void saveReminder(MessageModel message, Matcher matcher) {
@@ -68,19 +85,78 @@ public class ReminderExecutor {
 				return;
 			}
 
-			Integer time = StringUtil.getIntergers(txt[1]);
-			Unit unit = Unit.getFor(StringUtil.removeNumbers(txt[1]));
+			if (txt[1] == null || txt[1].isEmpty()) {
+				botApi.sendMessage(message.getChat().getId(), "É para lembrar quando? Aceito doces...");
+				return;
+			}
 
-			Date dateTime = unit.getNextDateFor(time);
-			scheduledRepository.save(new Scheduled(txt[0], dateTime, "Reminder", message.getFrom().getUsername(),
-					message.getChat().getId(), message.getFrom().getId(), unit.getTime() * time));
+			Date nowDate = new Date();
+			long now = nowDate.getTime();
+			Date dateTime = getNextDateForText(txt[1], nowDate);
+
+			Scheduled remind = new Scheduled(txt[0], dateTime, "Reminder", message.getFrom().getUsername(),
+					message.getChat().getId(), message.getFrom().getId(), dateTime.getTime() - now);
+			remind = scheduledRepository.save(remind);
 
 			LocalDateTime date = Instant.ofEpochMilli(dateTime.getTime()).atZone(SP_ZONE_ID).toLocalDateTime();
-			botApi.sendMessage(message.getChat().getId(), "Lembrete registrado em " + date.format(FORMATTER_TIME));
+			botApi.sendMessage(message.getChat().getId(), "Lembrete registrado em " + date.format(FORMATTER_TIME),
+					createButtonsToFrequently(remind));
 		} catch (Exception e) {
-			botApi.sendMessage(message.getChat().getId(), e.getMessage());
+			botApi.sendMessage(message.getChat().getId(), "Não consegui registrar o lembrete... " + e.getMessage());
 		}
 	}
+
+	private InlineKeyboardMarkup createButtonsToFrequently(Scheduled remind) {
+		InlineKeyboardButton[] linha_1 = {
+				new InlineKeyboardButton("Recorrente", "/frequently_reminder_" + remind.getId()),
+				new InlineKeyboardButton(parseToUnicode(":x:"), "/snooze_reminder_cancel") };
+
+		InlineKeyboardButton[][] buttons = { linha_1, {} };
+		InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(buttons);
+		return inlineKeyboardMarkup;
+	}
+
+	private static Date getNextDateForText(String text, Date date) {
+		Matcher matcher = Pattern.compile("\\d+").matcher(text);
+		String[] split = Arrays.stream(text.replaceAll(" e ", "").split("\\d")).filter(x -> !x.isEmpty())
+				.toArray(String[]::new);
+		Date from = date;
+		for (int i = 0; i < split.length; i++) {
+			String unitTxt = split[i].trim();
+
+			if (matcher.find()) {
+				Integer time = Integer.parseInt(matcher.group());
+				Unit unit = Unit.getFor(unitTxt);
+				from = unit.getNextDateForFrom(time, from);
+			} else {
+				throw new IllegalArgumentException();
+			}
+		}
+		return from;
+	}
+
+	// public static void main(String[] args) {
+	// Date date = new Date();
+	// Date nextDateForText = getNextDateForText("5 dias e 3horas e 2 minutos 1
+	// s", date);
+	// System.out.println(computeDiff(date, nextDateForText));
+	// }
+	//
+	// public static Map<TimeUnit,Long> computeDiff(Date date1, Date date2) {
+	// long diffInMillies = date2.getTime() - date1.getTime();
+	// List<TimeUnit> units = new
+	// ArrayList<TimeUnit>(EnumSet.allOf(TimeUnit.class));
+	// Collections.reverse(units);
+	// Map<TimeUnit,Long> result = new LinkedHashMap<TimeUnit,Long>();
+	// long milliesRest = diffInMillies;
+	// for ( TimeUnit unit : units ) {
+	// long diff = unit.convert(milliesRest,TimeUnit.MILLISECONDS);
+	// long diffInMilliesForUnit = unit.toMillis(diff);
+	// milliesRest = milliesRest - diffInMilliesForUnit;
+	// result.put(unit,diff);
+	// }
+	// return result;
+	// }
 
 	private String[] getParts(String txt, Matcher matcher) {
 		String[] parts = new String[2];
@@ -135,5 +211,21 @@ public class ReminderExecutor {
 		String when = Instant.ofEpochMilli(dateTime.getTime()).atZone(SP_ZONE_ID).toLocalDateTime()
 				.format(FORMATTER_TIME);
 		botApi.editMessage(message.getChat().getId(), message.getMessageId(), "Lembrete adiado para " + when);
+	}
+
+	public void frequently(MessageModel message, Matcher matcher) {
+		String group = matcher.group("end").trim();
+		int scheduledId = Integer.parseInt(group);
+		Scheduled scheduled = scheduledRepository.findOne(scheduledId);
+		scheduled.setFrequently(true);
+		scheduledRepository.save(scheduled);
+		botApi.editMessage(message.getChat().getId(), message.getMessageId(), "Lembrete agora é recorrente!");
+	}
+
+	public void frequentlyCancel(MessageModel message, Matcher matcher) {
+		Scheduled scheduled = scheduledRepository.findOne(Integer.parseInt(matcher.group("end").trim()));
+		scheduled.setFrequently(false);
+		scheduledRepository.save(scheduled);
+		botApi.editMessage(message.getChat().getId(), message.getMessageId(), "Lembrete NÃO é mais recorrente!");
 	}
 }

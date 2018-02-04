@@ -68,4 +68,8 @@ public enum Unit {
 		return null;
 	}
 
+	public Date getNextDateForFrom(Integer multiplier, Date date) {
+		return new Date(date.getTime() + multiplier * this.time);
+	}
+
 }

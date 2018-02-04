@@ -34,6 +34,8 @@ public class Scheduled {
 	@NotNull
 	private Integer chatId;
 	
+	private boolean frequently;
+	
 	@Deprecated
 	public Scheduled() {
 	}
@@ -111,6 +113,14 @@ public class Scheduled {
 
 	public void setPeriod(Long period) {
 		this.period = period;
+	}
+
+	public boolean isFrequently() {
+		return frequently;
+	}
+
+	public void setFrequently(boolean frequently) {
+		this.frequently = frequently;
 	}
 
 }

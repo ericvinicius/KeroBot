@@ -21,7 +21,9 @@ public class ReminderAction extends Action {
 			"(?<start>(?s).*)( +me +)?(avis(e|ar) +(em|daqui))(?<end>.*)",
 			"(?<start>(?s).*)( +me +)?(envi(ar|e) +(em|daqui))(?<end>.*)",
 			"/listar_lembretes",
-			"/snooze_reminder_(?<end>.*)");
+			"/snooze_reminder_(?<end>.*)",
+			"/frequently_reminder_(?<end>\\d+)",
+			"/frequently_reminder_cancel_(?<end>\\d+)");
 
 	@Override
 	public void execute(MessageModel message, int patternPosition, Matcher matcher) {
@@ -30,6 +32,10 @@ public class ReminderAction extends Action {
 			reminderExecutor.listReminders(message);
 		} else if (patternPosition == 4) { 
 			reminderExecutor.snooze(message, matcher);
+		} else if (patternPosition == 5) {
+			reminderExecutor.frequently(message, matcher);
+		} else if (patternPosition == 6) {
+			reminderExecutor.frequentlyCancel(message, matcher);
 		} else {
 			reminderExecutor.saveReminder(message, matcher);
 		}
