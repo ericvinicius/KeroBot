@@ -217,17 +217,21 @@ public class ReminderExecutor {
 		String group = matcher.group("end").trim();
 		int scheduledId = Integer.parseInt(group);
 		Scheduled scheduled = scheduledRepository.findOne(scheduledId);
-		scheduled.setFrequently(true);
-		scheduledRepository.save(scheduled);
-		logger.info("Salvando lembrete como recorrente...");
-		botApi.editMessage(message.getChat().getId(), message.getMessageId(), "Lembrete agora é recorrente!");
+		if (scheduled != null) {
+			scheduled.setFrequently(true);
+			scheduledRepository.save(scheduled);
+			logger.info("Salvando lembrete como recorrente...");
+			botApi.editMessage(message.getChat().getId(), message.getMessageId(), "Lembrete agora é recorrente!");
+		}
 	}
 
 	public void frequentlyCancel(MessageModel message, Matcher matcher) {
 		Scheduled scheduled = scheduledRepository.findOne(Integer.parseInt(matcher.group("end").trim()));
-		scheduled.setFrequently(false);
-		scheduledRepository.save(scheduled);
-		logger.info("Removendo lembrete como recorrente...");
-		botApi.editMessage(message.getChat().getId(), message.getMessageId(), "Lembrete NÃO é mais recorrente!");
+		if (scheduled != null) {
+			scheduled.setFrequently(false);
+			scheduledRepository.save(scheduled);
+			logger.info("Removendo lembrete como recorrente...");
+			botApi.editMessage(message.getChat().getId(), message.getMessageId(), "Lembrete NÃO é mais recorrente!");
+		}
 	}
 }
