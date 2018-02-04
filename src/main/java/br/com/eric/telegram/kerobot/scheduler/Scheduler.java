@@ -23,7 +23,9 @@ public class Scheduler {
 		Iterable<br.com.eric.telegram.kerobot.models.Scheduled> scheduleds = scheduledRepository.findAllByTimeLessThan(new Date().getTime());
 		scheduleds.forEach(s -> {
 			reminderExecutor.execute(s);
-			scheduledRepository.delete(s);
+			if (!s.isFrequently()) {
+				scheduledRepository.delete(s);
+			}
 		});
 	}
 
