@@ -47,7 +47,7 @@ public class ReminderExecutor {
 	private InlineKeyboardMarkup createButtons(Scheduled s) {
 		Long period = s.getPeriod();
 		InlineKeyboardButton[][] buttons;
-		if (s.isFrequently()) {
+		if (!s.isFrequently()) {
 			InlineKeyboardButton[] linha_1 = new InlineKeyboardButton[] {
 					new InlineKeyboardButton("+15m", "/snooze_reminder_15m"),
 					new InlineKeyboardButton("+1h", "/snooze_reminder_1h"),
@@ -118,7 +118,7 @@ public class ReminderExecutor {
 
 	private static Date getNextDateForText(String text, Date date) {
 		Matcher matcher = Pattern.compile("\\d+").matcher(text);
-		String[] split = Arrays.stream(text.replaceAll(" e ", "").split("\\d")).filter(x -> !x.isEmpty())
+		String[] split = Arrays.stream(text.replaceAll(" e ", "").split("\\d")).filter(x -> !x.trim().isEmpty())
 				.toArray(String[]::new);
 		Date from = date;
 		for (int i = 0; i < split.length; i++) {
@@ -129,7 +129,7 @@ public class ReminderExecutor {
 				Unit unit = Unit.getFor(unitTxt);
 				from = unit.getNextDateForFrom(time, from);
 			} else {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Parece que sua mensagem esta meio estranha...");
 			}
 		}
 		return from;
