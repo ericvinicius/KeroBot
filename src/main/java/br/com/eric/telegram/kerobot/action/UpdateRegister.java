@@ -78,8 +78,13 @@ public class UpdateRegister {
 
 	public void register(MessageModel message) {
 		chatRepository.save(message.getChat());
-		userRepository.save(message.getFrom());
-		hourInfoRepository.save(new HourInfo());
+		UserModel userModel = userRepository.save(message.getFrom());
+		HourInfo hour = hourInfoRepository.findOneByUserId(userModel.getId());
+		if (hour == null) {
+			hour = new HourInfo();
+			hour.setUserId(userModel.getId());
+			hourInfoRepository.save(hour);
+		}
 	}
 
 }

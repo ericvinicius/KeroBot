@@ -85,7 +85,7 @@ public class HoursExecutor {
 		}
 		Long extraHours = extraFor / 60L;
 		Long extraMinutes = extraFor % 60L;
-		builder.append("Extra: " + String.format("%d:%02d", extraHours, extraMinutes) + "\n");
+		builder.append("Extras: " + String.format("%d:%02d", extraHours, extraMinutes) + "\n");
 		InlineKeyboardMarkup inlineKeyboardMarkup = createButtons();
 
 		MessageType messageType = message.getType();
