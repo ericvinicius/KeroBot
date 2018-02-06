@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.eric.telegram.kerobot.daos.ChatRepository;
+import br.com.eric.telegram.kerobot.daos.HourInfoRepository;
 import br.com.eric.telegram.kerobot.daos.UserRepository;
 import br.com.eric.telegram.kerobot.models.ChatModel;
+import br.com.eric.telegram.kerobot.models.HourInfo;
 import br.com.eric.telegram.kerobot.models.MessageModel;
 import br.com.eric.telegram.kerobot.models.MessageType;
 import br.com.eric.telegram.kerobot.models.UserModel;
@@ -24,6 +26,9 @@ public class UpdateRegister {
 
 	@Autowired
 	private ChatRepository chatRepository;
+	
+	@Autowired
+	private HourInfoRepository hourInfoRepository;
 
 	public Optional<MessageModel> validateMessage(Update update) {
 		MessageModel messageModel = Optional.ofNullable(update.getMessage()).map(message -> {
@@ -74,6 +79,7 @@ public class UpdateRegister {
 	public void register(MessageModel message) {
 		chatRepository.save(message.getChat());
 		userRepository.save(message.getFrom());
+		hourInfoRepository.save(new HourInfo());
 	}
 
 }

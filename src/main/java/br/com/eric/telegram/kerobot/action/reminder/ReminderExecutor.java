@@ -104,15 +104,16 @@ public class ReminderExecutor {
 
 			LocalDateTime date = Instant.ofEpochMilli(dateTime.getTime()).atZone(SP_ZONE_ID).toLocalDateTime();
 			botApi.sendMessage(message.getChat().getId(), "Lembrete registrado em " + date.format(FORMATTER_TIME),
-					createButtonsToFrequently(remind));
+					createButtonsOfReminderRegistered(remind));
 		} catch (Exception e) {
 			botApi.sendMessage(message.getChat().getId(), "Não consegui registrar o lembrete... " + e.getMessage());
 		}
 	}
 
-	private InlineKeyboardMarkup createButtonsToFrequently(Scheduled remind) {
+	private InlineKeyboardMarkup createButtonsOfReminderRegistered(Scheduled remind) {
 		InlineKeyboardButton[] linha_1 = {
 				new InlineKeyboardButton("Recorrente", "/frequently_reminder_" + remind.getId()),
+				new InlineKeyboardButton(parseToUnicode(":no_entry:"), "/reminder_delete_" + remind.getId()),
 				new InlineKeyboardButton(parseToUnicode(":x:"), "/snooze_reminder_cancel") };
 
 		InlineKeyboardButton[][] buttons = { linha_1, {} };
@@ -236,6 +237,15 @@ public class ReminderExecutor {
 			scheduledRepository.save(scheduled);
 			logger.info("Removendo lembrete como recorrente...");
 			botApi.editMessage(message.getChat().getId(), message.getMessageId(), "Lembrete NÃO é mais recorrente!");
+		}
+	}
+
+	public void cancelReminder(MessageModel message, Matcher matcher) {
+		Scheduled scheduled = scheduledRepository.findOne(Integer.parseInt(matcher.group("end").trim()));
+		if (scheduled != null) {
+			scheduledRepository.delete(scheduled);
+			logger.info("deletando lembrete...");
+			botApi.editMessage(message.getChat().getId(), message.getMessageId(), "Lembrete cancelado!");
 		}
 	}
 }

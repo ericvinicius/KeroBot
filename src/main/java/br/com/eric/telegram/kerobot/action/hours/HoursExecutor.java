@@ -15,9 +15,11 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.com.eric.telegram.kerobot.daos.HourInfoRepository;
 import br.com.eric.telegram.kerobot.daos.HourRepository;
 import br.com.eric.telegram.kerobot.daos.UserRepository;
 import br.com.eric.telegram.kerobot.models.Hour;
+import br.com.eric.telegram.kerobot.models.HourInfo;
 import br.com.eric.telegram.kerobot.models.InlineKeyboardButton;
 import br.com.eric.telegram.kerobot.models.InlineKeyboardMarkup;
 import br.com.eric.telegram.kerobot.models.MessageModel;
@@ -39,6 +41,9 @@ public class HoursExecutor {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private HourInfoRepository hourInfoRepository;
+	
 	private static final Logger logger = LogManager.getLogger(HoursExecutor.class);
 	private static DateTimeFormatter FORMATTER_TIME = DateTimeFormatter.ofPattern("HH:mm");
 
@@ -63,8 +68,11 @@ public class HoursExecutor {
 
 	public void list(MessageModel message) {
 		Integer chatId = message.getChat().getId();
+		message.getFrom().getId();
 		List<Hour> hours = hourRepository.findByUserId(message.getFrom().getId());
-
+		HourInfo hourInfo = hourInfoRepository.findOneByUserId(message.getFrom().getId());
+		
+		Long extraFor = 0L;
 		StringBuilder builder = new StringBuilder();
 		builder.append("Horas de @").append(message.getFrom().getUsername()).append("\n");
 		for (Hour h : hours) {
@@ -73,9 +81,11 @@ public class HoursExecutor {
 
 			builder.append(h.getDay()).append(" => ").append(enter).append(" | ").append(exit).append(" => ")
 					.append(h.difference()).append("\n");
-	
+			extraFor += hourInfo.getExtraFor(h);
 		}
-
+		Long extraHours = extraFor / 60L;
+		Long extraMinutes = extraFor % 60L;
+		builder.append("Extra: " + String.format("%d:%02d", extraHours, extraMinutes) + "\n");
 		InlineKeyboardMarkup inlineKeyboardMarkup = createButtons();
 
 		MessageType messageType = message.getType();

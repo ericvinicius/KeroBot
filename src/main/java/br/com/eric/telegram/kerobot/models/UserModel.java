@@ -114,5 +114,4 @@ public class UserModel {
 			return false;
 		return true;
 	}
-
 }

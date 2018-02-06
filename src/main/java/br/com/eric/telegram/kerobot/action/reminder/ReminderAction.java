@@ -23,7 +23,8 @@ public class ReminderAction extends Action {
 			"/listar_lembretes",
 			"/snooze_reminder_(?<end>.*)",
 			"/frequently_reminder_(?<end>\\d+)",
-			"/frequently_reminder_cancel_(?<end>\\d+)");
+			"/frequently_reminder_cancel_(?<end>\\d+)",
+			"/reminder_delete_(?<end>\\d+)");
 
 	@Override
 	public void execute(MessageModel message, int patternPosition, Matcher matcher) {
@@ -36,6 +37,8 @@ public class ReminderAction extends Action {
 			reminderExecutor.frequently(message, matcher);
 		} else if (patternPosition == 6) {
 			reminderExecutor.frequentlyCancel(message, matcher);
+		} else if (patternPosition == 7) {
+			reminderExecutor.cancelReminder(message, matcher);
 		} else {
 			reminderExecutor.saveReminder(message, matcher);
 		}
