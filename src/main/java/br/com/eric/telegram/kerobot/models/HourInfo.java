@@ -1,7 +1,5 @@
 package br.com.eric.telegram.kerobot.models;
 
-import static java.time.temporal.ChronoUnit.MINUTES;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -53,7 +51,7 @@ public class HourInfo {
 	}
 
 	public Long getExtraFor(Hour hour) {
-		long between = MINUTES.between(hour.getEnterHour(), hour.getExitHour());
+		long between = hour.minutes();
 		return between - (lunchTime + this.hour);
 		
 	}

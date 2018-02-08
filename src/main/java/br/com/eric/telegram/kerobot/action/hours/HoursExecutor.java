@@ -1,10 +1,10 @@
 package br.com.eric.telegram.kerobot.action.hours;
 
+import static br.com.eric.telegram.kerobot.util.DateUtil.SP_ZONE_ID;
 import static com.vdurmont.emoji.EmojiParser.parseToUnicode;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -29,8 +29,6 @@ import br.com.eric.telegram.kerobot.telegram.TelegramApiExecutor;
 
 @Component
 public class HoursExecutor {
-
-	private static final ZoneId SP_ZONE_ID = ZoneId.of("America/Sao_Paulo");
 
 	@Autowired
 	private TelegramApiExecutor botApi;
