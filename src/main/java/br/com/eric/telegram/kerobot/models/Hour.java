@@ -1,6 +1,5 @@
 package br.com.eric.telegram.kerobot.models;
 
-import static br.com.eric.telegram.kerobot.util.DateUtil.SP_ZONE_ID;
 import static br.com.eric.telegram.kerobot.util.StringUtil.fixNumberWith2Digits;
 import static java.time.temporal.ChronoUnit.HOURS;
 import static java.time.temporal.ChronoUnit.MINUTES;
@@ -96,12 +95,8 @@ public class Hour {
 	}
 
 	public long minutes() {
-		if (enterHour == null) {
+		if (enterHour == null || exitHour == null) {
 			return 0;
-		}
-		
-		if (exitHour == null) {
-			return MINUTES.between(this.getEnterHour(), LocalDateTime.now(SP_ZONE_ID));
 		}
 		
 		return MINUTES.between(this.getEnterHour(), this.getExitHour());
