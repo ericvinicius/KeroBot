@@ -26,7 +26,7 @@ public class MapExecutor {
 
 	public void get(MessageModel message, String key, String customUsername) {
 
-		String username = (customUsername != null && !customUsername.isEmpty()) ? customUsername : message.getFrom().getUsername();
+		String username = (customUsername != null && !customUsername.isEmpty()) ? customUsername.replaceAll("@", "") : message.getFrom().getUsername();
 		Optional<UserModel> userOp = userRepository.findOneByUsername(username);
 		if (userOp.isPresent()) {
 			UserModel user = userOp.get();
@@ -42,7 +42,7 @@ public class MapExecutor {
 	}
 
 	public void edit(MessageModel message, String key, String value, String customUser) {
-		String username = (customUser != null && !customUser.isEmpty()) ? customUser : message.getFrom().getUsername();
+		String username = (customUser != null && !customUser.isEmpty()) ? customUser.replaceAll("@", "") : message.getFrom().getUsername();
 		Optional<UserModel> userOp = userRepository.findOneByUsername(username);
 		if (userOp.isPresent()) {
 			UserModel user = userOp.get();
