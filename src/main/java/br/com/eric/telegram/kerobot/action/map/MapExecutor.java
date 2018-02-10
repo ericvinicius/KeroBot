@@ -29,7 +29,6 @@ public class MapExecutor {
 	private static final Logger logger = LogManager.getLogger(MapExecutor.class);
 
 	public void get(MessageModel message, String key, String customUsername) {
-
 		String username = (customUsername != null && !customUsername.isEmpty()) ? customUsername : message.getFrom().getUsername();
 		logger.info("Get key: " + key + " for user: " + username);
 		Optional<UserModel> userOp = userRepository.findOneByUsername(username.replaceAll("@", ""));
