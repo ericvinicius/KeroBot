@@ -2,6 +2,8 @@ package br.com.eric.telegram.kerobot.action.map;
 
 import java.util.Optional;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,11 +25,14 @@ public class MapExecutor {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	private static final Logger logger = LogManager.getLogger(MapExecutor.class);
 
 	public void get(MessageModel message, String key, String customUsername) {
 
-		String username = (customUsername != null && !customUsername.isEmpty()) ? customUsername.replaceAll("@", "") : message.getFrom().getUsername();
-		Optional<UserModel> userOp = userRepository.findOneByUsername(username);
+		String username = (customUsername != null && !customUsername.isEmpty()) ? customUsername : message.getFrom().getUsername();
+		logger.info("Get key: " + key + " for user: " + username);
+		Optional<UserModel> userOp = userRepository.findOneByUsername(username.replaceAll("@", ""));
 		if (userOp.isPresent()) {
 			UserModel user = userOp.get();
 			Optional<MapModel> keyValueOp = keyValueRepository.findByUserIdAndChave(user.getId(), key);
@@ -42,8 +47,9 @@ public class MapExecutor {
 	}
 
 	public void edit(MessageModel message, String key, String value, String customUser) {
-		String username = (customUser != null && !customUser.isEmpty()) ? customUser.replaceAll("@", "") : message.getFrom().getUsername();
-		Optional<UserModel> userOp = userRepository.findOneByUsername(username);
+		String username = (customUser != null && !customUser.isEmpty()) ? customUser : message.getFrom().getUsername();
+		logger.info("Edit key: " + key + " for user: " + username);
+		Optional<UserModel> userOp = userRepository.findOneByUsername(username.replaceAll("@", ""));
 		if (userOp.isPresent()) {
 			UserModel user = userOp.get();
 			Optional<MapModel> keyValueOp = keyValueRepository.findByUserIdAndChave(user.getId(), key);
@@ -66,7 +72,7 @@ public class MapExecutor {
 
 	public void list(MessageModel message) {
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("Chaves de @" + message.getFrom().getUsername());
+		stringBuilder.append("Chaves de @" + message.getFrom().getUsername() + "\n");
 		keyValueRepository.findAllByUserId(message.getFrom().getId()).forEach(map -> {
 			stringBuilder.append(map.getChave()).append("\n");
 		});
