@@ -60,7 +60,7 @@ public class MapExecutor {
 				botApi.sendMessage(message.getChat().getId(), "Chave: " + key + "\nValor: " + value + "\nAnterior: " + previous);
 				return;
 			} else {
-				MapModel keyValue = new MapModel(message.getFrom().getId(), key, value);
+				MapModel keyValue = new MapModel(user.getId(), key, value);
 				keyValueRepository.save(keyValue);
 				botApi.sendMessage(message.getChat().getId(), "Chave: " + key + "\nValor: " + value);
 				return;
