@@ -17,8 +17,8 @@ public class MapAction extends Action {
 	private MapExecutor executor;
 
 	private final List<String> PATTERNS = Arrays.asList(
-			"\\/key_get ((?<user>@\\w+ ))?(?<key>\\w+)",
-			"\\/key_edit ((?<user>@\\w+ ))?(?<key>\\w+) (?<value>.+)",
+			"\\/key ((?<user>@\\w+ ))?(?<key>\\w+)",
+			"\\/key ((?<user>@\\w+ ))?(?<key>\\w+) (?<value>.+)",
 			"\\/keys");
 
 	@Override
@@ -28,10 +28,10 @@ public class MapAction extends Action {
 		if (patternPosition == 2) {
 			super.info("MapAction", "List keys");
 			executor.list(message);
-		} else if (patternPosition == 1) {
+		} else if (patternPosition == 0) {
 			super.info("MapAction", "get key");
 			executor.get(message, matcher.group("key"), matcher.group("user"));
-		} else if (patternPosition == 0) {
+		} else if (patternPosition == 1) {
 			super.info("MapAction", "edit key");
 			String value = matcher.group("value");
 			executor.edit(message, matcher.group("key"), value, matcher.group("user"));
