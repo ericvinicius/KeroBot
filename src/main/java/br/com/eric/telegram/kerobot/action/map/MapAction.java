@@ -17,8 +17,8 @@ public class MapAction extends Action {
 	private MapExecutor executor;
 
 	private final List<String> PATTERNS = Arrays.asList(
-			"\\/key ((?<user>@\\w+ ))?(?<key>\\S+)",
-			"\\/key ((?<user>@\\w+ ))?(?<key>\\S+) (?<value>.+)",
+			"\\/key ((?<user>@\\w+ ))?(?<key>\\w+)",
+			"\\/key ((?<user>@\\w+ ))?(?<key>\\w+) (?<value>.+)",
 			"\\/keys");
 
 	@Override
