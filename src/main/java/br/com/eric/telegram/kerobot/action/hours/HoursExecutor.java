@@ -70,19 +70,20 @@ public class HoursExecutor {
 		List<Hour> hours = hourRepository.findByUserId(message.getFrom().getId());
 		HourInfo hourInfo = hourInfoRepository.findOneByUserId(message.getFrom().getId());
 		
-		Long extraFor = 0L;
+		Long extraMins = 0L;
 		StringBuilder builder = new StringBuilder();
 		builder.append("Horas de @").append(message.getFrom().getUsername()).append("\n");
 		for (Hour h : hours) {
 			String enter = h.getEnterHour() != null ? h.getEnterHour().format(FORMATTER_TIME) : "__:__";
 			String exit = h.getExitHour() != null ? h.getExitHour().format(FORMATTER_TIME) : "__:__";
-
+			Long minutesInHour = hourInfo.getExtraFor(h);
+			
 			builder.append(h.getDay()).append(" => ").append(enter).append(" | ").append(exit).append(" => ")
-					.append(h.difference()).append("\n");
-			extraFor += hourInfo.getExtraFor(h);
+					.append(h.difference()).append(" | ").append(String.format("%d:%02d", minutesInHour/60, minutesInHour%60)).append("\n");
+			extraMins += minutesInHour;
 		}
-		Long extraHours = extraFor / 60L;
-		Long extraMinutes = extraFor % 60L;
+		Long extraHours = extraMins / 60L;
+		Long extraMinutes = extraMins % 60L;
 		builder.append("Extras: " + String.format("%d:%02d", extraHours, extraMinutes) + "\n");
 		InlineKeyboardMarkup inlineKeyboardMarkup = createButtons();
 

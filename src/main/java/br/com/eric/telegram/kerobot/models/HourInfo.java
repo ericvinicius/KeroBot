@@ -52,8 +52,7 @@ public class HourInfo {
 
 	public Long getExtraFor(Hour hour) {
 		long between = hour.minutes();
-		return between - (lunchTime + this.hour);
-		
+		return between == 0L ? 0L : (between - (lunchTime + this.hour));
 	}
 	
 }

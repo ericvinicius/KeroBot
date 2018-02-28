@@ -215,7 +215,7 @@ public class ReminderExecutor {
 
 		String when = Instant.ofEpochMilli(dateTime.getTime()).atZone(SP_ZONE_ID).toLocalDateTime()
 				.format(FORMATTER_TIME);
-		botApi.editMessage(message.getChat().getId(), message.getMessageId(), originalMessage + "\n\n\nLembrete adiado para " + when);
+		botApi.editMessage(message.getChat().getId(), message.getMessageId(), originalMessage + "\n\nLembrete adiado para " + when);
 	}
 
 	public void frequently(MessageModel message, Matcher matcher) {
