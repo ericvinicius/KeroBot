@@ -7,10 +7,10 @@ import org.springframework.data.repository.CrudRepository;
 
 import br.com.eric.telegram.kerobot.models.MapModel;
 
-public interface MapRepository extends CrudRepository<MapModel, Integer> {
+public interface MapRepository extends CrudRepository<MapModel, Long> {
 
-	Optional<MapModel> findByUserIdAndChave(Integer userId, String chave);
+	Optional<MapModel> findByUserIdAndChave(Long userId, String chave);
 
-	List<MapModel> findAllByUserId(Integer id);
+	List<MapModel> findAllByUserId(Long id);
 
 }

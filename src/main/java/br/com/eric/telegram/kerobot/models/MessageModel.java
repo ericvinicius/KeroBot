@@ -2,9 +2,9 @@ package br.com.eric.telegram.kerobot.models;
 
 public class MessageModel {
 	
-	private Integer messageId;
+	private Long messageId;
 
-	private Integer updateId;
+	private Long updateId;
 
 	private UserModel from;
 	
@@ -20,7 +20,7 @@ public class MessageModel {
 	public MessageModel() {
 	}
 
-	public MessageModel(Integer messageId, Integer updateId, UserModel userModel, ChatModel chatModel, String text, MessageType type) {
+	public MessageModel(Long messageId, Long updateId, UserModel userModel, ChatModel chatModel, String text, MessageType type) {
 		this.messageId = messageId;
 		this.updateId = updateId;
 		this.type = type;
@@ -97,7 +97,7 @@ public class MessageModel {
 		return true;
 	}
 
-	public Integer getUpdateId() {
+	public Long getUpdateId() {
 		return updateId;
 	}
 
@@ -117,11 +117,11 @@ public class MessageModel {
 		this.type = type;
 	}
 
-	public Integer getMessageId() {
+	public Long getMessageId() {
 		return messageId;
 	}
 
-	public void setMessageId(Integer messageId) {
+	public void setMessageId(Long messageId) {
 		this.messageId = messageId;
 	}
 

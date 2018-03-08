@@ -172,8 +172,8 @@ public class ReminderExecutor {
 
 	public void listReminders(MessageModel message) {
 		StringBuilder builder = new StringBuilder();
-		Integer chatId = message.getChat().getId();
-		Integer userId = message.getFrom().getId();
+		Long chatId = message.getChat().getId();
+		Long userId = message.getFrom().getId();
 
 		builder.append("Seus Lembretes: \n");
 		List<Scheduled> reminders = scheduledRepository.findAllByChatIdAndUserIdOrderByIdDesc(chatId, userId);
@@ -220,7 +220,7 @@ public class ReminderExecutor {
 
 	public void frequently(MessageModel message, Matcher matcher) {
 		String group = matcher.group("end").trim();
-		int scheduledId = Integer.parseInt(group);
+		Long scheduledId = Long.parseLong(group);
 		Scheduled scheduled = scheduledRepository.findOne(scheduledId);
 		if (scheduled != null) {
 			scheduled.setFrequently(true);
@@ -231,7 +231,7 @@ public class ReminderExecutor {
 	}
 
 	public void frequentlyCancel(MessageModel message, Matcher matcher) {
-		Scheduled scheduled = scheduledRepository.findOne(Integer.parseInt(matcher.group("end").trim()));
+		Scheduled scheduled = scheduledRepository.findOne(Long.parseLong(matcher.group("end").trim()));
 		if (scheduled != null) {
 			scheduled.setFrequently(false);
 			scheduledRepository.save(scheduled);
@@ -241,7 +241,7 @@ public class ReminderExecutor {
 	}
 
 	public void cancelReminder(MessageModel message, Matcher matcher) {
-		Scheduled scheduled = scheduledRepository.findOne(Integer.parseInt(matcher.group("end").trim()));
+		Scheduled scheduled = scheduledRepository.findOne(Long.parseLong(matcher.group("end").trim()));
 		if (scheduled != null) {
 			scheduledRepository.delete(scheduled);
 			logger.info("deletando lembrete...");

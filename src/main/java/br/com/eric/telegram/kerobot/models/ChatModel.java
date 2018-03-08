@@ -7,7 +7,7 @@ import javax.persistence.Id;
 public class ChatModel {
 
 	@Id
-	private Integer id;
+	private Long id;
 	
 	private String type;
 	
@@ -16,13 +16,13 @@ public class ChatModel {
 	public ChatModel() {
 	}
 
-	public ChatModel(Integer id, String title, String type) {
+	public ChatModel(Long id, String title, String type) {
 		this.id = id;
 		tittle = title;
 		this.type = type;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 	

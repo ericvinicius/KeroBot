@@ -18,7 +18,7 @@ public class Hour {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 
 	private LocalDate day;
 
@@ -27,19 +27,19 @@ public class Hour {
 	private LocalDateTime exitHour;
 
 	@NotNull
-	private Integer userId;
+	private Long userId;
 
 	@Deprecated
 	public Hour() {
 	}
 
-	public Hour(LocalDateTime now, LocalDate today, Integer userId) {
+	public Hour(LocalDateTime now, LocalDate today, Long userId) {
 		this.day = today;
 		this.enterHour = now;
 		this.userId = userId;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -67,11 +67,11 @@ public class Hour {
 		this.exitHour = exit;
 	}
 
-	public Integer getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Integer userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

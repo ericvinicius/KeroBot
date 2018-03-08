@@ -34,7 +34,7 @@ public class GoodKeroExecutor {
 	public void goodTime(MessageModel message, String phrase, String time) {
 		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("America/Sao_Paulo"));
 		int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-		Integer chatId = message.getChat().getId();
+		Long chatId = message.getChat().getId();
 
 		if (time.equals("dia") && timeOfDay >= 6 && timeOfDay < 12) {
 			doIt(chatId, time);
@@ -63,11 +63,11 @@ public class GoodKeroExecutor {
 
 	}
 
-	private void failDoIt(Integer chatId, String time) {
+	private void failDoIt(Long chatId, String time) {
 		botApi.sendMessage(chatId, "Mas nem esta de " + time + "... Acho que esta na hora de comer doces...");
 	}
 
-	public void doIt(Integer chatId, String time) {
+	public void doIt(Long chatId, String time) {
 		Response giphy = giphyApi.random(GiphyApi.Rating.G.getName(), time, GiphyApi.TOKEN);
 		botApi.sendVideo(chatId, giphy.getData().getImage_url());
 	}

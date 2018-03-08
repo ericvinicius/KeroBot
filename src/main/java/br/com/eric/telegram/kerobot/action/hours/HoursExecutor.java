@@ -65,7 +65,7 @@ public class HoursExecutor {
 	}
 
 	public void list(MessageModel message) {
-		Integer chatId = message.getChat().getId();
+		Long chatId = message.getChat().getId();
 		message.getFrom().getId();
 		List<Hour> hours = hourRepository.findByUserId(message.getFrom().getId());
 		HourInfo hourInfo = hourInfoRepository.findOneByUserId(message.getFrom().getId());
@@ -90,7 +90,7 @@ public class HoursExecutor {
 		MessageType messageType = message.getType();
 		String callback_query_id = messageType.getString("callback_query_id");
 
-		Integer messageId = message.getMessageId();
+		Long messageId = message.getMessageId();
 		if (hours.isEmpty()) {
 			botApi.sendMessageOrEditMessage(chatId, "Voce nao possui horas registradas...", inlineKeyboardMarkup,
 					messageType, messageId, callback_query_id);

@@ -13,7 +13,7 @@ public class Scheduled {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	
 	@NotNull
 	private String text;
@@ -29,10 +29,10 @@ public class Scheduled {
 	private String userName;
 	
 	@NotNull
-	private Integer userId;
+	private Long userId;
 	
 	@NotNull
-	private Integer chatId;
+	private Long chatId;
 	
 	private boolean frequently;
 	
@@ -40,7 +40,7 @@ public class Scheduled {
 	public Scheduled() {
 	}
 
-	public Scheduled(String text, Date time, String category, String to, Integer chatId, Integer userId, Long period) {
+	public Scheduled(String text, Date time, String category, String to, Long chatId, Long userId, Long period) {
 		this.text = text;
 		this.userName = to;
 		this.chatId = chatId;
@@ -83,27 +83,27 @@ public class Scheduled {
 		this.userName = to;
 	}
 
-	public Integer getChatId() {
+	public Long getChatId() {
 		return chatId;
 	}
 
-	public void setChatId(Integer chatId) {
+	public void setChatId(Long chatId) {
 		this.chatId = chatId;
 	}
 
-	public Integer getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Integer userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

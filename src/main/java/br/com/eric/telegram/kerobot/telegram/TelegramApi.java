@@ -21,33 +21,33 @@ public interface TelegramApi {
 	// "certificate=@keys/keystore.pem"
 	// https://api.telegram.org/bot480394771:AAEXAhXgyzaZPpCBNsdOreSxsclgNNmofCs/setWebhook\?url\=https://64.137.242.226:8443/webhook
 	public final String TOKEN = "480394771:AAEXAhXgyzaZPpCBNsdOreSxsclgNNmofCs";
-	public final Integer ADMIN_CHAT_ID = 174439923;
+	public final Long ADMIN_CHAT_ID = 174439923L;
 
 	@Get
 	@Path("/bot" + TOKEN + "/sendMessage")
-	public MessageResponse sendMessage(@QueryParameter("chat_id") Integer chat_id, @QueryParameter("text") String text);
+	public MessageResponse sendMessage(@QueryParameter("chat_id") Long chat_id, @QueryParameter("text") String text);
 	
 	@Get
 	@Path("/bot" + TOKEN + "/sendMessage")
-	public MessageResponse sendMessage(@QueryParameter("chat_id") Integer chat_id, @QueryParameter("text") String text, @QueryParameter("reply_markup") InlineKeyboardMarkup inlineKeyboardMarkup);
+	public MessageResponse sendMessage(@QueryParameter("chat_id") Long chat_id, @QueryParameter("text") String text, @QueryParameter("reply_markup") InlineKeyboardMarkup inlineKeyboardMarkup);
 
 	@Get
 	@Path("/bot" + TOKEN + "/sendVideo")
-	public MessageResponse sendVideo(@QueryParameter("chat_id") Integer chat_id,
+	public MessageResponse sendVideo(@QueryParameter("chat_id") Long chat_id,
 			@QueryParameter(value = "video") String videoURL);
 
 	@Get
 	@Path("/bot" + TOKEN + "/sendPhoto")
-	public MessageResponse sendPhoto(@QueryParameter("chat_id") Integer chat_id,
+	public MessageResponse sendPhoto(@QueryParameter("chat_id") Long chat_id,
 			@QueryParameter(value = "photo") String photoURL);
 
 	@Get
 	@Path("/bot" + TOKEN + "/editMessageText")
-	public MessageResponse editMessageText(@QueryParameter("chat_id") Integer chat_id, @QueryParameter("text") String text, @QueryParameter("message_id") Integer messageId, @QueryParameter("reply_markup") InlineKeyboardMarkup inlineKeyboardMarkup);
+	public MessageResponse editMessageText(@QueryParameter("chat_id") Long chat_id, @QueryParameter("text") String text, @QueryParameter("message_id") Long messageId, @QueryParameter("reply_markup") InlineKeyboardMarkup inlineKeyboardMarkup);
 	
 	@Get
 	@Path("/bot" + TOKEN + "/editMessageText")
-	public MessageResponse editMessageText(@QueryParameter("chat_id") Integer chat_id, @QueryParameter("text") String text, @QueryParameter("message_id") Integer messageId);
+	public MessageResponse editMessageText(@QueryParameter("chat_id") Long chat_id, @QueryParameter("text") String text, @QueryParameter("message_id") Long messageId);
 
 	@Get
 	@Path("/bot" + TOKEN + "/answerCallbackQuery")

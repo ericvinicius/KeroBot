@@ -8,7 +8,7 @@ import javax.persistence.OneToOne;
 public class UserModel {
 
 	@Id
-	private Integer id;
+	private Long id;
 
 	@OneToOne
 	private ChatModel lastChat;
@@ -22,7 +22,7 @@ public class UserModel {
 	public UserModel() {
 	}
 
-	public UserModel(Integer id, String first_name, String username, ChatModel chatModel, boolean is_bot) {
+	public UserModel(Long id, String first_name, String username, ChatModel chatModel, boolean is_bot) {
 		this.id = id;
 		this.fisrtName = first_name;
 		this.username = username;
@@ -30,7 +30,7 @@ public class UserModel {
 		this.bot = is_bot;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 

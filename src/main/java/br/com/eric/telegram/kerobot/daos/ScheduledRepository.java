@@ -7,14 +7,14 @@ import org.springframework.data.repository.CrudRepository;
 
 import br.com.eric.telegram.kerobot.models.Scheduled;
 
-public interface ScheduledRepository extends CrudRepository<Scheduled, Integer> {
+public interface ScheduledRepository extends CrudRepository<Scheduled, Long> {
 
 	Iterable<Scheduled> findAllByTimeLessThan(long time);
 
-	void deleteByChatIdAndUserId(Integer chatId, Integer userId);
+	void deleteByChatIdAndUserId(Long chatId, Long userId);
 
-	Optional<Scheduled> findFirstByChatIdAndUserIdOrderByIdDesc(Integer chatId, Integer userId);
+	Optional<Scheduled> findFirstByChatIdAndUserIdOrderByIdDesc(Long chatId, Long userId);
 
-	List<Scheduled> findAllByChatIdAndUserIdOrderByIdDesc(Integer id, Integer id2);
+	List<Scheduled> findAllByChatIdAndUserIdOrderByIdDesc(Long id, Long id2);
 
 }

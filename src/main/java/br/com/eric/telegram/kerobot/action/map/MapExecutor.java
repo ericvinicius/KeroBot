@@ -71,7 +71,7 @@ public class MapExecutor {
 
 	}
 
-	private void sendKey(Integer id, String username, String key, String value, String previous) {
+	private void sendKey(Long id, String username, String key, String value, String previous) {
 		StringBuilder stringBuilder = new StringBuilder().append("Usuario: @").append(username).append("\nChave: ")
 				.append(key).append("\nValor: ").append(value);
 		

@@ -10,9 +10,9 @@ public class MapModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	
-	private Integer userId;
+	private Long userId;
 	
 	private String chave;
 	
@@ -22,25 +22,25 @@ public class MapModel {
 	public MapModel() {
 	}
 	
-	public MapModel(Integer userId, String key, String value) {
+	public MapModel(Long userId, String key, String value) {
 		this.userId = userId;
 		this.chave = key;
 		this.valor = value;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Integer getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Integer userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

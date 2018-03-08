@@ -8,10 +8,10 @@ import org.springframework.data.repository.CrudRepository;
 
 import br.com.eric.telegram.kerobot.models.Hour;
 
-public interface HourRepository extends CrudRepository<Hour, Integer> {
+public interface HourRepository extends CrudRepository<Hour, Long> {
 
-	List<Hour> findByUserId(Integer id);
+	List<Hour> findByUserId(Long id);
 
-	Optional<Hour> findOneByDayAndUserId(LocalDate today, Integer userId);
+	Optional<Hour> findOneByDayAndUserId(LocalDate today, Long userId);
 
 }

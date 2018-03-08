@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Update {
-	private Integer update_id;
+	private Long update_id;
 	private Message message;
 	private Message edited_message;
 	private Message channel_post;
@@ -18,11 +18,11 @@ public class Update {
 	private CallbackQuery callback_query;
 	private ShippingQuery shipping_query;
 
-	public Integer getUpdate_id() {
+	public Long getUpdate_id() {
 		return update_id;
 	}
 
-	public void setUpdate_id(Integer update_id) {
+	public void setUpdate_id(Long update_id) {
 		this.update_id = update_id;
 	}
 

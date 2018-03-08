@@ -18,7 +18,7 @@ public class DeleteReminderExecutor {
 	@Autowired
 	private ScheduledRepository scheduledRepository;
 
-	public void deleteLast(Integer chatId, Integer userId) {
+	public void deleteLast(Long chatId, Long userId) {
 		Optional<Scheduled> scheduled = scheduledRepository.findFirstByChatIdAndUserIdOrderByIdDesc(chatId, userId);
 		
 		if (scheduled.isPresent()) {

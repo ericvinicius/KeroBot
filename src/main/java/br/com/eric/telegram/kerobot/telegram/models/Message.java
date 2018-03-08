@@ -4,17 +4,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Message {
-	private Integer message_id;
+	private Long message_id;
 	private User from;
 	private Integer date;
 	private String text;
 	private Chat chat;
 
-	public Integer getMessage_id() {
+	public Long getMessage_id() {
 		return message_id;
 	}
 
-	public void setMessage_id(Integer message_id) {
+	public void setMessage_id(Long message_id) {
 		this.message_id = message_id;
 	}
 
