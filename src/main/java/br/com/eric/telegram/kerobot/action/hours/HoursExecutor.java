@@ -191,4 +191,35 @@ public class HoursExecutor {
 
 	}
 
+	public void editEspecific(MessageModel message, Matcher matcher) {
+		String action = matcher.group("action");
+		String hourTxt = matcher.group("hour");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+		LocalDateTime dateTime = LocalDateTime.parse(action, formatter);
+		
+		Optional<UserModel> u = userRepository
+				.findOneByUsername(message.getFrom().getUsername().replaceAll("@", "").trim());
+		if (u.isPresent()) {
+			UserModel user = u.get();
+			Optional<Hour> hour = hourRepository.findOneByDayAndUserId(dateTime.toLocalDate(), user.getId());
+			Hour h;
+			if (hour.isPresent()) {
+				h = hour.get();
+			} else {
+				h = new Hour(dateTime.toLocalDate(), user.getId());
+			}
+			
+			if (hourTxt.equals("entrada")) {
+				logger.info("Enter");
+				h.setEnter(dateTime);
+			} else if (hourTxt.equals("saida")) {
+				logger.info("Exit");
+				h.setExit(dateTime);
+			}
+			hourRepository.save(h);
+			list(message);
+		}
+		
+	}
+
 }

@@ -39,6 +39,11 @@ public class Hour {
 		this.userId = userId;
 	}
 
+	public Hour(LocalDate day, Long userId) {
+		this.day = day;
+		this.userId = userId;
+	}
+
 	public Long getId() {
 		return id;
 	}
