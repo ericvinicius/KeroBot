@@ -21,8 +21,8 @@ public class HoursAction extends Action {
 			"\\/ponto_saida", 
 			"\\/(listar|ver|consultar)_horas",
 			"\\/ponto_refresh",
-			"\\/ponto_edit (?<hour>entrada|saida) (?<action>\\+|-)",
-			"\\/ponto_edit (?<hour>entrada|saida) (?<action>\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d)"
+			"\\/ponto_(?<hour>entrada|saida) (?<action>\\+|-)",
+			"\\/ponto_(?<hour>entrada|saida) (?<action>\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d)"
 			);
 
 	@Override
